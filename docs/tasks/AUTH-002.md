@@ -7,8 +7,18 @@
 - [x] Todo Route Handler administrativo repete sessão e allowlist no servidor.
 - [x] Respostas de comando distinguem ausência de sessão (`401`) e identidade sem autorização (`404`).
 - [x] Cliente trata sessão expirada e retorna ao contexto após novo login.
-- [ ] Matriz negativa e testes locais aprovados; smoke do Preview pendente.
-- [ ] Backlog, matriz e evidência final reconciliados.
+- [x] Matriz negativa, testes locais e smoke do Preview aprovados.
+- [ ] Sessão expirada validada pelo proprietário no Preview.
+- [x] Backlog, matriz e evidência parcial reconciliados.
+
+## Estado de validação
+
+- 40 testes aprovados em 9 arquivos.
+- Typecheck limpo, sem cache incremental, lint e build aprovados.
+- Preview imutável `oplib-3edm8mopb-feather-tecnologias.vercel.app` no commit `b4a02ab`.
+- Seis cenários E2E aprovados no run `35532991562`, incluindo página protegida e dois comandos anônimos.
+- Identidade fora da allowlist permanece coberta pela matriz unitária e pelo ensaio Clerk de `EVID-FND-008-01`.
+- O aceite humano de expiração real permanece pendente porque a sessão Clerk não pode ser revogada pela automação sem copiar credenciais para esta máquina ou para o GitHub.
 
 ## Contrato do corte
 

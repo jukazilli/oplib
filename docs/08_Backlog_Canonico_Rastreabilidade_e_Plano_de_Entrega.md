@@ -398,7 +398,7 @@ Estado atual: implementação, testes locais, smoke do Preview e aceite autentic
 
 ### AUTH-002 — Proteger sessão, rotas e comandos
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D05 §10 “Sessão expirada”; D07 §16; TL §8.
 - **Objetivo:** bloquear toda leitura ou mutação administrativa sem sessão e allowlist válidas.
 - **Descrição:** `proxy.ts` como primeira barreira e autorização repetida no servidor em cada ação sensível.
@@ -407,6 +407,8 @@ Estado atual: implementação, testes locais, smoke do Preview e aceite autentic
 - **Riscos:** confiar somente no middleware ou na interface.
 - **Testes:** `TEST-AUTH-002-01` matriz negativa por comando; `-02` expiração.
 - **Evidência:** `EVID-AUTH-002-01` relatório de autorização.
+
+Estado atual: proteção em duas camadas e matriz negativa aprovadas; o aceite humano de sessão expirada permanece pendente em `EVID-AUTH-002-01`. A persistência do rascunho editorial será validada quando o editor existir em PUB-001/PUB-002.
 
 ### ADM-001 — Shell e visão geral administrativa
 
