@@ -24,4 +24,10 @@ Resultado: CRUD, rejeição de duplicidade, bloqueio de exclusão associada, sub
 
 ## Evidência remota
 
-A registrar após a publicação da branch e conclusão dos checks.
+- PR: `#21` (`feat/tax-002-manage-taxonomy` sobre `feat/tax-001-knowledge-areas`);
+- deployment Preview: `8UABcfs5mBJnFkqfAqWb1aaaEk9P`;
+- checks `Vercel` e `Vercel Preview Comments`: aprovados;
+- inspeção do componente real em desktop e viewport móvel de `390×844`: hierarquia, campos, ações e fluxo destrutivo aprovados, sem rolagem horizontal;
+- formulário destrutivo expandido confirmou item, contagem de uso, substituição e remoção explícita.
+
+O Preview remoto estava protegido pelo login da Vercel. A inspeção visual foi executada em rota local efêmera com o componente real e dados sintéticos; rota e bypass temporários foram removidos antes do commit de fechamento.
