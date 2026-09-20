@@ -23,3 +23,7 @@ O script local valida hash, descriptografa com a identidade offline, confirma a 
 Pendente: duração do restore real, quantidade saneada de tabelas, versão usada e prova de remoção da branch temporária.
 
 Nenhuma connection string, chave, conteúdo do dump ou dado de usuário será registrado nesta evidência.
+
+## Exceção operacional
+
+`OPS-002` permite desenvolvimento e Preview com dados sintéticos enquanto backup e restore reais permanecem pendentes. A FND-015 deve ser concluída antes de Production ou antes de conteúdo real insubstituível; até lá, RPO de 24 horas e RTO de 4 horas não estão comprovados.

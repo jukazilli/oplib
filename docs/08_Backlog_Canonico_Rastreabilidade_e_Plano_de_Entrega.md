@@ -236,7 +236,7 @@ Um item só recebe `done` quando:
 
 ### FND-005 — Provisionar Neon em São Paulo
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D07 §§22–23; TL §7; INF §§7–8 e 11.
 - **Objetivo:** disponibilizar PostgreSQL isolado por ambiente em `aws-sa-east-1`.
 - **Descrição:** criar projeto, no mínimo as branches `production` e `preview`, e habilitar pooling para runtime.
@@ -248,7 +248,7 @@ Um item só recebe `done` quando:
 
 ### FND-006 — Configurar schema e migrations
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D06 §16; D07 §§10–11; TL §7; INF §12.
 - **Objetivo:** tornar o schema reproduzível e reforçar invariantes no banco.
 - **Descrição:** configurar Drizzle, migration inicial, constraints, índices e tabela de controle.
@@ -260,7 +260,7 @@ Um item só recebe `done` quando:
 
 ### FND-007 — Vincular projeto Vercel em São Paulo
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D02 §13; TL §§5–6; INF §§7 e 10.
 - **Objetivo:** executar a aplicação em Vercel Functions `gru1`.
 - **Descrição:** criar/vincular um projeto, configurar Node 22, Fluid Compute, scopes de ambiente e domínio Vercel.
@@ -272,7 +272,8 @@ Um item só recebe `done` quando:
 
 ### FND-008 — Configurar Clerk administrativo
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned` com gate humano para produção.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
+- **Exceção:** a capacidade de desenvolvimento está comprovada; MFA de Production permanece bloqueado por `DEC-004`.
 - **Origem:** D07 §16; TL §8; INF §13.
 - **Objetivo:** criar a base de identidade do único administrador.
 - **Descrição:** instâncias dev/prod, usuário proprietário, chaves escopadas, allowlist e redirects; não criar cadastro público.
@@ -284,7 +285,7 @@ Um item só recebe `done` quando:
 
 ### FND-009 — Configurar Blob para capas
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D02 §8.4; D07 §19; TL §13; INF §14.
 - **Objetivo:** disponibilizar armazenamento público seguro para capas.
 - **Descrição:** criar store, OIDC/token por ambiente, prefixos e regras de upload imutável.
@@ -357,6 +358,7 @@ Um item só recebe `done` quando:
 ### FND-015 — Configurar backup e provar restauração
 
 - **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
+- **Exceção:** automação integrada; backup e restore reais permanecem obrigatórios antes de Production ou de conteúdo real insubstituível, conforme `OPS-002`.
 - **Origem:** D07 §23; INF §§14.2 e 15.
 - **Objetivo:** atingir RPO de 24 horas e RTO de 4 horas para o MVP.
 - **Descrição:** snapshot, `pg_dump` diário criptografado, store privado, retenção e restore em branch temporária.
@@ -368,7 +370,7 @@ Um item só recebe `done` quando:
 
 ### FND-016 — Smoke e aceite da Fundação
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** TL §26; INF §§25–26.
 - **Objetivo:** provar que a base pode receber funcionalidades.
 - **Descrição:** reconciliar repositório, toolchain, CI, Preview, Neon, migrations, auth, Blob, segurança, logs, backup e rollback.
@@ -813,6 +815,10 @@ Um item só recebe `done` quando:
 ### GATE-FND — Fundação pronta
 
 É aprovado quando FND-001 a FND-016 estão `done`, ou quando uma exceção explícita identifica item, impacto, prazo e responsável. A exceção nunca pode liberar produção sem MFA, segregação de ambientes, migrations, secrets, CI, backup restaurável e autorização no servidor.
+
+`OPS-002` permite avançar funcionalidades somente em desenvolvimento e Preview com dados sintéticos ou reconstruíveis. Production permanece bloqueada até FND-012, FND-015 e DEC-004 estarem resolvidas.
+
+Estado atual: `GATE-FND` aprovado para desenvolvimento e Preview por `EVID-FND-016-01`; não aprovado para Production.
 
 ### GATE-EDITORIAL — Publicar e ler com segurança
 
