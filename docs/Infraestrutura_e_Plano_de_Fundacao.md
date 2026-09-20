@@ -56,7 +56,7 @@ Nenhum provedor, serviço ou conveniência operacional pode alterar silenciosame
 | Estratégia | serviços gerenciados e poucos provedores |
 | Custo | camada gratuita sempre que segura; qualquer cobrança exige aprovação específica |
 | Cloud | preview e produção em nuvem desde a Fundação |
-| Local | desenvolvimento permitido, nunca como parte da operação de produção |
+| Local | edição e checks rápidos sem Docker ou banco local; integração validada em Preview |
 | Região primária | São Paulo, Brasil |
 
 O OPALIB não precisa no MVP de filas, workers dedicados, realtime, Redis, scheduler da aplicação, processamento pesado, IA, mecanismos externos de busca ou clusters próprios.
@@ -173,11 +173,13 @@ O uso de serviços beta do Neon restritos a outras regiões não justifica mover
 
 | Ambiente | Código | Vercel | Neon | Dados | Finalidade |
 |---|---|---|---|---|---|
-| Local | branch Git do trabalho | Development | `development` | sintéticos | desenvolvimento |
+| Local | branch Git do trabalho | nenhum | nenhum | nenhum | edição, typecheck, testes unitários e build |
 | Teste de integração | commit/PR | GitHub Actions | `test` | sintéticos e descartáveis | testes automatizados |
 | Preview | pull request | Preview Deployment | `preview` | sintéticos e moderados | validação humana e E2E |
 | Produção | `main` liberada | Production | `production` | reais | site público |
 | Restore test | execução temporária | nenhum | `restore-test-*` | cópia restaurada | prova de recuperação |
+
+O OPALIB não usará Docker nem PostgreSQL local. Depois dos checks locais aplicáveis, cada pull request elegível será validado em um Preview Vercel conectado somente a recursos não produtivos. Esse Preview funciona como staging operacional do projeto.
 
 ### 8.2. Regras de segregação
 
@@ -190,6 +192,8 @@ O uso de serviços beta do Neon restritos a outras regiões não justifica mover
 - capas de Preview usam prefixo ou store separado e política de limpeza;
 - `NEXT_PUBLIC_SITE_URL` é próprio de cada ambiente;
 - nenhuma automação possui permissão para excluir o projeto Neon de produção.
+- nenhum comando local depende de Docker ou de PostgreSQL instalado na máquina;
+- integração, E2E e validação humana usam Preview/Staging depois que FND-005 a FND-011 estiverem materializados.
 
 ### 8.3. Política de branches Neon
 
@@ -300,6 +304,8 @@ Drizzle Kit gera migrations versionadas. O fluxo é:
 9. executar migration de produção por workflow manual protegido;
 10. implantar a versão compatível;
 11. executar smoke pós-deploy.
+
+O push de uma branch sincroniza o código com o Preview Vercel. Mudanças de schema continuam versionadas no Git, mas sua aplicação no Neon não é um efeito cego de todo commit: o workflow identifica a branch não produtiva correta, aplica a migration por conexão direta e interrompe o Preview se houver falha. Produção permanece manual e protegida.
 
 Regras:
 

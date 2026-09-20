@@ -1,50 +1,75 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-focus: var(--focus);
+  --font-editorial: var(--font-editorial);
+  --font-interface: var(--font-interface);
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+}
+
 :root {
   color-scheme: light;
-  font-family: system-ui, sans-serif;
-  background: #f7f6f2;
-  color: #1d2230;
+  --background: #f8fafb;
+  --foreground: #17212b;
+  --surface: #ffffff;
+  --muted: #eef3f5;
+  --muted-foreground: #52606d;
+  --border: #d9e1e6;
+  --primary: #326f8d;
+  --primary-foreground: #ffffff;
+  --focus: #146f9c;
 }
 
 * {
-  box-sizing: border-box;
+  border-color: var(--border);
 }
-
+html {
+  background: var(--background);
+}
 body {
   margin: 0;
+  background:
+    radial-gradient(
+      circle at 78% 18%,
+      rgb(135 202 229 / 18%),
+      transparent 22rem
+    ),
+    radial-gradient(
+      circle at 86% 32%,
+      rgb(170 161 214 / 12%),
+      transparent 18rem
+    ),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-interface), sans-serif;
 }
-
-main {
-  display: grid;
-  min-height: 100svh;
-  align-content: center;
-  gap: 1rem;
-  width: min(100% - 2rem, 52rem);
-  margin-inline: auto;
-  padding-block: 4rem;
+::selection {
+  background: #ddeef5;
+  color: var(--foreground);
 }
-
-.eyebrow,
-h1,
-.summary {
-  margin: 0;
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
-
-.eyebrow {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+.bg-opal-gradient {
+  background: linear-gradient(90deg, #87cae5, #aaa1d6, #dfc29c);
 }
-
-h1 {
-  max-width: 14ch;
-  font-size: clamp(2.5rem, 9vw, 5rem);
-  line-height: 0.98;
-  letter-spacing: -0.05em;
-}
-
-.summary {
-  max-width: 44ch;
-  color: #535b6d;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  line-height: 1.6;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

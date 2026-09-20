@@ -20,7 +20,12 @@ const requiredFiles = [
   "pnpm-lock.yaml",
   "src/app/(public)/page.tsx",
   "src/app/layout.tsx",
+  "src/app/styles.css",
+  "src/components/ui/button.tsx",
+  "tests/e2e/foundation.spec.ts",
+  "tests/unit/home-page.test.tsx",
   "tsconfig.json",
+  "vitest.config.mts",
 ];
 
 const errors = [];
