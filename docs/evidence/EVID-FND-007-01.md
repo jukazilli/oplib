@@ -14,7 +14,7 @@ A Vercel confirmou:
 - funções em `gru1`;
 - URL `https://oplib-fkvx7s3oj-feather-tecnologias.vercel.app`.
 
-O build utilizou Next.js 16, pnpm 9 e Node 22. A faixa de engine aceita patches compatíveis do Node 22 a partir da versão local `22.12.0`.
+O build utilizou Next.js 16, pnpm 9 e Node 22. O repositório fixa `22.12.0`; a plataforma selecionou um patch mais recente do Node 22 e emitiu apenas um aviso não bloqueante.
 
 ## TEST-FND-007-02 — matriz de ambiente
 
