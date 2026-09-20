@@ -18,7 +18,7 @@ test("anonymous visitor cannot access the collection", async ({ page }) => {
 
   await expect(page).toHaveURL(/\/sign-in(?:\/|\?|$)/);
   await expect(
-    page.getByRole("heading", { name: /entrar|sign in/i }),
+    page.getByRole("heading", { level: 1, name: "Acesso administrativo" }),
   ).toBeVisible();
 });
 
