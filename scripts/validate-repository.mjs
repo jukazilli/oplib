@@ -10,6 +10,7 @@ const requiredFiles = [
   ".github/workflows/codeql.yml",
   ".github/workflows/repository-policy.yml",
   ".gitignore",
+  ".env.example",
   "CONTRIBUTING.md",
   "README.md",
   "SECURITY.md",
@@ -22,10 +23,13 @@ const requiredFiles = [
   "src/app/layout.tsx",
   "src/app/styles.css",
   "src/components/ui/button.tsx",
+  "src/lib/env/schema.ts",
+  "src/lib/env/server.ts",
   "tests/e2e/foundation.spec.ts",
   "tests/unit/home-page.test.tsx",
   "tsconfig.json",
   "vitest.config.mts",
+  "docs/runbooks/configuration.md",
 ];
 
 const errors = [];
