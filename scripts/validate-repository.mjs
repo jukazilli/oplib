@@ -15,6 +15,12 @@ const requiredFiles = [
   "SECURITY.md",
   "docs/08_Backlog_Canonico_Rastreabilidade_e_Plano_de_Entrega.md",
   "docs/09_Matriz_Operacional_de_Rastreabilidade.md",
+  "next.config.ts",
+  "package.json",
+  "pnpm-lock.yaml",
+  "src/app/(public)/page.tsx",
+  "src/app/layout.tsx",
+  "tsconfig.json",
 ];
 
 const errors = [];
@@ -49,6 +55,20 @@ if (!matrix.includes("| FND-001 |")) {
 
 if (!readFileSync(".gitignore", "utf8").includes(".env.*")) {
   errors.push(".gitignore não protege variantes de .env");
+}
+
+const packageManifest = JSON.parse(readFileSync("package.json", "utf8"));
+
+if (packageManifest.engines?.node !== "22.12.0") {
+  errors.push("package.json não fixa Node.js 22.12.0");
+}
+
+if (packageManifest.packageManager !== "pnpm@9.11.0") {
+  errors.push("package.json não fixa pnpm 9.11.0");
+}
+
+if (packageManifest.dependencies?.next !== "16.3.5") {
+  errors.push("package.json não fixa Next.js 16.3.5");
 }
 
 if (errors.length > 0) {

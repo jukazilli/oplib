@@ -200,7 +200,7 @@ Um item só recebe `done` quando:
 
 ### FND-002 — Materializar toolchain e aplicação-base
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** TL §§4–6 e 20; INF §24 FND-002.
 - **Objetivo:** criar a base executável coerente com a stack aprovada.
 - **Descrição:** Next.js 16 App Router, React 19.2, Node 22 LTS, TypeScript estrito e pnpm fixado, sem monorepo.
