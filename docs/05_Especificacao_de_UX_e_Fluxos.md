@@ -402,6 +402,38 @@ Não haverá gráficos no MVP.
 
 Toda nova publicação começará como rascunho.
 
+### Gate de especificação da interface
+
+O formulário não será implementado diretamente a partir da lista de campos. Antes do código, `UX-002` deverá aprovar um contrato de interação por campo e por ação.
+
+Cada contrato responderá:
+
+1. qual dado está sendo editado e de onde vêm suas opções;
+2. se aceita nenhum, um ou vários valores;
+3. se permite pesquisar, criar, editar ou remover opções;
+4. qual controle será usado e por quê;
+5. quais são os estados vazio, sem resultado, carregando, erro e desabilitado;
+6. como funcionam teclado, foco, leitor de tela e celular;
+7. quando o dado é validado e salvo;
+8. como cancelar, voltar, corrigir ou recuperar.
+
+Nenhuma decisão ausente será preenchida durante a implementação por convenção do framework ou preferência do agente.
+
+#### Lacuna conhecida — campo Área
+
+Já está decidido que uma publicação poderá possuir uma ou mais áreas cadastradas e que pelo menos uma será obrigatória para publicar. Ainda precisam de aprovação antes da UI:
+
+- seleção simples ou múltipla durante o rascunho;
+- lista visível ou combobox pesquisável;
+- quantidade de opções que ativa pesquisa;
+- possibilidade ou proibição de criar uma área sem sair do editor;
+- comportamento quando a busca não encontra resultado;
+- remoção e troca de áreas selecionadas;
+- apresentação no celular e navegação por teclado;
+- relação entre criação inline e a administração de taxonomia.
+
+Até essas decisões serem fechadas em `UX-002`, o campo Área não possui contrato suficiente para implementação.
+
 ### Campos obrigatórios para publicar
 
 - título;

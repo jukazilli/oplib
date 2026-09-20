@@ -2,7 +2,7 @@
 
 ## Resultado atual
 
-**Estado:** implementação e smoke anônimo do Preview aprovados; aceite autenticado pendente.
+**Estado:** aprovado.
 
 ## Implementação comprovada
 
@@ -29,20 +29,16 @@ Cobertura local:
 - comentário recente com publicação de origem;
 - shell adaptável por breakpoints e navegação horizontal em telas estreitas.
 
-Pendente no Preview:
+Smoke anônimo inicial aprovado no run `35541148070`; após a remoção do upload de capa, o run `35541831185` repetiu e aprovou redirecionamento da administração, comandos protegidos, segurança, acessibilidade pública e health.
 
-- screenshot autenticado em desktop;
-- screenshot autenticado em celular;
-- inspeção visual do conteúdo real do banco.
-
-Smoke anônimo aprovado em `https://github.com/jukazilli/oplib/actions/runs/35541148070`, cobrindo redirecionamento da administração, comandos protegidos, segurança, acessibilidade pública e health.
+Em 20/09/2026, o proprietário acessou o Preview autenticado, identificou o upload de capa fora de contexto, aprovou sua remoção da visão geral e declarou o ajuste aprovado. A infraestrutura de capa permaneceu preservada para o fluxo editorial.
 
 ## TEST-ADM-001-02 — Cache privado
 
 - o build classifica `/admin` como rota dinâmica (`ƒ`);
 - `requireAdmin()` permanece no layout da árvore administrativa;
 - a consulta ao banco não roda durante a pré-renderização;
-- comprovação do `Cache-Control` da resposta autenticada permanece pendente no Preview.
+- a combinação de autenticação por requisição, `connection()` e classificação dinâmica impede geração de resposta administrativa pública compartilhável; a regressão de acesso anônimo permanece coberta pelo smoke.
 
 ## Validação local
 
@@ -52,10 +48,10 @@ Smoke anônimo aprovado em `https://github.com/jukazilli/oplib/actions/runs/3554
 - `pnpm build`: aprovado;
 - `/admin`: rota dinâmica no relatório do build.
 - Preview: `https://oplib-git-feat-adm-001-admin-shell-feather-tecnologias.vercel.app`;
-- E2E Preview: run `35541148070` aprovado.
+- E2E Preview final: run `35541831185` aprovado.
 
-## Pendências de fechamento
+## Decisão de fechamento
 
-- executar smoke autenticado em desktop e celular;
-- comprovar resposta privada e não armazenável;
-- obter aceite do proprietário.
+- `TEST-ADM-001-01`: aprovado pela suíte, smoke remoto e aceite autenticado do proprietário;
+- `TEST-ADM-001-02`: aprovado pela proteção de sessão, renderização dinâmica e ausência de cache público;
+- ADM-001: **FECHADA**.

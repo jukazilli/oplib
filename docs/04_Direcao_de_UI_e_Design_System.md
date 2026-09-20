@@ -766,6 +766,49 @@ A exclusão permanente deverá exigir confirmação explícita com trecho do com
 - alternância escrever/prévia;
 - mensagem de validação.
 
+#### Escolha do controle
+
+O componente será escolhido pelo contrato do campo, nunca por um padrão genérico:
+
+| Necessidade                         | Controle candidato             | Condição de uso                                                    |
+| ----------------------------------- | ------------------------------ | ------------------------------------------------------------------ |
+| texto sem vocabulário controlado    | campo de texto ou textarea     | o valor pode ser criado livremente                                 |
+| poucas opções exclusivas e estáveis | rádio ou seleção simples       | todas as opções podem ser compreendidas sem pesquisa               |
+| muitas opções exclusivas            | combobox pesquisável           | existe uma fonte controlada e somente um valor pode ser escolhido  |
+| muitas opções combináveis           | multiselect pesquisável        | a cardinalidade múltipla está aprovada                             |
+| selecionar ou criar                 | combobox com criação explícita | criação inline, permissão, validação e duplicidade foram aprovadas |
+| decisão binária independente        | checkbox ou switch             | o estado e o efeito imediato são inequívocos                       |
+
+Um placeholder não substitui rótulo. Criação inline nunca será adicionada apenas porque uma busca não encontrou resultado.
+
+### Escolha da superfície de interação
+
+| Situação                                              | Superfície preferencial               | Evitar                                                    |
+| ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------- |
+| formulário longo, retomável ou com grupos dependentes | fluxo multi-etapas                    | uma página densa ou etapas artificiais para poucos campos |
+| tarefa principal com muitos dados                     | tela dedicada                         | diálogo grande ou rolável como página improvisada         |
+| decisão irreversível ou de grande consequência        | diálogo modal curto                   | confirmação para ação rotineira ou facilmente reversível  |
+| ação reversível de consequência limitada              | ação direta com feedback e `Desfazer` | modal de confirmação desnecessário                        |
+| escolha contextual curta                              | popover ou menu                       | esconder processo longo em superfície pequena             |
+| detalhes auxiliares sem abandonar contexto            | gaveta lateral                        | usar gaveta para a tarefa principal no celular            |
+
+### Contrato obrigatório antes do componente
+
+Antes da implementação, a especificação deverá registrar:
+
+- tarefa e resultado esperado;
+- dado, origem, cardinalidade e permissão;
+- controle e justificativa;
+- valor inicial e persistência;
+- estados padrão, foco, carregamento, vazio, sem resultado, erro, sucesso e desabilitado;
+- criar, selecionar, remover, cancelar e desfazer, quando aplicáveis;
+- validação e mensagem junto ao campo;
+- teclado, foco, leitor de tela e comportamento no celular;
+- consequência da ação e necessidade de confirmação;
+- evidência de aceite.
+
+Se qualquer decisão material estiver ausente, o componente permanece não implementável.
+
 ### Ações
 
 - botão principal;

@@ -563,6 +563,35 @@ O leitor deverá reconhecer autoria, datas, referências e estados sem precisar 
 3. A interface faz alguma promessa que o sistema não consegue comprovar?
 4. Dados anônimos estão sendo apresentados como identificados?
 
+## P-UX-018 — A interação deve ser decidida antes de ser codificada
+
+### Objetivo
+
+Evitar que componentes e fluxos sejam escolhidos por hábito da ferramenta, convenção genérica ou preferência do implementador.
+
+### Regra
+
+Nenhuma experiência relevante será implementada enquanto seu contrato de interação permanecer ambíguo. O tipo de controle deverá decorrer da tarefa, dos dados, das permissões e dos estados esperados.
+
+### Critérios
+
+- cada campo define origem dos dados, cardinalidade, obrigatoriedade e possibilidade de criação;
+- cada controle define comportamento com mouse, teclado, toque e tecnologia assistiva;
+- carregamento, vazio, ausência de resultado, erro, sucesso e indisponibilidade são especificados quando aplicáveis;
+- ações reversíveis preferem feedback com possibilidade de desfazer;
+- ações destrutivas ou de grande consequência exigem confirmação proporcional;
+- fluxos longos usam etapas somente quando a divisão reduz carga cognitiva e permite retomada;
+- pop-up, diálogo, gaveta, popover ou tela dedicada não são escolhidos antes de se definir contexto, consequência e quantidade de informação;
+- uma lacuna de interação bloqueia somente o slice afetado e vira item rastreável antes do código.
+
+### Perguntas de avaliação
+
+1. Por que este tipo de controle é adequado aos dados e à tarefa?
+2. O usuário pode pesquisar, selecionar, criar, remover ou corrigir? Quais dessas ações são permitidas?
+3. O que acontece sem opções, sem resultado, com erro ou no celular?
+4. A confirmação é necessária ou apenas acrescenta atrito?
+5. A decisão foi aprovada ou foi presumida pelo implementador?
+
 ## 4. Regras transversais
 
 Toda decisão de UX/UI deverá:
@@ -577,6 +606,7 @@ Toda decisão de UX/UI deverá:
 - manter a identidade interdisciplinar;
 - evitar padrões manipulativos de engajamento;
 - ser sustentável para um único administrador.
+- possuir contrato de interação aprovado antes da implementação quando não for trivial.
 
 ## 5. Checklist mínimo de avaliação
 
@@ -596,6 +626,7 @@ Antes de aprovar uma tela, fluxo ou componente, verificar:
 12. A solução parece pertencer ao OPALIB?
 13. A interface está criando comportamento de rede social?
 14. A solução adiciona complexidade sem valor comprovado?
+15. O controle e seus estados foram definidos antes do código?
 
 ## 6. Decisões que este documento não toma
 
