@@ -308,7 +308,7 @@ Um item só recebe `done` quando:
 
 ### FND-011 — Configurar E2E e smoke
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D06 §18.3; TL §19; INF §16.
 - **Objetivo:** validar o aplicativo no ambiente real de Preview.
 - **Descrição:** Playwright, axe e smoke de página, health, banco e autenticação mínima.
