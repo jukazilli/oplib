@@ -224,7 +224,7 @@ Um item só recebe `done` quando:
 
 ### FND-004 — Definir configuração e segredos
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D06 §14; TL §22; INF §18.
 - **Objetivo:** validar configuração e impedir vazamento de segredos.
 - **Descrição:** `.env.example`, schema Zod, gitignore, escopo por ambiente e procedimento de pull seguro.
