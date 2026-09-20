@@ -296,7 +296,7 @@ Um item só recebe `done` quando:
 
 ### FND-010 — Configurar CI de pull request
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D06 §20; TL §20; INF §16.
 - **Objetivo:** bloquear regressões antes do merge.
 - **Descrição:** format, lint, typecheck, unitários, integração, build, CodeQL e auditoria aplicável.
