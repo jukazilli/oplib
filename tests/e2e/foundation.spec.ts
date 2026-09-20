@@ -34,6 +34,20 @@ test("public sign-up route is absent", async ({ request }) => {
   expect(response.status()).toBe(404);
 });
 
+test("anonymous administrative commands are rejected safely", async ({
+  request,
+}) => {
+  for (const pathname of ["/api/admin/covers/pathname", "/api/admin/covers"]) {
+    const response = await request.post(pathname, { data: {} });
+
+    expect(response.status()).toBe(401);
+    expect(response.headers()["cache-control"]).toContain("no-store");
+    await expect(response.json()).resolves.toEqual({
+      error: "Acesso administrativo não autorizado.",
+    });
+  }
+});
+
 test("public home has no critical accessibility violations", async ({
   page,
 }) => {

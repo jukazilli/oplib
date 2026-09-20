@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 
 import { mediaEnvSchema } from "@/lib/env/schema";
 import { PayloadTooLargeError, readLimitedJson } from "@/lib/security/request";
-import { requireAdmin } from "@/modules/identity/admin";
+import { adminAuthorizationResponse } from "@/modules/identity/authorization";
+import { requireAdminCommand } from "@/modules/identity/admin";
 import {
   CoverValidationError,
   extensionForCoverType,
 } from "@/modules/media/cover-policy";
 
 export async function POST(request: Request) {
-  await requireAdmin();
-
   try {
+    await requireAdminCommand();
     const { contentType } = await readLimitedJson<{ contentType?: string }>(
       request,
     );
@@ -22,6 +22,9 @@ export async function POST(request: Request) {
       pathname: `${env.BLOB_COVERS_PREFIX}/${crypto.randomUUID()}.${extension}`,
     });
   } catch (error) {
+    const authorizationResponse = adminAuthorizationResponse(error);
+    if (authorizationResponse) return authorizationResponse;
+
     if (error instanceof CoverValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
