@@ -1,0 +1,29 @@
+name: Propor tarefa
+description: Registre uma tarefa vinculada ao backlog canônico.
+title: "chore: "
+body:
+  - type: input
+    id: backlog
+    attributes:
+      label: Item do backlog
+      placeholder: FND-001
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objetivo
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceite
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Testes e evidências esperadas
+    validations:
+      required: true

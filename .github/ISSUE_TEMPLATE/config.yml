@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Relatar vulnerabilidade
+    url: https://github.com/jukazilli/oplib/security/advisories/new
+    about: Use o relato privado para vulnerabilidades e possíveis vazamentos.
