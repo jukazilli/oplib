@@ -454,7 +454,7 @@ Estado atual: shell responsivo, contagens reais, comentários recentes e estados
 
 ### TAX-001 — Áreas de conhecimento
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D02 §§8.1–8.3; D04 §6; D07 §§9.2 e 10.
 - **Objetivo:** representar Engenharia de Software, Educação Física e conteúdo interdisciplinar.
 - **Descrição:** seed idempotente, slugs estáveis, associação de uma ou mais áreas e identidade visual por área.
@@ -463,6 +463,8 @@ Estado atual: shell responsivo, contagens reais, comentários recentes e estados
 - **Riscos:** área virar texto livre e fragmentar filtros.
 - **Testes:** `TEST-TAX-001-01` seed repetido; `-02` associação múltipla.
 - **Evidência:** `EVID-TAX-001-01` teste de integração.
+
+Estado atual: schema relacional existente preservado; seed determinístico e idempotente implementado para as três áreas canônicas; validação no Preview pendente.
 
 ### TAX-002 — Administrar categorias e tags
 
