@@ -3,6 +3,8 @@ import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Manrope, Newsreader } from "next/font/google";
 
+import { authenticationLocalization } from "@/modules/identity/ui";
+
 import "./styles.css";
 
 const newsreader = Newsreader({
@@ -27,6 +29,7 @@ export default function RootLayout({
       <body>
         <ClerkProvider
           appearance={{ theme: shadcn }}
+          localization={authenticationLocalization}
           signInUrl="/sign-in"
           signUpUrl={undefined}
         >

@@ -15,9 +15,6 @@ export default function SignInPage() {
           <h1 className="mt-5 font-editorial text-4xl font-medium tracking-[-0.03em]">
             Acesso administrativo
           </h1>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            Entre com a conta autorizada para gerenciar o acervo.
-          </p>
         </header>
         <div className="flex justify-center">
           <SignIn
