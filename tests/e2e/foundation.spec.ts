@@ -5,6 +5,11 @@ test("public home is available", async ({ page }) => {
   const response = await page.goto("/");
 
   expect(response?.ok()).toBe(true);
+  expect(response?.headers()["content-security-policy-report-only"]).toContain(
+    "frame-ancestors 'none'",
+  );
+  expect(response?.headers()["x-content-type-options"]).toBe("nosniff");
+  expect(response?.headers()["x-frame-options"]).toBe("DENY");
   await expect(
     page.getByRole("heading", {
       level: 1,
