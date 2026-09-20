@@ -94,11 +94,11 @@ Um item só pode mudar para `done` se os campos “Implementação atual”, “
 | Estado | Quantidade | Observação |
 |---|---:|---|
 | `ready` | 0 | nenhum item aguardando início imediato |
-| `planned` | 48 | aguardam ordem e dependências |
+| `planned` | 47 | aguardam ordem e dependências |
 | `blocked-human` | 5 | DEC-001 a DEC-004 e CNT-001 |
 | `in-progress` | 0 | nenhum item em execução |
 | `review` | 0 | nenhuma entrega em validação |
-| `done` | 2 | FND-001 e FND-002 concluídos e comprovados |
+| `done` | 3 | FND-001 a FND-003 concluídos e comprovados |
 | `cancelled` | 0 | nenhum item removido |
 
 Total: 55 itens permanentes.
@@ -118,7 +118,7 @@ Total: 55 itens permanentes.
 |---|---|---|---|---|---|---|---|
 | FND-001 | D06 §§20–23; INF §§9,24 | proteger e preparar o repositório | `.github/`, `README.md`, ruleset GitHub | `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `.github/`, `scripts/validate-repository.mjs` | `TEST-FND-001-01`, `TEST-FND-001-02` | `docs/evidence/EVID-FND-001-01.md` | `done` |
 | FND-002 | TL §§4–6,20; INF §24 | materializar Next.js, Node, TypeScript e pnpm | `package.json`, lockfile, `src/app/`, configs raiz | `package.json`, `pnpm-lock.yaml`, `.nvmrc`, `.node-version`, `tsconfig.json`, `next.config.ts`, `src/app/` | `TEST-FND-002-01`, `TEST-FND-002-02` | `docs/evidence/EVID-FND-002-01.md` | `done` |
-| FND-003 | PUX; D04; TL §9 | criar tokens, UI-base e ferramentas de teste | `src/styles/`, `src/components/ui/`, configs de teste | — | `TEST-FND-003-*` | `EVID-FND-003-01` | `planned` |
+| FND-003 | PUX; D04; TL §9 | criar tokens, UI-base e ferramentas de teste | `src/styles/`, `src/components/ui/`, configs de teste | `src/app/styles.css`, `src/components/ui/`, `eslint.config.mjs`, `vitest.config.mts`, `playwright.config.ts` | `TEST-FND-003-01`, `TEST-FND-003-02` | `docs/evidence/EVID-FND-003-01.md` | `done` |
 | FND-004 | D06 §14; TL §22; INF §18 | validar configuração e segredos | `.env.example`, `src/lib/env/`, `.gitignore` | — | `TEST-FND-004-*` | `EVID-FND-004-01` | `planned` |
 | FND-005 | D07 §§22–23; TL §7; INF §§7–8,11 | provisionar Neon e branches em São Paulo | Neon + `docs/runbooks/neon.md` | — | `TEST-FND-005-*` | `EVID-FND-005-01` | `planned` |
 | FND-006 | D06 §16; D07 §§10–11; INF §12 | configurar schema, constraints e migrations | `src/lib/db/`, `drizzle/`, `drizzle.config.ts` | — | `TEST-FND-006-*` | `EVID-FND-006-01` | `planned` |
@@ -264,4 +264,4 @@ Antes de cada gate, verificar:
 
 A baseline documental DOC-02 a DOC-09 está concluída. O projeto ainda não possui Fundação nem código executável; isso é um estado válido e explicitamente registrado.
 
-O item `FND-002 — Materializar toolchain e aplicação-base` está concluído. O próximo item aplicável é `FND-003 — Criar baseline de UI e qualidade`. A implementação funcional somente poderá começar após `GATE-FND` ou exceção formalmente aprovada.
+O item `FND-003 — Criar baseline de UI e qualidade` está concluído. O próximo item aplicável é `FND-004 — Definir configuração e segredos`. A implementação funcional somente poderá começar após `GATE-FND` ou exceção formalmente aprovada.

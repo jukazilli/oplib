@@ -212,7 +212,7 @@ Um item só recebe `done` quando:
 
 ### FND-003 — Criar baseline de UI e qualidade
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** PUX; D04 §§4–12 e 24–33; TL §9; INF §24 FND-003.
 - **Objetivo:** materializar os tokens “Opala Lunar Editorial” e a base de testes.
 - **Descrição:** configurar Tailwind 4, Newsreader, Manrope, componentes shadcn necessários, Vitest, Testing Library e Playwright.
