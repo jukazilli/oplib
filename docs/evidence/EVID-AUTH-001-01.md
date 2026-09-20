@@ -2,7 +2,7 @@
 
 ## Resultado atual
 
-**Estado:** implementação pronta e validação automatizada aprovada; aceite autenticado do proprietário pendente.
+**Estado:** aprovado.
 
 ## Implementação comprovada
 
@@ -25,16 +25,20 @@
 - `/admin` anônimo redireciona para `/sign-in`;
 - `/sign-up` responde `404` e a entrada não oferece cadastro público.
 
-## Aceite autenticado pendente
+## Aceite autenticado do proprietário
 
-As chaves Clerk não ficam nesta máquina e não foram copiadas para o GitHub Actions. Sem `CLERK_SECRET_KEY` ou sessão humana, o Playwright encontra corretamente a proteção anti-bot do Clerk e não pode simular a conta real.
+Em 20/09/2026, o proprietário informou `AUTH-001 aprovado` após executar o roteiro no Preview com a conta administrativa. O aceite comprova:
 
-O proprietário deve validar no Preview, sem registrar credenciais na evidência:
+- login válido com redirecionamento para `/admin` e visão `Acervo`;
+- ação explícita `Sair` com retorno a `/sign-in`;
+- nova tentativa de abrir `/admin` bloqueada após o logout.
 
-1. abrir `/sign-in` e entrar com a conta administrativa;
-2. confirmar o redirecionamento para `/admin` e o título `Acervo`;
-3. acionar `Sair` e confirmar o retorno a `/sign-in`;
-4. tentar abrir `/admin` novamente e confirmar que o acesso continua revogado;
-5. informar apenas “aprovado” ou a divergência observada.
+Nenhuma credencial ou identidade foi registrada. As chaves Clerk continuam ausentes desta máquina e do GitHub Actions.
 
-Até esse aceite, `TEST-AUTH-001-01` e `TEST-AUTH-001-03` permanecem pendentes e AUTH-001 não deve ser marcado como `done`.
+## Decisão de fechamento
+
+- `TEST-AUTH-001-01`: aprovado por aceite humano;
+- `TEST-AUTH-001-02`: aprovado por mensagem genérica configurada e teste unitário;
+- `TEST-AUTH-001-03`: aprovado por aceite humano;
+- `TEST-AUTH-001-04`: aprovado por teste unitário e smoke remoto;
+- AUTH-001: **FECHADA**.
