@@ -22,6 +22,8 @@ Cada branch possui:
 
 Os papéis foram criados por SQL porque papéis adicionados pelo Console Neon recebem associação administrativa incompatível com o requisito de runtime sem DDL.
 
+> Simplificação posterior: esses papéis deixaram de ser requisito operacional da Fundação. O projeto passa a usar inicialmente `neondb_owner`, gerenciado pelo Neon, com isolamento por branch e separação entre endpoint pooled e direto. Os papéis existentes podem permanecer sem uso; não é necessário redefinir suas senhas.
+
 ## TEST-FND-005-01 — conectividade por ambiente
 
 `SELECT 1` foi executado com sucesso nas branches:
