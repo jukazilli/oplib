@@ -10,7 +10,7 @@ test-results/
 
 # Environment and secrets
 .env
-# TEST-FND-001-02: variante removida temporariamente para provar o gate
+.env.*
 !.env.example
 
 # Local tooling
