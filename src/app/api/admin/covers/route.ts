@@ -3,6 +3,7 @@ import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
 
 import { mediaEnvSchema } from "@/lib/env/schema";
+import { PayloadTooLargeError, readLimitedJson } from "@/lib/security/request";
 import { requireAdmin } from "@/modules/identity/admin";
 import {
   ALLOWED_COVER_TYPES,
@@ -12,7 +13,7 @@ import {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as HandleUploadBody;
+    const body = await readLimitedJson<HandleUploadBody>(request);
     const json = await handleUpload({
       body,
       request,
@@ -55,7 +56,14 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(json);
-  } catch {
+  } catch (error) {
+    if (error instanceof PayloadTooLargeError) {
+      return NextResponse.json(
+        { error: "A requisição excede o limite permitido." },
+        { status: 413 },
+      );
+    }
+
     return NextResponse.json(
       { error: "Não foi possível enviar a capa." },
       { status: 400 },

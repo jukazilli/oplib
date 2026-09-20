@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { mediaEnvSchema } from "@/lib/env/schema";
+import { PayloadTooLargeError, readLimitedJson } from "@/lib/security/request";
 import { requireAdmin } from "@/modules/identity/admin";
 import {
   CoverValidationError,
@@ -11,7 +12,9 @@ export async function POST(request: Request) {
   await requireAdmin();
 
   try {
-    const { contentType } = (await request.json()) as { contentType?: string };
+    const { contentType } = await readLimitedJson<{ contentType?: string }>(
+      request,
+    );
     const extension = extensionForCoverType(contentType ?? "");
     const env = mediaEnvSchema.parse(process.env);
 
@@ -21,6 +24,13 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof CoverValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    if (error instanceof PayloadTooLargeError) {
+      return NextResponse.json(
+        { error: "A requisição excede o limite permitido." },
+        { status: 413 },
+      );
     }
 
     return NextResponse.json(
