@@ -1,6 +1,5 @@
-import { UserButton } from "@clerk/nextjs";
-
 import { CoverUpload } from "@/app/admin/cover-upload";
+import { SignOutControl } from "@/components/admin/sign-out-control";
 import { requireAdmin } from "@/modules/identity/admin";
 
 export default async function AdminPage() {
@@ -12,7 +11,7 @@ export default async function AdminPage() {
         <span className="font-interface text-xs font-bold tracking-[0.2em]">
           OPALIB
         </span>
-        <UserButton />
+        <SignOutControl />
       </header>
       <main className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 lg:px-12">
         <p className="font-interface text-xs font-semibold tracking-[0.16em] text-muted-foreground uppercase">

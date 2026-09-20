@@ -25,6 +25,13 @@ test("anonymous visitor cannot access the collection", async ({ page }) => {
   await expect(
     page.getByRole("heading", { level: 1, name: "Acesso administrativo" }),
   ).toBeVisible();
+  await expect(page.getByText(/cadastro|criar conta/i)).toHaveCount(0);
+});
+
+test("public sign-up route is absent", async ({ request }) => {
+  const response = await request.get("/sign-up");
+
+  expect(response.status()).toBe(404);
 });
 
 test("public home has no critical accessibility violations", async ({
