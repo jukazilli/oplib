@@ -384,7 +384,7 @@ Um item só recebe `done` quando:
 
 ### AUTH-001 — Entrar e sair da administração
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D02 §9; D05 §10; D07 §16.
 - **Objetivo:** permitir que somente o proprietário inicie e encerre sessão administrativa.
 - **Descrição:** rota própria, UI tematizada do Clerk, mensagem genérica e logout explícito; nenhuma divulgação na navegação pública.
@@ -393,6 +393,8 @@ Um item só recebe `done` quando:
 - **Riscos:** confundir autenticação com autorização.
 - **Testes:** `TEST-AUTH-001-01` sucesso; `-02` falha genérica; `-03` logout.
 - **Evidência:** `EVID-AUTH-001-01` E2E com conta de teste.
+
+Estado atual: implementação, testes locais e smoke anônimo do Preview aprovados; login e logout reais aguardam aceite do proprietário em `EVID-AUTH-001-01`.
 
 ### AUTH-002 — Proteger sessão, rotas e comandos
 
