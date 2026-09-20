@@ -4,20 +4,32 @@ import { auth } from "@clerk/nextjs/server";
 import { notFound, redirect } from "next/navigation";
 
 import { identityEnvSchema } from "@/lib/env/schema";
-import { evaluateAdminAccess } from "@/modules/identity/access";
+import {
+  AdminAuthorizationError,
+  assertAdminAccess,
+} from "@/modules/identity/authorization";
 
 export async function requireAdmin() {
   const { userId } = await auth();
   const env = identityEnvSchema.parse(process.env);
-  const access = evaluateAdminAccess(userId, env.ADMIN_CLERK_USER_ID);
 
-  if (access === "unauthenticated") {
-    redirect("/sign-in");
-  }
+  try {
+    return assertAdminAccess(userId, env.ADMIN_CLERK_USER_ID);
+  } catch (error) {
+    if (
+      error instanceof AdminAuthorizationError &&
+      error.access === "unauthenticated"
+    ) {
+      redirect("/sign-in?redirect_url=%2Fadmin");
+    }
 
-  if (access === "forbidden") {
     notFound();
   }
+}
 
-  return { userId };
+export async function requireAdminCommand() {
+  const { userId } = await auth();
+  const env = identityEnvSchema.parse(process.env);
+
+  return assertAdminAccess(userId, env.ADMIN_CLERK_USER_ID);
 }

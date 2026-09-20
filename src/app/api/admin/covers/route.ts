@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 
 import { mediaEnvSchema } from "@/lib/env/schema";
 import { PayloadTooLargeError, readLimitedJson } from "@/lib/security/request";
-import { requireAdmin } from "@/modules/identity/admin";
+import { requireAdminCommand } from "@/modules/identity/admin";
+import { adminAuthorizationResponse } from "@/modules/identity/authorization";
 import {
   ALLOWED_COVER_TYPES,
   detectCoverType,
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
       body,
       request,
       onBeforeGenerateToken: async (pathname) => {
-        await requireAdmin();
+        await requireAdminCommand();
         const env = mediaEnvSchema.parse(process.env);
         const escapedPrefix = env.BLOB_COVERS_PREFIX.replace(
           /[.*+?^${}()|[\]\\]/g,
@@ -57,6 +58,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json(json);
   } catch (error) {
+    const authorizationResponse = adminAuthorizationResponse(error);
+    if (authorizationResponse) return authorizationResponse;
+
     if (error instanceof PayloadTooLargeError) {
       return NextResponse.json(
         { error: "A requisição excede o limite permitido." },

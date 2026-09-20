@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRef, useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
+import { adminSignInUrl } from "@/modules/identity/redirect";
 import { validateCoverFile } from "@/modules/media/cover-policy";
 
 type UploadedCover = { pathname: string; url: string };
@@ -35,6 +36,11 @@ export function CoverUpload() {
         pathname?: string;
         error?: string;
       };
+
+      if (pathnameResponse.status === 401) {
+        window.location.assign(adminSignInUrl(window.location.pathname, true));
+        return;
+      }
 
       if (!pathnameResponse.ok || !prepared.pathname) {
         throw new Error(prepared.error ?? "Não foi possível preparar o envio.");

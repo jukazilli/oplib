@@ -10,7 +10,7 @@ import {
 describe("security baseline", () => {
   it("defines the defensive response headers", () => {
     const headers = new Headers(
-      securityHeaders.map(({ key, value }) => [key, value]),
+      securityHeaders.map(({ key, value }): [string, string] => [key, value]),
     );
 
     expect(headers.get("content-security-policy-report-only")).toContain(

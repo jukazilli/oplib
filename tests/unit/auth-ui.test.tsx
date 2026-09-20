@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+afterEach(cleanup);
 
 vi.mock("@clerk/nextjs", () => ({
   SignIn: ({
@@ -32,13 +34,32 @@ import {
 } from "@/modules/identity/ui";
 
 describe("administrative authentication UI", () => {
-  it("uses the private sign-in route and always continues to the overview", () => {
-    render(<SignInPage />);
+  it("uses the private sign-in route and continues to the overview", async () => {
+    render(await SignInPage({ searchParams: Promise.resolve({}) }));
 
     const signIn = screen.getByTestId("clerk-sign-in");
     expect(signIn).toHaveAttribute("data-path", "/sign-in");
     expect(signIn).toHaveAttribute("data-redirect", "/admin");
     expect(screen.queryByText(/cadastro|criar conta/i)).not.toBeInTheDocument();
+  });
+
+  it("shows an expired session and returns to a safe admin context", async () => {
+    render(
+      await SignInPage({
+        searchParams: Promise.resolve({
+          reason: "session_expired",
+          redirect_url: "/admin/publicacoes/rascunho?aba=conteudo",
+        }),
+      }),
+    );
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Sessão expirada. Entre novamente.",
+    );
+    expect(screen.getByTestId("clerk-sign-in")).toHaveAttribute(
+      "data-redirect",
+      "/admin/publicacoes/rascunho?aba=conteudo",
+    );
   });
 
   it("offers explicit sign-out and returns to sign-in", () => {
