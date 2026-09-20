@@ -41,7 +41,7 @@ Validações locais executadas nesta branch:
 Validação remota desta branch:
 
 - Preview: `https://oplib-git-feat-fnd-016-foundation-readiness-feather-tecnologias.vercel.app`;
-- E2E: `https://github.com/jukazilli/oplib/actions/runs/35529425596`;
+- E2E: `https://github.com/jukazilli/oplib/actions/runs/35529642446` (commit funcional `be58706`);
 - resultado: quatro cenários aprovados em Chromium, incluindo página pública, proteção administrativa, acessibilidade básica e health conectado ao Neon;
 - CI, CodeQL, política do repositório e deployment Vercel do PR #16 aprovados.
 
