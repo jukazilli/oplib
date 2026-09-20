@@ -96,9 +96,9 @@ Um item só pode mudar para `done` se os campos “Implementação atual”, “
 | `ready` | 0 | nenhum item aguardando início imediato |
 | `planned` | 49 | aguardam ordem e dependências |
 | `blocked-human` | 5 | DEC-001 a DEC-004 e CNT-001 |
-| `in-progress` | 1 | FND-001 em execução |
+| `in-progress` | 0 | nenhum item em execução |
 | `review` | 0 | nenhuma entrega em validação |
-| `done` | 0 | nenhuma evidência funcional produzida |
+| `done` | 1 | FND-001 concluído e comprovado |
 | `cancelled` | 0 | nenhum item removido |
 
 Total: 55 itens permanentes.
@@ -116,7 +116,7 @@ Total: 55 itens permanentes.
 
 | ID | Origem | Requisito | Destino previsto | Implementação atual | Testes previstos | Evidência esperada | Status |
 |---|---|---|---|---|---|---|---|
-| FND-001 | D06 §§20–23; INF §§9,24 | proteger e preparar o repositório | `.github/`, `README.md`, ruleset GitHub | `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `.github/` | `TEST-FND-001-*` | `EVID-FND-001-01` | `in-progress` |
+| FND-001 | D06 §§20–23; INF §§9,24 | proteger e preparar o repositório | `.github/`, `README.md`, ruleset GitHub | `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `.github/`, `scripts/validate-repository.mjs` | `TEST-FND-001-01`, `TEST-FND-001-02` | `docs/evidence/EVID-FND-001-01.md` | `done` |
 | FND-002 | TL §§4–6,20; INF §24 | materializar Next.js, Node, TypeScript e pnpm | `package.json`, lockfile, `src/app/`, configs raiz | — | `TEST-FND-002-*` | `EVID-FND-002-01` | `planned` |
 | FND-003 | PUX; D04; TL §9 | criar tokens, UI-base e ferramentas de teste | `src/styles/`, `src/components/ui/`, configs de teste | — | `TEST-FND-003-*` | `EVID-FND-003-01` | `planned` |
 | FND-004 | D06 §14; TL §22; INF §18 | validar configuração e segredos | `.env.example`, `src/lib/env/`, `.gitignore` | — | `TEST-FND-004-*` | `EVID-FND-004-01` | `planned` |
@@ -264,4 +264,4 @@ Antes de cada gate, verificar:
 
 A baseline documental DOC-02 a DOC-09 está concluída. O projeto ainda não possui Fundação nem código executável; isso é um estado válido e explicitamente registrado.
 
-O item `FND-001 — Proteger e preparar o repositório` está em execução. O próximo item planejado é `FND-002 — Materializar toolchain e aplicação-base`. A implementação funcional somente poderá começar após `GATE-FND` ou exceção formalmente aprovada.
+O item `FND-001 — Proteger e preparar o repositório` está concluído. O próximo item aplicável é `FND-002 — Materializar toolchain e aplicação-base`. A implementação funcional somente poderá começar após `GATE-FND` ou exceção formalmente aprovada.

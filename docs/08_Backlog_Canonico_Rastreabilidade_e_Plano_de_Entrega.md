@@ -188,7 +188,7 @@ Um item só recebe `done` quando:
 
 ### FND-001 — Proteger e preparar o repositório
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D06 §§20–23; INF §§9 e 24.
 - **Objetivo:** tornar o GitHub a origem protegida de código, documentação e automação.
 - **Descrição:** criar README operacional, licença técnica do código quando decidida, templates essenciais, ruleset, Dependabot, secret scanning e CodeQL.
