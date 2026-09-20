@@ -26,6 +26,10 @@ vi.mock("@clerk/nextjs", () => ({
 
 import SignInPage from "@/app/sign-in/[[...sign-in]]/page";
 import { SignOutControl } from "@/components/admin/sign-out-control";
+import {
+  authenticationErrorMessage,
+  authenticationLocalization,
+} from "@/modules/identity/ui";
 
 describe("administrative authentication UI", () => {
   it("uses the private sign-in route and always continues to the overview", () => {
@@ -42,5 +46,12 @@ describe("administrative authentication UI", () => {
 
     const button = screen.getByRole("button", { name: "Sair" });
     expect(button.parentElement).toHaveAttribute("data-redirect", "/sign-in");
+  });
+
+  it("does not distinguish an unknown identity from an incorrect password", () => {
+    expect(authenticationLocalization.unstable__errors).toMatchObject({
+      form_identifier_not_found: authenticationErrorMessage,
+      form_password_incorrect: authenticationErrorMessage,
+    });
   });
 });
