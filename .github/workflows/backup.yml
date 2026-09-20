@@ -1,0 +1,129 @@
+name: Encrypted Database Backup
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      retention_tier:
+        description: Retenção do backup manual
+        required: true
+        default: manual
+        type: choice
+        options:
+          - manual
+          - daily
+          - weekly
+      confirmation:
+        description: Informe CREATE_ENCRYPTED_BACKUP
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: encrypted-database-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Create, encrypt and retain backup
+    if: github.event_name == 'schedule' || inputs.confirmation == 'CREATE_ENCRYPTED_BACKUP'
+    environment: Backup
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.11.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.12.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install age
+        run: sudo apt-get update && sudo apt-get install --yes age
+
+      - name: Create and validate logical dump
+        id: dump
+        shell: bash
+        env:
+          DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+          REQUESTED_TIER: ${{ inputs.retention_tier }}
+          BACKUP_ENCRYPTION_PUBLIC_KEY: ${{ secrets.BACKUP_ENCRYPTION_PUBLIC_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$DATABASE_URL_UNPOOLED"
+          test -n "$BACKUP_ENCRYPTION_PUBLIC_KEY"
+          workdir="$(mktemp -d)"
+          chmod 700 "$workdir"
+          backup_id="$(date -u +%Y-%m-%dT%H%M%SZ)"
+          tier="${REQUESTED_TIER:-daily}"
+          weekly_copy=false
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            tier=daily
+            if [[ "$(date -u +%u)" == "7" ]]; then weekly_copy=true; fi
+          fi
+          dump_file="$workdir/oplib.dump"
+          encrypted_file="$workdir/oplib.dump.age"
+          manifest_file="$workdir/oplib.manifest.json"
+
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --env DATABASE_URL_UNPOOLED \
+            --volume "$workdir:/backup" \
+            postgres:17-alpine \
+            sh -c 'pg_dump --dbname "$DATABASE_URL_UNPOOLED" --format custom --no-owner --no-privileges --file /backup/oplib.dump'
+          docker run --rm --volume "$workdir:/backup" postgres:17-alpine pg_restore --list /backup/oplib.dump >/dev/null
+          age --recipient "$BACKUP_ENCRYPTION_PUBLIC_KEY" --output "$encrypted_file" "$dump_file"
+          encrypted_sha256="$(sha256sum "$encrypted_file" | cut -d' ' -f1)"
+          encrypted_bytes="$(stat --format=%s "$encrypted_file")"
+          jq --null-input \
+            --arg backupId "$backup_id" \
+            --arg createdAt "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg retentionTier "$tier" \
+            --arg encryptedSha256 "$encrypted_sha256" \
+            --arg gitSha "$GITHUB_SHA" \
+            --argjson encryptedBytes "$encrypted_bytes" \
+            '{schemaVersion:1, backupId:$backupId, createdAt:$createdAt, retentionTier:$retentionTier, format:"postgres-custom+age", encryptedSha256:$encryptedSha256, encryptedBytes:$encryptedBytes, gitSha:$gitSha}' \
+            > "$manifest_file"
+          shred --remove "$dump_file"
+          echo "workdir=$workdir" >> "$GITHUB_OUTPUT"
+          echo "backup_id=$backup_id" >> "$GITHUB_OUTPUT"
+          echo "tier=$tier" >> "$GITHUB_OUTPUT"
+          echo "weekly_copy=$weekly_copy" >> "$GITHUB_OUTPUT"
+          echo "encrypted_sha256=$encrypted_sha256" >> "$GITHUB_OUTPUT"
+
+      - name: Upload, verify and apply retention
+        env:
+          BACKUP_BLOB_READ_WRITE_TOKEN: ${{ secrets.BACKUP_BLOB_READ_WRITE_TOKEN }}
+          WORKDIR: ${{ steps.dump.outputs.workdir }}
+          WEEKLY_COPY: ${{ steps.dump.outputs.weekly_copy }}
+        shell: bash
+        run: |
+          node scripts/backup-storage.mjs upload "$WORKDIR/oplib.dump.age" "$WORKDIR/oplib.manifest.json"
+          if [[ "$WEEKLY_COPY" == "true" ]]; then
+            node scripts/backup-storage.mjs upload "$WORKDIR/oplib.dump.age" "$WORKDIR/oplib.manifest.json" weekly
+          fi
+
+      - name: Record sanitized summary
+        env:
+          BACKUP_ID: ${{ steps.dump.outputs.backup_id }}
+          RETENTION_TIER: ${{ steps.dump.outputs.tier }}
+          ENCRYPTED_SHA256: ${{ steps.dump.outputs.encrypted_sha256 }}
+        shell: bash
+        run: |
+          echo "## Encrypted backup created" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Backup: \`$BACKUP_ID\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Retention: \`$RETENTION_TIER\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SHA-256 (encrypted): \`$ENCRYPTED_SHA256\`" >> "$GITHUB_STEP_SUMMARY"
