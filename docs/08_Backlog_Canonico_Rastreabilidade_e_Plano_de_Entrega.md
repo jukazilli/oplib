@@ -332,7 +332,7 @@ Um item só recebe `done` quando:
 
 ### FND-013 — Aplicar baseline de segurança
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D02 §11; D07 §24; TL §16; INF §19.
 - **Objetivo:** estabelecer controles de borda, headers e entrada antes das features públicas.
 - **Descrição:** TLS, CSP Report-Only, headers, cookies, payload limits, WAF em log e respostas seguras.

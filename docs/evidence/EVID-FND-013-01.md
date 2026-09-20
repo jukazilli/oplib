@@ -2,7 +2,7 @@
 
 ## Estado
 
-Evidência parcial. Headers, limite de payload e validação no Preview foram aprovados. A regra WAF permanece como rascunho até publicação humana em modo `log`.
+Concluída. Headers, limite de payload e validação no Preview foram aprovados. A regra WAF foi publicada em modo `log`, sem bloquear tráfego.
 
 ## Controles implementados
 
@@ -29,10 +29,11 @@ Evidência parcial. Headers, limite de payload e validação no Preview foram ap
 
 ## TEST-FND-013-03 — Autenticação abusiva
 
-- regra `Observe Preview admin authentication` criada como rascunho;
+- regra `Observe Preview admin authentication` publicada, ativa e válida;
 - escopo: somente ambiente `preview` e caminho iniciado por `/sign-in`;
 - ação: `log`, sem bloqueio;
-- publicação e observação de eventos pendentes de revisão humana.
+- nenhum rascunho ou alteração pendente;
+- telemetria do período registrou 7 acessos permitidos a `/sign-in`, confirmando que o fluxo continuou disponível durante a observação.
 
 ## Escopo futuro
 
