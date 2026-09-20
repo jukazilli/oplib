@@ -2,7 +2,7 @@
 
 ## Resultado atual
 
-**Estado:** implementação e validação no Preview concluídas; checks da PR em revisão.
+**Estado:** aprovado.
 
 ## Implementação comprovada
 
@@ -27,6 +27,8 @@
 - typecheck, lint e build aprovados;
 - `29` arquivos de governança validados.
 
-## Pendência
+## Checks finais
 
-- confirmar os checks finais da PR e registrar o aceite do corte.
+- Vercel Preview: aprovado na PR #20.
+- Vercel Preview Comments: aprovado na PR #20.
+- Corte reconciliado no backlog e na matriz operacional como `done`.
