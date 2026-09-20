@@ -14,7 +14,8 @@
 - estados vazio e degradado com mensagens curtas e sem detalhes técnicos;
 - falha de leitura registrada apenas com campos controlados e correlation ID;
 - consulta adiada até uma requisição real com `connection()`;
-- envio de capa já entregue preservado na administração.
+- envio de capa removido da visão geral e preservado tecnicamente para integração ao fluxo editorial.
+- padrão multi-etapas registrado em DOC-04/DOC-05, com referência visual versionada em `docs/assets/reference-multistep-editorial.svg`.
 
 ## TEST-ADM-001-01 — Desktop e celular
 

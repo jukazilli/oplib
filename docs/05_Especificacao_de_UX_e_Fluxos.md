@@ -432,14 +432,27 @@ Toda nova publicação começará como rascunho.
 
 1. O autor seleciona “Nova publicação”.
 2. O sistema cria o contexto de um novo rascunho.
-3. O autor preenche os metadados.
-4. Escreve em Markdown.
-5. Consulta a prévia.
-6. Salva o rascunho.
-7. Corrige eventuais validações.
-8. Seleciona “Publicar”.
-9. Confirma a publicação.
-10. O sistema apresenta o endereço público.
+3. A etapa “Informações” reúne metadados e taxonomia.
+4. A etapa “Conteúdo” reúne escrita Markdown e prévia durante a edição.
+5. A etapa “Capa” reúne imagem e texto alternativo.
+6. A etapa “Referências” reúne bibliografia e links relacionados.
+7. A etapa “Revisão” apresenta prévia e validações pendentes.
+8. O autor avança ou retorna sem perder os dados já preenchidos.
+9. O sistema salva o rascunho e a última etapa válida para retomada.
+10. Na etapa “Publicação”, o autor confirma a mudança de estado.
+11. O sistema apresenta o endereço público.
+
+### Comportamento do fluxo multi-etapas
+
+- desktop: etapas persistentes em uma coluna lateral e formulário da etapa atual na área principal;
+- celular: número, nome e progresso da etapa atual em formato compacto, com lista completa sob demanda;
+- `Voltar` preserva os dados preenchidos;
+- `Continuar` valida apenas o necessário para avançar;
+- campos obrigatórios para publicar podem permanecer incompletos durante o rascunho;
+- erros impedem somente o avanço que depende deles e apontam o campo correspondente;
+- ao reabrir um rascunho, o autor retorna à última etapa válida;
+- a etapa final consolida conteúdo, capa, referências e estado antes da confirmação;
+- sair com mudanças ainda não salvas mantém o aviso definido para o editor.
 
 Mensagem de sucesso:
 

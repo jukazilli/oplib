@@ -11,6 +11,7 @@ depends_on:
   - UX-PRINCIPLES
 visual_reference:
   - ./assets/moodboard-opalib.png
+  - ./assets/reference-multistep-editorial.svg
 governs:
   - visual-direction
   - design-system
@@ -23,6 +24,8 @@ governs:
 # Direção de UI e Design System — OPALIB
 
 ![Moodboard visual do OPALIB](./assets/moodboard-opalib.png)
+
+![Referência de fluxo multi-etapas adaptada ao OPALIB](./assets/reference-multistep-editorial.svg)
 
 ## 1. Objetivo
 
@@ -113,40 +116,40 @@ O moodboard deverá orientar atmosfera, cores e tratamento de superfícies. Foto
 
 ### Cores fundamentais
 
-| Token | Cor | Uso |
-|---|---:|---|
-| `background` | `#F7F8F6` | Fundo principal perolado |
-| `surface` | `#FFFFFF` | Conteúdo, formulários e navegação |
-| `surface-soft` | `#EFF3F5` | Áreas secundárias |
-| `surface-blue` | `#EAF5FA` | Destaques suaves |
-| `text-primary` | `#172432` | Texto principal azul-noturno |
-| `text-secondary` | `#596673` | Metadados e textos auxiliares |
-| `text-subtle` | `#7A858F` | Informações de menor hierarquia |
-| `border` | `#D9E1E6` | Bordas e separadores |
-| `border-strong` | `#B8C6CF` | Estados que exigem maior definição |
+| Token            |       Cor | Uso                                |
+| ---------------- | --------: | ---------------------------------- |
+| `background`     | `#F7F8F6` | Fundo principal perolado           |
+| `surface`        | `#FFFFFF` | Conteúdo, formulários e navegação  |
+| `surface-soft`   | `#EFF3F5` | Áreas secundárias                  |
+| `surface-blue`   | `#EAF5FA` | Destaques suaves                   |
+| `text-primary`   | `#172432` | Texto principal azul-noturno       |
+| `text-secondary` | `#596673` | Metadados e textos auxiliares      |
+| `text-subtle`    | `#7A858F` | Informações de menor hierarquia    |
+| `border`         | `#D9E1E6` | Bordas e separadores               |
+| `border-strong`  | `#B8C6CF` | Estados que exigem maior definição |
 
 ### Identidade
 
-| Token | Cor | Uso |
-|---|---:|---|
-| `primary` | `#326F8D` | Ações principais e links |
-| `primary-hover` | `#285B74` | Hover e ação pressionada |
-| `primary-soft` | `#DDEEF5` | Seleções e fundos suaves |
-| `opal-blue` | `#87CAE5` | Reflexo principal |
-| `opal-lilac` | `#AAA1D6` | Conteúdo interdisciplinar e detalhes |
-| `opal-sand` | `#DFC29C` | Calor humano e Educação Física |
-| `opal-mist` | `#C5D9E2` | Elementos decorativos discretos |
-| `midnight` | `#132332` | Rodapé e superfícies especiais |
+| Token           |       Cor | Uso                                  |
+| --------------- | --------: | ------------------------------------ |
+| `primary`       | `#326F8D` | Ações principais e links             |
+| `primary-hover` | `#285B74` | Hover e ação pressionada             |
+| `primary-soft`  | `#DDEEF5` | Seleções e fundos suaves             |
+| `opal-blue`     | `#87CAE5` | Reflexo principal                    |
+| `opal-lilac`    | `#AAA1D6` | Conteúdo interdisciplinar e detalhes |
+| `opal-sand`     | `#DFC29C` | Calor humano e Educação Física       |
+| `opal-mist`     | `#C5D9E2` | Elementos decorativos discretos      |
+| `midnight`      | `#132332` | Rodapé e superfícies especiais       |
 
 ### Cores semânticas
 
-| Token | Cor | Uso |
-|---|---:|---|
-| `success` | `#2E7658` | Ação concluída |
-| `warning` | `#96601F` | Atenção |
-| `danger` | `#B13A35` | Erro e exclusão |
-| `info` | `#326F8D` | Informação |
-| `focus` | `#146F9C` | Indicador de foco |
+| Token     |       Cor | Uso               |
+| --------- | --------: | ----------------- |
+| `success` | `#2E7658` | Ação concluída    |
+| `warning` | `#96601F` | Atenção           |
+| `danger`  | `#B13A35` | Erro e exclusão   |
+| `info`    | `#326F8D` | Informação        |
+| `focus`   | `#146F9C` | Indicador de foco |
 
 As combinações finais deverão passar por validação de contraste WCAG antes da implementação.
 
@@ -248,16 +251,16 @@ Blocos de código utilizarão uma fonte monoespaçada do sistema. Uma família a
 
 ## 8. Escala tipográfica inicial
 
-| Elemento | Desktop | Compacto | Fonte |
-|---|---:|---:|---|
-| Título principal | 56–64 px | 38–44 px | Newsreader |
+| Elemento             |  Desktop | Compacto | Fonte      |
+| -------------------- | -------: | -------: | ---------- |
+| Título principal     | 56–64 px | 38–44 px | Newsreader |
 | Título da publicação | 48–56 px | 34–40 px | Newsreader |
-| Título de seção | 32–40 px | 28–32 px | Newsreader |
-| Subtítulo | 24–28 px | 22–24 px | Newsreader |
-| Corpo de artigo | 19 px | 18 px | Newsreader |
-| Corpo de interface | 16 px | 16 px | Manrope |
-| Texto auxiliar | 14 px | 14 px | Manrope |
-| Rótulo | 12–13 px | 12–13 px | Manrope |
+| Título de seção      | 32–40 px | 28–32 px | Newsreader |
+| Subtítulo            | 24–28 px | 22–24 px | Newsreader |
+| Corpo de artigo      |    19 px |    18 px | Newsreader |
+| Corpo de interface   |    16 px |    16 px | Manrope    |
+| Texto auxiliar       |    14 px |    14 px | Manrope    |
+| Rótulo               | 12–13 px | 12–13 px | Manrope    |
 
 O corpo dos artigos deverá utilizar altura de linha aproximada entre `1.65` e `1.75`.
 
@@ -635,6 +638,41 @@ Ações:
 Excluir deverá permanecer em posição secundária e exigir confirmação reforçada.
 
 ## 22. Editor Markdown
+
+### Fluxo multi-etapas
+
+Tarefas administrativas longas deverão ser divididas em etapas quando exigirem conjuntos distintos de decisões. A criação de publicação adotará este padrão para reduzir carga cognitiva e tornar o progresso recuperável.
+
+No desktop, o fluxo deverá usar:
+
+- coluna lateral com todas as etapas, estado atual e progresso;
+- área principal dedicada somente à etapa em curso;
+- ação `Voltar` no início do conteúdo;
+- ações `Continuar` e `Salvar rascunho` em posição previsível;
+- revisão final antes de publicar.
+
+No celular, a coluna lateral será substituída por um indicador compacto com etapa atual e progresso. A lista completa poderá ser aberta sob demanda, sem ocupar a área de edição.
+
+Etapas previstas para criar uma publicação:
+
+1. Informações — título, resumo, tipo, área, categoria e tags;
+2. Conteúdo — escrita em Markdown;
+3. Capa — imagem e texto alternativo;
+4. Referências — bibliografia e links relacionados;
+5. Revisão — prévia, validações e destaque;
+6. Publicação — confirmação e endereço público.
+
+Regras:
+
+- um rascunho será criado e salvo desde a primeira etapa;
+- voltar não apagará dados já preenchidos;
+- o autor poderá retomar na última etapa válida;
+- erros serão apresentados na etapa e no campo correspondentes;
+- etapas incompletas serão distinguíveis de etapas concluídas;
+- publicar permanecerá restrito à etapa final;
+- o indicador de progresso não será usado como decoração nem para fluxos curtos.
+
+Referência visual: `assets/reference-multistep-editorial.svg`, adaptação da segunda imagem fornecida pelo proprietário em 20/09/2026. A referência orienta estrutura e hierarquia, não identidade visual ou conteúdo literal.
 
 ### Desktop
 

@@ -1,6 +1,5 @@
 import { EyeOff, FileText, Plus, Send, Undo2 } from "lucide-react";
 
-import { CoverUpload } from "@/app/admin/cover-upload";
 import { Button } from "@/components/ui/button";
 import type { AdminOverview } from "@/modules/admin/overview";
 
@@ -105,8 +104,6 @@ export function AdminOverviewContent({
           </ul>
         )}
       </section>
-
-      <CoverUpload />
     </>
   );
 }

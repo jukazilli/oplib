@@ -53,6 +53,9 @@ describe("administrative overview", () => {
     ).toBeDisabled();
     expect(screen.getByText("Nenhum comentário ainda")).toBeInTheDocument();
     expect(screen.getAllByText("0")).toHaveLength(4);
+    expect(
+      screen.queryByRole("heading", { name: "Nova capa" }),
+    ).not.toBeInTheDocument();
   });
 
   it("lists recent comments with their source publication", () => {
