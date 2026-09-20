@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  assertCoverCanBeDeleted,
   CoverValidationError,
   MAX_COVER_BYTES,
   validateCoverFile,
@@ -42,5 +43,10 @@ describe("cover policy", () => {
     });
 
     await expect(validateCoverFile(file)).rejects.toThrow("no máximo 5 MB");
+  });
+
+  it("prevents deleting a cover that is still referenced", () => {
+    expect(() => assertCoverCanBeDeleted(true)).toThrow("ainda está vinculada");
+    expect(() => assertCoverCanBeDeleted(false)).not.toThrow();
   });
 });

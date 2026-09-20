@@ -53,6 +53,12 @@ export function extensionForCoverType(type: string) {
   return COVER_TYPES[type as CoverContentType];
 }
 
+export function assertCoverCanBeDeleted(isStillReferenced: boolean) {
+  if (isStillReferenced) {
+    throw new Error("A capa ainda está vinculada a uma publicação.");
+  }
+}
+
 export async function validateCoverFile(file: File) {
   if (file.size === 0) {
     throw new CoverValidationError("Selecione uma imagem válida.");
