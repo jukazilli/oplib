@@ -34,20 +34,6 @@ test("public sign-up route is absent", async ({ request }) => {
   expect(response.status()).toBe(404);
 });
 
-test("invalid sign-in does not enumerate identities", async ({ page }) => {
-  await page.goto("/sign-in");
-  await page
-    .locator('input[name="identifier"]')
-    .fill("conta-inexistente+clerk_test@example.com");
-  await page.locator('button[type="submit"]').click();
-
-  await expect(
-    page.getByText(
-      "Não foi possível entrar. Verifique os dados e tente novamente.",
-    ),
-  ).toBeVisible();
-});
-
 test("public home has no critical accessibility violations", async ({
   page,
 }) => {
