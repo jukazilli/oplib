@@ -8,13 +8,13 @@
 
 ## Versões materializadas
 
-| Ferramenta | Versão |
-|---|---:|
-| Node.js | `22.12.0` |
-| pnpm | `9.11.0` |
-| Next.js | `16.3.5` |
-| React e React DOM | `19.2.8` |
-| TypeScript | `5.9.3` |
+| Ferramenta        |    Versão |
+| ----------------- | --------: |
+| Node.js           | `22.12.0` |
+| pnpm              |  `9.11.0` |
+| Next.js           |  `16.3.5` |
+| React e React DOM |  `19.2.8` |
+| TypeScript        |   `5.9.3` |
 
 As versões estão fixadas em `package.json`, `.nvmrc`, `.node-version` e `pnpm-lock.yaml`.
 
