@@ -2,7 +2,7 @@
 
 ## Resultado atual
 
-**Estado:** implementação local aprovada; Preview e aceite visual pendentes.
+**Estado:** implementação e smoke anônimo do Preview aprovados; aceite autenticado pendente.
 
 ## Implementação comprovada
 
@@ -34,6 +34,8 @@ Pendente no Preview:
 - screenshot autenticado em celular;
 - inspeção visual do conteúdo real do banco.
 
+Smoke anônimo aprovado em `https://github.com/jukazilli/oplib/actions/runs/35541148070`, cobrindo redirecionamento da administração, comandos protegidos, segurança, acessibilidade pública e health.
+
 ## TEST-ADM-001-02 — Cache privado
 
 - o build classifica `/admin` como rota dinâmica (`ƒ`);
@@ -48,10 +50,11 @@ Pendente no Preview:
 - `pnpm lint`: aprovado;
 - `pnpm build`: aprovado;
 - `/admin`: rota dinâmica no relatório do build.
+- Preview: `https://oplib-git-feat-adm-001-admin-shell-feather-tecnologias.vercel.app`;
+- E2E Preview: run `35541148070` aprovado.
 
 ## Pendências de fechamento
 
-- publicar Preview;
 - executar smoke autenticado em desktop e celular;
 - comprovar resposta privada e não armazenável;
 - obter aceite do proprietário.
