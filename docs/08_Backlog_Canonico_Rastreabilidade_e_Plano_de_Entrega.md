@@ -356,7 +356,7 @@ Um item só recebe `done` quando:
 
 ### FND-015 — Configurar backup e provar restauração
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D07 §23; INF §§14.2 e 15.
 - **Objetivo:** atingir RPO de 24 horas e RTO de 4 horas para o MVP.
 - **Descrição:** snapshot, `pg_dump` diário criptografado, store privado, retenção e restore em branch temporária.
