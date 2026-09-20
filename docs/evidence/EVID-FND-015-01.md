@@ -1,20 +1,29 @@
-# EVID-FND-015-01 — Backup e restauração
+# EVID-FND-015-01 — Backup criptografado e restauração
 
 ## Estado
 
-Não implementada no corte atual. A FND-015 foi congelada por decisão explícita em `OPS-002` e permanece `planned`.
+Em andamento. A automação, a retenção e o runbook foram implementados e validados localmente. A conclusão depende da configuração protegida, de um backup real e do restore em branch Neon temporária.
 
-## Trabalho preservado
+## TEST-FND-015-01 — Integridade e retenção
 
-- PR draft: `https://github.com/jukazilli/oplib/pull/15`;
-- automação de backup criptografado, retenção e restore preparada, mas não integrada;
-- nenhum bucket privado, chave `age`, backup ou restore real foi criado;
-- nenhuma configuração de Production foi alterada.
+- `pg_dump` custom-format e `pg_restore --list` fazem parte do workflow;
+- o dump é criptografado com `age` antes do upload;
+- somente a chave pública integra a automação; a identidade privada permanece offline;
+- Blob privado guarda o arquivo criptografado e seu manifesto;
+- o tamanho do upload é conferido antes da remoção de cópias antigas;
+- política testada: sete diários e quatro semanais, sem remoção automática dos manuais;
+- validação local: 29 testes aprovados, incluindo três cenários de retenção.
 
-## Risco aceito
+Pendente: URL da primeira execução verde e SHA-256 saneado do arquivo criptografado.
 
-Desenvolvimento e Preview usam somente dados sintéticos, reconstruíveis ou preservados também fora da aplicação. Não existe RPO de 24 horas nem RTO de 4 horas comprovado durante a exceção.
+## TEST-FND-015-02 — Restore
 
-## Retomada obrigatória
+O script local valida hash, descriptografa com a identidade offline, confirma a estrutura do dump, restaura com `--exit-on-error` e executa consulta de sanidade. Ele exige branch com nome `restore-test-AAAAMMDD`, confirmação explícita e endpoint diferente da origem.
 
-A FND-015 deve ser retomada antes de Production ou antes de conteúdo real insubstituível. O corte futuro poderá manter Vercel Blob ou aprovar outra estratégia, incluindo a avaliação já identificada de Cloudflare R2 e Backblaze B2.
+Pendente: duração do restore real, quantidade saneada de tabelas, versão usada e prova de remoção da branch temporária.
+
+Nenhuma connection string, chave, conteúdo do dump ou dado de usuário será registrado nesta evidência.
+
+## Exceção operacional
+
+`OPS-002` permite desenvolvimento e Preview com dados sintéticos enquanto backup e restore reais permanecem pendentes. A FND-015 deve ser concluída antes de Production ou antes de conteúdo real insubstituível; até lá, RPO de 24 horas e RTO de 4 horas não estão comprovados.
