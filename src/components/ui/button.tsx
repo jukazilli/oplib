@@ -11,6 +11,8 @@ const buttonVariants = cva(
           "bg-primary text-primary-foreground hover:bg-[#285b74] active:bg-[#214c61]",
         secondary:
           "border-border bg-surface text-foreground hover:bg-muted border",
+        destructive:
+          "border-destructive bg-surface text-destructive hover:bg-destructive/10 border",
       },
     },
     defaultVariants: { variant: "primary" },

@@ -23,6 +23,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed:areas": "node scripts/seed-knowledge-areas.mjs",
     "db:verify:areas": "node scripts/verify-knowledge-areas.mjs",
+    "db:verify:taxonomy": "node scripts/verify-taxonomy.mjs",
     "db:verify": "node scripts/verify-database.mjs"
   },
   "dependencies": {

@@ -30,10 +30,9 @@ describe("administrative overview", () => {
     const navigation = screen.getByRole("navigation", {
       name: "Administração",
     });
-    expect(within(navigation).getByText("Visão geral")).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
+    expect(
+      within(navigation).getByText("Visão geral").closest("a"),
+    ).toHaveAttribute("aria-current", "page");
     expect(within(navigation).getByText("Publicações")).toHaveAttribute(
       "aria-disabled",
       "true",
@@ -41,7 +40,9 @@ describe("administrative overview", () => {
     expect(
       within(navigation).queryByText("Nova publicação"),
     ).not.toBeInTheDocument();
-    expect(within(navigation).queryByRole("link")).not.toBeInTheDocument();
+    expect(
+      within(navigation).getByRole("link", { name: "Categorias e tags" }),
+    ).toHaveAttribute("href", "/admin/taxonomia");
     expect(screen.getAllByRole("button", { name: "Sair" })).toHaveLength(2);
   });
 
