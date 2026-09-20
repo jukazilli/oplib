@@ -320,7 +320,7 @@ Um item só recebe `done` quando:
 
 ### FND-012 — Configurar release de produção e rollback
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D06 §§20–21; INF §§16–17.
 - **Objetivo:** promover o mesmo commit aprovado com migration e retorno controlados.
 - **Descrição:** GitHub Environment protegido, workflow manual, migration direta, deploy Vercel, smoke e rollback.

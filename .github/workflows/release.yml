@@ -1,0 +1,214 @@
+name: Production Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Operacao controlada
+        required: true
+        default: rehearse
+        type: choice
+        options:
+          - rehearse
+          - promote
+          - rollback
+      commit_sha:
+        description: SHA completo do commit aprovado
+        required: true
+        type: string
+      deployment_url:
+        description: URL do deployment Vercel aprovado ou alvo do rollback
+        required: true
+        type: string
+      confirmation:
+        description: Use REHEARSE, PROMOTE ou ROLLBACK conforme a operacao
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
+env:
+  VERCEL_CLI_VERSION: 59.23.2
+
+jobs:
+  rehearse:
+    name: Rehearse approved commit
+    if: inputs.operation == 'rehearse' && inputs.confirmation == 'REHEARSE'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout approved commit
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.commit_sha }}
+
+      - name: Verify checked-out commit
+        shell: bash
+        env:
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+        run: |
+          [[ "$EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$DEPLOYMENT_URL" =~ ^https://[a-zA-Z0-9-]+\.vercel\.app/?$ ]]
+          test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.11.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.12.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run quality gates
+        run: pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2ktdGVzdC5jbGVyay5hY2NvdW50cy5kZXYk
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Preview smoke
+        run: pnpm test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ inputs.deployment_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+
+      - name: Record rehearsal summary
+        shell: bash
+        env:
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+        run: |
+          echo "## Release rehearsal approved" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Commit: \`$EXPECTED_COMMIT\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Deployment: $DEPLOYMENT_URL" >> "$GITHUB_STEP_SUMMARY"
+
+  promote:
+    name: Promote to Production
+    if: inputs.operation == 'promote' && inputs.confirmation == 'PROMOTE' && github.ref == 'refs/heads/main'
+    environment: Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout approved commit
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.commit_sha }}
+          fetch-depth: 0
+
+      - name: Verify commit is on main
+        shell: bash
+        env:
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+        run: |
+          [[ "$EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$DEPLOYMENT_URL" =~ ^https://[a-zA-Z0-9-]+\.vercel\.app/?$ ]]
+          test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT"
+          git fetch origin main
+          git merge-base --is-ancestor HEAD origin/main
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.11.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.12.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify deployment commit
+        shell: bash
+        env:
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          test -n "$VERCEL_TOKEN"
+          test -n "$VERCEL_ORG_ID"
+          test -n "$VERCEL_PROJECT_ID"
+          deployment_host="${DEPLOYMENT_URL#https://}"
+          deployment_host="${deployment_host%/}"
+          actual_commit="$(curl --fail --silent --show-error \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v13/deployments/$deployment_host?teamId=$VERCEL_ORG_ID" \
+            | jq --raw-output '.meta.githubCommitSha // empty')"
+          test "$actual_commit" = "$EXPECTED_COMMIT"
+
+      - name: Inspect approved deployment
+        env:
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+        run: pnpm dlx vercel@${{ env.VERCEL_CLI_VERSION }} inspect "$DEPLOYMENT_URL" --scope "${{ secrets.VERCEL_ORG_ID }}" --token "${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Apply production migrations
+        run: pnpm db:migrate
+        env:
+          DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+
+      - name: Promote approved deployment
+        env:
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+        run: pnpm dlx vercel@${{ env.VERCEL_CLI_VERSION }} promote "$DEPLOYMENT_URL" --scope "${{ secrets.VERCEL_ORG_ID }}" --token "${{ secrets.VERCEL_TOKEN }}" --timeout 5m
+
+  rollback:
+    name: Roll back Production
+    if: inputs.operation == 'rollback' && inputs.confirmation == 'ROLLBACK' && github.ref == 'refs/heads/main'
+    environment: Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify rollback target
+        shell: bash
+        env:
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          [[ "$EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$DEPLOYMENT_URL" =~ ^https://[a-zA-Z0-9-]+\.vercel\.app/?$ ]]
+          test -n "$VERCEL_TOKEN"
+          test -n "$VERCEL_ORG_ID"
+          test -n "$VERCEL_PROJECT_ID"
+          deployment_host="${DEPLOYMENT_URL#https://}"
+          deployment_host="${deployment_host%/}"
+          actual_commit="$(curl --fail --silent --show-error \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v13/deployments/$deployment_host?teamId=$VERCEL_ORG_ID" \
+            | jq --raw-output '.meta.githubCommitSha // empty')"
+          test "$actual_commit" = "$EXPECTED_COMMIT"
+
+      - name: Roll back to known-good deployment
+        env:
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+        run: npx --yes vercel@${{ env.VERCEL_CLI_VERSION }} rollback "$DEPLOYMENT_URL" --scope "${{ secrets.VERCEL_ORG_ID }}" --token "${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Record rollback summary
+        shell: bash
+        env:
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
+          DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+        run: |
+          echo "## Production rollback requested" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Target: $DEPLOYMENT_URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Expected commit: \`$EXPECTED_COMMIT\`" >> "$GITHUB_STEP_SUMMARY"

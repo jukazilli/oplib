@@ -32,3 +32,5 @@ vercel deploy . -y --scope feather-tecnologias
 ```
 
 Produção exige decisão explícita, gates aprovados e comando separado com `--prod`.
+
+O procedimento controlado de promoção e retorno está em [release-and-rollback.md](release-and-rollback.md). Até o go-live, use apenas a operação de ensaio; ela valida o commit no Preview sem alterar Production.
