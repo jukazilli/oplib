@@ -15,7 +15,7 @@
 - falha de leitura registrada apenas com campos controlados e correlation ID;
 - consulta adiada até uma requisição real com `connection()`;
 - envio de capa removido da visão geral e preservado tecnicamente para integração ao fluxo editorial.
-- composição editorial integrada a Publicações registrada em DOC-04/DOC-05, com referência em `docs/assets/reference-threads/editorial-composer.svg`.
+- composição editorial integrada a Publicações registrada em DOC-04/DOC-05, com referência original em `docs/assets/reference-threads.png`.
 
 ## TEST-ADM-001-01 — Desktop e celular
 

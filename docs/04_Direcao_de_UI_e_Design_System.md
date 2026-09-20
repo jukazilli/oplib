@@ -11,7 +11,7 @@ depends_on:
   - UX-PRINCIPLES
 visual_reference:
   - ./assets/moodboard-opalib.png
-  - ./assets/reference-threads/editorial-composer.svg
+  - ./assets/reference-threads.png
 governs:
   - visual-direction
   - design-system
@@ -25,7 +25,7 @@ governs:
 
 ![Moodboard visual do OPALIB](./assets/moodboard-opalib.png)
 
-![Referência de composição editorial leve adaptada ao OPALIB](./assets/reference-threads/editorial-composer.svg)
+![Referência de composição editorial leve inspirada no Threads](./assets/reference-threads.png)
 
 ## 1. Objetivo
 
@@ -655,7 +655,7 @@ O OPALIB não adotará feed infinito, métricas competitivas, perfis sociais, ur
 
 Informações secundárias serão reveladas progressivamente na própria composição ou edição, sem wizard obrigatório. Publicação continuará exigindo revisão e confirmação consciente.
 
-Referência visual: `assets/reference-threads/editorial-composer.svg`, adaptação da imagem fornecida pelo proprietário em 20/09/2026. A referência governa composição leve e ferramentas contextuais, não aparência, marca ou comportamento social literal.
+Referência visual: `assets/reference-threads.png`, imagem fornecida pelo proprietário em 20/09/2026. A referência governa composição leve e ferramentas contextuais, não aparência, marca ou comportamento social literal.
 
 ### Desktop
 
