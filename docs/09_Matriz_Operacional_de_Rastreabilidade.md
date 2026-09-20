@@ -139,7 +139,7 @@ Total: 55 itens permanentes.
 | -------- | ------------------------ | --------------------------------------------------- | ------------------------------------------------------------- | ------------------- | ----------------- | ------------------ | --------- |
 | AUTH-001 | D02 §9; D05 §10; D07 §16 | entrar e sair da administração                      | `src/app/admin/`, `src/components/admin/`, `src/modules/identity/` | login/logout explícitos, erro genérico e cadastro ausente; aceite autenticado aprovado | `TEST-AUTH-001-*` | `docs/evidence/EVID-AUTH-001-01.md` | `done` |
 | AUTH-002 | D05 §10; D07 §16; TL §8  | proteger sessão, rotas e comandos                   | `src/proxy.ts`, `src/modules/identity/authorization.ts`       | Proxy e recursos protegidos; matriz negativa e expiração aprovadas | `TEST-AUTH-002-*` | `docs/evidence/EVID-AUTH-002-01.md` | `done` |
-| ADM-001  | D04 §§20–23; D05 §§3,11  | criar shell e visão geral administrativa            | `src/app/(admin)/admin/`, `src/components/admin/`             | —                   | `TEST-ADM-001-*`  | `EVID-ADM-001-01`  | `planned` |
+| ADM-001  | D04 §§20–23; D05 §§3,11  | criar shell e visão geral administrativa            | `src/app/admin/`, `src/components/admin/`, `src/modules/admin/` | shell responsivo e visão geral real; Preview pendente | `TEST-ADM-001-*`  | `docs/evidence/EVID-ADM-001-01.md` | `in-progress` |
 | ADM-002  | D05 §3; D02 §20; D04 §19 | materializar configurações institucionais aprovadas | `src/app/(admin)/admin/configuracoes/` ou conteúdo versionado | —                   | `TEST-ADM-002-*`  | `EVID-ADM-002-01`  | `planned` |
 
 ## 8. Taxonomia e publicação

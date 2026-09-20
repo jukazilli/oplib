@@ -412,7 +412,7 @@ Estado atual: proteção em duas camadas, matriz negativa, smoke do Preview e ac
 
 ### ADM-001 — Shell e visão geral administrativa
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D04 §§20–23; D05 §§3 e 11.
 - **Objetivo:** orientar o autor sem dashboard denso.
 - **Descrição:** navegação para Publicações, Nova publicação, Categorias e tags, Comentários e Sair; resumo de contagens e comentários recentes, sem gráficos.
@@ -421,6 +421,8 @@ Estado atual: proteção em duas camadas, matriz negativa, smoke do Preview e ac
 - **Riscos:** virar dashboard genérico ou expor dados a cache.
 - **Testes:** `TEST-ADM-001-01` E2E desktop/mobile; `-02` cache headers.
 - **Evidência:** `EVID-ADM-001-01` screenshots e teste.
+
+Estado atual: shell responsivo, contagens reais, comentários recentes e estados vazio/erro implementados localmente; validação no Preview e aceite visual pendentes em `EVID-ADM-001-01`.
 
 ### ADM-002 — Configurações essenciais do acervo
 
