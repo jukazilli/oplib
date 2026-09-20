@@ -22,6 +22,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 22.12.0
+          package-manager-cache: false
 
       - name: Validate governance files
         run: node scripts/validate-repository.mjs

@@ -4,12 +4,24 @@ Acervo editorial interdisciplinar para publicar, organizar e descobrir artigos c
 
 ## Estado do projeto
 
-O projeto está na fase de Fundação. A documentação canônica está em [`docs/`](docs/) e a execução segue o backlog e a matriz de rastreabilidade:
+O projeto está na fase de Fundação. A aplicação-base já pode ser executada localmente, e a documentação canônica está em [`docs/`](docs/):
 
 - [`docs/08_Backlog_Canonico_Rastreabilidade_e_Plano_de_Entrega.md`](docs/08_Backlog_Canonico_Rastreabilidade_e_Plano_de_Entrega.md)
 - [`docs/09_Matriz_Operacional_de_Rastreabilidade.md`](docs/09_Matriz_Operacional_de_Rastreabilidade.md)
 
-Ainda não existe aplicação executável. A toolchain será materializada no item `FND-002`.
+## Desenvolvimento local
+
+Pré-requisitos:
+
+- Node.js `22.12.0`;
+- pnpm `9.11.0`.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+A aplicação fica disponível em `http://localhost:3000`.
 
 ## Stack aprovada
 
@@ -20,7 +32,7 @@ Ainda não existe aplicação executável. A toolchain será materializada no it
 - Neon PostgreSQL e Drizzle ORM
 - Clerk, Vercel e Vercel Blob
 
-As versões exatas serão fixadas no manifesto e no lockfile durante o `FND-002`.
+As versões exatas estão fixadas no manifesto e no lockfile.
 
 ## Como contribuir
 
