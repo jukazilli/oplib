@@ -38,19 +38,20 @@ describe("administrative overview", () => {
       "aria-disabled",
       "true",
     );
+    expect(
+      within(navigation).queryByText("Nova publicação"),
+    ).not.toBeInTheDocument();
     expect(within(navigation).queryByRole("link")).not.toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Sair" })).toHaveLength(2);
   });
 
-  it("shows real counts, dominant action and the empty comments state", () => {
+  it("shows real counts and the empty comments state without a duplicate creation action", () => {
     render(<AdminOverviewContent overview={emptyOverview} />);
 
     expect(
       screen.getByRole("heading", { level: 1, name: "Acervo" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Nova publicação" }),
-    ).toBeDisabled();
+    expect(screen.queryByText("Nova publicação")).not.toBeInTheDocument();
     expect(screen.getByText("Nenhum comentário ainda")).toBeInTheDocument();
     expect(screen.getAllByText("0")).toHaveLength(4);
     expect(

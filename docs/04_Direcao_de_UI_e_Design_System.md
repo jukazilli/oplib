@@ -11,7 +11,7 @@ depends_on:
   - UX-PRINCIPLES
 visual_reference:
   - ./assets/moodboard-opalib.png
-  - ./assets/reference-multistep-editorial.svg
+  - ./assets/reference-threads/editorial-composer.svg
 governs:
   - visual-direction
   - design-system
@@ -25,7 +25,7 @@ governs:
 
 ![Moodboard visual do OPALIB](./assets/moodboard-opalib.png)
 
-![Referência de fluxo multi-etapas adaptada ao OPALIB](./assets/reference-multistep-editorial.svg)
+![Referência de composição editorial leve adaptada ao OPALIB](./assets/reference-threads/editorial-composer.svg)
 
 ## 1. Objetivo
 
@@ -590,7 +590,6 @@ A administração seguirá o mesmo sistema visual, mas com prioridade maior para
 
 - visão geral;
 - publicações;
-- nova publicação;
 - categorias e tags;
 - comentários;
 - configurações essenciais;
@@ -606,7 +605,6 @@ Poderá apresentar:
 - rascunhos;
 - comentários recentes;
 - comentários ocultos;
-- ação principal “Nova publicação”.
 
 Gráficos não fazem parte do MVP.
 
@@ -639,40 +637,25 @@ Excluir deverá permanecer em posição secundária e exigir confirmação refor
 
 ## 22. Editor Markdown
 
-### Fluxo multi-etapas
+### Superfície editorial integrada
 
-Tarefas administrativas longas deverão ser divididas em etapas quando exigirem conjuntos distintos de decisões. A criação de publicação adotará este padrão para reduzir carga cognitiva e tornar o progresso recuperável.
+A criação e a gestão das publicações compartilharão a página `Publicações`. Não haverá item separado “Nova publicação” na navegação nem chamada duplicada na visão geral.
 
-No desktop, o fluxo deverá usar:
+A referência de redes sociais será absorvida somente no que reduz atrito para o autor:
 
-- coluna lateral com todas as etapas, estado atual e progresso;
-- área principal dedicada somente à etapa em curso;
-- ação `Voltar` no início do conteúdo;
-- ações `Continuar` e `Salvar rascunho` em posição previsível;
-- revisão final antes de publicar.
+- caixa de composição no início da lista;
+- entrada de texto imediata;
+- ferramentas compactas para capa, referências e outros recursos aprovados;
+- salvamento como rascunho sem exigir preenchimento completo;
+- publicações abaixo em uma lista contínua e finita;
+- itens resumidos que podem ser expandidos para consultar ou editar;
+- estado editorial sempre explícito: rascunho, publicado ou retirado.
 
-No celular, a coluna lateral será substituída por um indicador compacto com etapa atual e progresso. A lista completa poderá ser aberta sob demanda, sem ocupar a área de edição.
+O OPALIB não adotará feed infinito, métricas competitivas, perfis sociais, urgência, recomendação algorítmica ou mecanismos de retenção. A lista continuará sendo uma ferramenta privada de autoria e gestão editorial.
 
-Etapas previstas para criar uma publicação:
+Informações secundárias serão reveladas progressivamente na própria composição ou edição, sem wizard obrigatório. Publicação continuará exigindo revisão e confirmação consciente.
 
-1. Informações — título, resumo, tipo, área, categoria e tags;
-2. Conteúdo — escrita em Markdown;
-3. Capa — imagem e texto alternativo;
-4. Referências — bibliografia e links relacionados;
-5. Revisão — prévia, validações e destaque;
-6. Publicação — confirmação e endereço público.
-
-Regras:
-
-- um rascunho será criado e salvo desde a primeira etapa;
-- voltar não apagará dados já preenchidos;
-- o autor poderá retomar na última etapa válida;
-- erros serão apresentados na etapa e no campo correspondentes;
-- etapas incompletas serão distinguíveis de etapas concluídas;
-- publicar permanecerá restrito à etapa final;
-- o indicador de progresso não será usado como decoração nem para fluxos curtos.
-
-Referência visual: `assets/reference-multistep-editorial.svg`, adaptação da segunda imagem fornecida pelo proprietário em 20/09/2026. A referência orienta estrutura e hierarquia, não identidade visual ou conteúdo literal.
+Referência visual: `assets/reference-threads/editorial-composer.svg`, adaptação da imagem fornecida pelo proprietário em 20/09/2026. A referência governa composição leve e ferramentas contextuais, não aparência, marca ou comportamento social literal.
 
 ### Desktop
 
@@ -783,14 +766,15 @@ Um placeholder não substitui rótulo. Criação inline nunca será adicionada a
 
 ### Escolha da superfície de interação
 
-| Situação                                              | Superfície preferencial               | Evitar                                                    |
-| ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------- |
-| formulário longo, retomável ou com grupos dependentes | fluxo multi-etapas                    | uma página densa ou etapas artificiais para poucos campos |
-| tarefa principal com muitos dados                     | tela dedicada                         | diálogo grande ou rolável como página improvisada         |
-| decisão irreversível ou de grande consequência        | diálogo modal curto                   | confirmação para ação rotineira ou facilmente reversível  |
-| ação reversível de consequência limitada              | ação direta com feedback e `Desfazer` | modal de confirmação desnecessário                        |
-| escolha contextual curta                              | popover ou menu                       | esconder processo longo em superfície pequena             |
-| detalhes auxiliares sem abandonar contexto            | gaveta lateral                        | usar gaveta para a tarefa principal no celular            |
+| Situação                                            | Superfície preferencial                  | Evitar                                                   |
+| --------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------- |
+| formulário longo com edição não linear              | tela integrada com revelação progressiva | wizard obrigatório ou uma página densa                   |
+| processo estritamente sequencial com pré-requisitos | fluxo multi-etapas                       | etapas quando a ordem não produz segurança ou clareza    |
+| tarefa principal com muitos dados                   | tela dedicada                            | diálogo grande ou rolável como página improvisada        |
+| decisão irreversível ou de grande consequência      | diálogo modal curto                      | confirmação para ação rotineira ou facilmente reversível |
+| ação reversível de consequência limitada            | ação direta com feedback e `Desfazer`    | modal de confirmação desnecessário                       |
+| escolha contextual curta                            | popover ou menu                          | esconder processo longo em superfície pequena            |
+| detalhes auxiliares sem abandonar contexto          | gaveta lateral                           | usar gaveta para a tarefa principal no celular           |
 
 ### Contrato obrigatório antes do componente
 

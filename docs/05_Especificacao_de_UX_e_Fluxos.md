@@ -92,7 +92,6 @@ A administração não será divulgada na navegação pública.
 
 - Visão geral;
 - Publicações;
-- Nova publicação;
 - Categorias e tags;
 - Comentários;
 - Configurações essenciais;
@@ -394,7 +393,6 @@ A tela deverá apresentar apenas informações úteis para continuar o trabalho:
 - publicações retiradas do ar;
 - comentários recentes;
 - comentários ocultos;
-- ação “Nova publicação”.
 
 Não haverá gráficos no MVP.
 
@@ -462,29 +460,28 @@ Até essas decisões serem fechadas em `UX-002`, o campo Área não possui contr
 
 ### Fluxo
 
-1. O autor seleciona “Nova publicação”.
-2. O sistema cria o contexto de um novo rascunho.
-3. A etapa “Informações” reúne metadados e taxonomia.
-4. A etapa “Conteúdo” reúne escrita Markdown e prévia durante a edição.
-5. A etapa “Capa” reúne imagem e texto alternativo.
-6. A etapa “Referências” reúne bibliografia e links relacionados.
-7. A etapa “Revisão” apresenta prévia e validações pendentes.
-8. O autor avança ou retorna sem perder os dados já preenchidos.
-9. O sistema salva o rascunho e a última etapa válida para retomada.
-10. Na etapa “Publicação”, o autor confirma a mudança de estado.
-11. O sistema apresenta o endereço público.
+1. O autor abre `Publicações`.
+2. A caixa de composição aparece antes da lista de publicações.
+3. Ao iniciar o texto, o sistema cria o contexto de um rascunho.
+4. Ferramentas contextuais permitem adicionar capa, referências e demais recursos aprovados.
+5. Metadados obrigatórios para publicar são revelados conforme necessário, sem impedir um rascunho incompleto.
+6. O rascunho pode ser salvo e recolhido na própria lista.
+7. Ao selecionar uma publicação resumida, o autor expande seu conteúdo para consultar ou editar.
+8. A prévia e as validações ficam disponíveis antes da mudança de estado.
+9. Publicar exige confirmação explícita.
+10. O sistema apresenta o endereço público e mantém o item na lista com estado atualizado.
 
-### Comportamento do fluxo multi-etapas
+### Comportamento da composição integrada
 
-- desktop: etapas persistentes em uma coluna lateral e formulário da etapa atual na área principal;
-- celular: número, nome e progresso da etapa atual em formato compacto, com lista completa sob demanda;
-- `Voltar` preserva os dados preenchidos;
-- `Continuar` valida apenas o necessário para avançar;
-- campos obrigatórios para publicar podem permanecer incompletos durante o rascunho;
-- erros impedem somente o avanço que depende deles e apontam o campo correspondente;
-- ao reabrir um rascunho, o autor retorna à última etapa válida;
-- a etapa final consolida conteúdo, capa, referências e estado antes da confirmação;
-- sair com mudanças ainda não salvas mantém o aviso definido para o editor.
+- a entrada inicial privilegia título provisório ou conteúdo, conforme decisão de `UX-002`;
+- ferramentas usam ícones com nome acessível e tooltip curto quando o símbolo não for inequívoco;
+- capa, referências e metadados abrem controles contextuais sem transformar a composição em modal extenso;
+- a lista é paginada ou carregada por ação explícita; não haverá rolagem infinita;
+- itens recolhidos exibem somente título, resumo curto, estado, área e atualização;
+- somente um item deve permanecer em edição expandida por vez;
+- recolher ou trocar de item preserva o rascunho e respeita o aviso de alterações não salvas;
+- filtros e busca pertencem à mesma página, mas não competem com a composição;
+- no celular, composição e item expandido ocupam a largura disponível, com ferramentas roláveis ou agrupadas sem esconder ações essenciais.
 
 Mensagem de sucesso:
 

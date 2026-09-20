@@ -5,7 +5,6 @@ import {
   FolderTree,
   LayoutDashboard,
   MessageSquareText,
-  Plus,
   Settings2,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -16,7 +15,6 @@ import { cn } from "@/lib/utils";
 const navigation = [
   { label: "Visão geral", icon: LayoutDashboard, available: true },
   { label: "Publicações", icon: BookOpenText, available: false },
-  { label: "Nova publicação", icon: Plus, available: false },
   { label: "Categorias e tags", icon: FolderTree, available: false },
   { label: "Comentários", icon: MessageSquareText, available: false },
   { label: "Configurações", icon: Settings2, available: false },

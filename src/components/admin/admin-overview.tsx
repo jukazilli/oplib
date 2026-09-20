@@ -1,6 +1,5 @@
-import { EyeOff, FileText, Plus, Send, Undo2 } from "lucide-react";
+import { EyeOff, FileText, Send, Undo2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import type { AdminOverview } from "@/modules/admin/overview";
 
 const countCards = [
@@ -25,7 +24,7 @@ export function AdminOverviewContent({
 }) {
   return (
     <>
-      <section className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <section>
         <div>
           <p className="font-interface text-xs font-semibold tracking-[0.16em] text-muted-foreground uppercase">
             Visão geral
@@ -34,14 +33,6 @@ export function AdminOverviewContent({
             Acervo
           </h1>
         </div>
-        <Button
-          disabled
-          className="w-full gap-2 sm:w-auto"
-          title="Disponível em breve"
-        >
-          <Plus aria-hidden="true" className="size-4" />
-          Nova publicação
-        </Button>
       </section>
 
       <section

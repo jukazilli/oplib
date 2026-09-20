@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Referência de composição editorial integrada</title>
+  <desc id="desc">Caixa de composição leve com ferramentas contextuais acima de uma lista finita de publicações resumidas e expansíveis.</desc>
+  <rect width="1200" height="760" fill="#f4f6f7"/>
+  <rect x="78" y="48" width="1044" height="664" rx="28" fill="#ffffff"/>
+  <g font-family="Arial, sans-serif">
+    <text x="128" y="105" fill="#17212b" font-size="16" font-weight="700" letter-spacing="3">PUBLICAÇÕES</text>
+    <rect x="128" y="135" width="944" height="206" rx="20" fill="#ffffff" stroke="#d9e1e6" stroke-width="2"/>
+    <circle cx="173" cy="184" r="20" fill="#326f8d"/>
+    <text x="164" y="190" fill="#ffffff" font-size="16" font-weight="700">O</text>
+    <text x="210" y="174" fill="#17212b" font-size="15" font-weight="700">Novo rascunho</text>
+    <text x="210" y="205" fill="#7a8792" font-size="19">Comece a escrever…</text>
+    <line x1="210" y1="229" x2="1028" y2="229" stroke="#eef3f5"/>
+    <g fill="none" stroke="#52606d" stroke-width="2">
+      <rect x="210" y="255" width="31" height="27" rx="6"/><path d="M216 276l7-7 5 5 7-9"/>
+      <rect x="256" y="255" width="31" height="27" rx="6"/><path d="M264 264h15M264 271h11"/>
+      <circle cx="317" cy="268" r="14"/><path d="M311 268h12M317 262v12"/>
+      <path d="M354 258h24v20h-24zM360 263h12M360 269h9"/>
+      <path d="M404 258h24v20h-24zM410 263h12M410 269h12M410 275h8"/>
+    </g>
+    <text x="210" y="305" fill="#52606d" font-size="13">Capa</text>
+    <text x="256" y="305" fill="#52606d" font-size="13">Referência</text>
+    <text x="306" y="305" fill="#52606d" font-size="13">Área</text>
+    <rect x="916" y="251" width="112" height="42" rx="12" fill="#326f8d"/>
+    <text x="943" y="277" fill="#ffffff" font-size="14" font-weight="700">Salvar</text>
+
+    <text x="128" y="390" fill="#52606d" font-size="13" font-weight="700" letter-spacing="2">SEUS TEXTOS</text>
+    <rect x="128" y="414" width="944" height="112" rx="16" fill="#ffffff" stroke="#d9e1e6"/>
+    <rect x="153" y="439" width="74" height="62" rx="10" fill="#ddeef5"/>
+    <text x="250" y="448" fill="#326f8d" font-size="12" font-weight="700">RASCUNHO</text>
+    <text x="250" y="477" fill="#17212b" font-size="18" font-weight="700">Conhecimento em movimento</text>
+    <text x="250" y="502" fill="#52606d" font-size="13">Educação Física · atualizado hoje</text>
+    <text x="1020" y="477" fill="#52606d" font-size="24">›</text>
+
+    <rect x="128" y="542" width="944" height="112" rx="16" fill="#ffffff" stroke="#d9e1e6"/>
+    <rect x="153" y="567" width="74" height="62" rx="10" fill="#eee9f7"/>
+    <text x="250" y="576" fill="#326f8d" font-size="12" font-weight="700">PUBLICADA</text>
+    <text x="250" y="605" fill="#17212b" font-size="18" font-weight="700">Engenharia e aprendizagem</text>
+    <text x="250" y="630" fill="#52606d" font-size="13">Engenharia de Software · 18 set. 2026</text>
+    <text x="1020" y="605" fill="#52606d" font-size="24">›</text>
+  </g>
+</svg>

@@ -189,14 +189,14 @@ Um item só recebe `done` quando:
 - **Tipo:** `decision`; **Prioridade:** `P0`; **Status:** `blocked-human`.
 - **Origem:** P-UX-018; D04 §24 “Contrato obrigatório”; D05 §12 “Gate de especificação da interface”.
 - **Objetivo:** decidir como cada campo, ação e transição da criação de publicação se comportará antes de implementar o formulário.
-- **Descrição:** produzir e aprovar os contratos de título, resumo, tipo, áreas, categoria, tags, curso, disciplina, data, conteúdo, capa, referências, destaque, slug, salvamento, avanço, retorno, saída e publicação.
+- **Descrição:** produzir e aprovar os contratos da composição integrada: título, resumo, tipo, áreas, categoria, tags, curso, disciplina, data, conteúdo, capa, referências, destaque, slug, expansão/recolhimento, salvamento, saída e publicação.
 - **Critérios:** dado/origem/cardinalidade; controle justificado; pesquisa e criação; estados; validação; teclado; celular; persistência; cancelamento/recuperação e confirmação definidos para cada interação.
 - **Dependências:** ADM-001, TAX-001.
 - **Riscos:** reproduzir padrões genéricos, criar taxonomia acidental no editor, esconder decisões em componentes ou refazer a UI depois do backend.
-- **Testes:** `TEST-UX-002-01` revisão da matriz campo a campo; `-02` protótipo dos controles ambíguos; `-03` aceite desktop/celular.
+- **Testes:** `TEST-UX-002-01` revisão da matriz campo a campo; `-02` protótipo da composição e dos controles ambíguos; `-03` aceite desktop/celular.
 - **Evidência:** `EVID-UX-002-01` contratos e decisões aprovados pelo proprietário.
 
-Estado atual: campo Área e demais interações editoriais deliberadamente bloqueados para UI até refinamento e aceite humano; nenhuma escolha de componente está autorizada por inferência.
+Estado atual: a composição integrada a Publicações e a lista expansível estão aprovadas; campo Área e demais controles internos permanecem bloqueados para UI até refinamento e aceite humano.
 
 ## 7. Fundação — FND
 
@@ -429,8 +429,8 @@ Estado atual: proteção em duas camadas, matriz negativa, smoke do Preview e ac
 - **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D04 §§20–23; D05 §§3 e 11.
 - **Objetivo:** orientar o autor sem dashboard denso.
-- **Descrição:** navegação para Publicações, Nova publicação, Categorias e tags, Comentários e Sair; resumo de contagens e comentários recentes, sem gráficos.
-- **Critérios:** ação dominante visível; estados vazio/erro; responsivo; não cacheado publicamente.
+- **Descrição:** navegação para Publicações, Categorias e tags, Comentários e Sair; resumo de contagens e comentários recentes, sem gráficos e sem criação duplicada.
+- **Critérios:** estados vazio/erro; responsivo; não cacheado publicamente; criação aparece somente em Publicações.
 - **Dependências:** AUTH-002.
 - **Riscos:** virar dashboard genérico ou expor dados a cache.
 - **Testes:** `TEST-ADM-001-01` E2E desktop/mobile; `-02` cache headers.
@@ -481,7 +481,7 @@ Estado atual: shell responsivo, contagens reais, comentários recentes e estados
 - **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** D02 §§9–10; D05 §§12–13.
 - **Objetivo:** iniciar toda publicação como rascunho e salvar conscientemente.
-- **Descrição:** formulário editorial, estado “Alterações não salvas”, último salvamento e recuperação temporária no navegador.
+- **Descrição:** composição editorial integrada à lista de Publicações, estado “Alterações não salvas”, último salvamento e recuperação temporária no navegador.
 - **Critérios:** novo conteúdo não é público; salvar é manual; saída pendente avisa; recuperação local nunca sobrescreve versão mais nova.
 - **Dependências:** AUTH-002, ADM-001, TAX-001, UX-002.
 - **Riscos:** perda de trabalho ou publicação acidental.
@@ -565,8 +565,8 @@ Estado atual: shell responsivo, contagens reais, comentários recentes e estados
 - **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** D02 §9; D04 §21; D05 §11.
 - **Objetivo:** encontrar rascunhos, publicados e retirados para continuar o trabalho.
-- **Descrição:** lista com busca, status, área, atualização e ações coerentes.
-- **Critérios:** filtros preservados quando útil; estados vazios; ações secundárias não competem com editar; curtidas visíveis sem identidade.
+- **Descrição:** página única com caixa de composição e lista de publicações resumidas, expansíveis para consulta ou edição, além de busca, status, área e atualização.
+- **Critérios:** sem rolagem infinita; filtros preservados quando útil; somente uma edição expandida; estados vazios; ações secundárias não competem com editar; curtidas visíveis sem identidade.
 - **Dependências:** ADM-001, PUB-001.
 - **Riscos:** ação destrutiva acidental em lista densa.
 - **Testes:** `TEST-PUB-007-01` filtros/status; `-02` responsividade e teclado.

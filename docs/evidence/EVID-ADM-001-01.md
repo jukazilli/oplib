@@ -9,13 +9,13 @@
 - shell administrativo responsivo com navegação compacta e saída explícita;
 - visão geral com contagens reais de publicadas, rascunhos, retiradas e comentários ocultos;
 - lista dos cinco comentários mais recentes vinculados à publicação;
-- ação dominante “Nova publicação” visível e indisponível até o fluxo editorial existir;
+- ausência de ação “Nova publicação” duplicada na visão geral e na navegação;
 - destinos futuros identificados sem links que terminem em páginas inexistentes;
 - estados vazio e degradado com mensagens curtas e sem detalhes técnicos;
 - falha de leitura registrada apenas com campos controlados e correlation ID;
 - consulta adiada até uma requisição real com `connection()`;
 - envio de capa removido da visão geral e preservado tecnicamente para integração ao fluxo editorial.
-- padrão multi-etapas registrado em DOC-04/DOC-05, com referência visual versionada em `docs/assets/reference-multistep-editorial.svg`.
+- composição editorial integrada a Publicações registrada em DOC-04/DOC-05, com referência em `docs/assets/reference-threads/editorial-composer.svg`.
 
 ## TEST-ADM-001-01 — Desktop e celular
 
