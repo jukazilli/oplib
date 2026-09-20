@@ -23,7 +23,11 @@ export const identityEnvSchema = z.object({
 });
 
 export const mediaEnvSchema = z.object({
-  BLOB_READ_WRITE_TOKEN: nonEmptySecret,
+  BLOB_COVERS_PREFIX: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9][a-z0-9/-]*[a-z0-9]$/, "prefixo de capas inválido"),
+  BLOB_READ_WRITE_TOKEN: nonEmptySecret.optional(),
 });
 
 export const interactionsEnvSchema = z.object({

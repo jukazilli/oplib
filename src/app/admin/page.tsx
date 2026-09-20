@@ -1,5 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
 
+import { CoverUpload } from "@/app/admin/cover-upload";
 import { requireAdmin } from "@/modules/identity/admin";
 
 export default async function AdminPage() {
@@ -20,6 +21,7 @@ export default async function AdminPage() {
         <h1 className="mt-4 font-editorial text-5xl font-medium tracking-[-0.04em]">
           Acervo
         </h1>
+        <CoverUpload />
       </main>
     </div>
   );
