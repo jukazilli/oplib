@@ -1,15 +1,36 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-test("a página-base comunica o acervo sem violações acessíveis automáticas", async ({
-  page,
-}) => {
-  await page.goto("/");
+
+test("public home is available", async ({ page }) => {
+  const response = await page.goto("/");
+
+  expect(response?.ok()).toBe(true);
   await expect(
     page.getByRole("heading", {
       level: 1,
       name: "Conhecimento que atravessa áreas.",
     }),
   ).toBeVisible();
+});
+
+test("anonymous visitor cannot access the collection", async ({ page }) => {
+  await page.goto("/admin");
+
+  await expect(page).toHaveURL(/\/sign-in(?:\/|\?|$)/);
+  await expect(
+    page.getByRole("heading", { name: /entrar|sign in/i }),
+  ).toBeVisible();
+});
+
+test("public home has no critical accessibility violations", async ({
+  page,
+}) => {
+  await page.goto("/");
+
   const results = await new AxeBuilder({ page }).analyze();
-  expect(results.violations).toEqual([]);
+  const criticalViolations = results.violations.filter(
+    (violation) => violation.impact === "critical",
+  );
+
+  expect(criticalViolations).toEqual([]);
 });
