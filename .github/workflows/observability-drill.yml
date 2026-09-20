@@ -1,0 +1,27 @@
+name: Observability Drill
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Informe EMIT_TEST_FAILURE
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-failure:
+    name: Synthetic pipeline failure
+    if: github.event_name == 'workflow_dispatch' && inputs.confirmation == 'EMIT_TEST_FAILURE'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Emit sanitized synthetic failure
+        shell: bash
+        run: |
+          echo '{"level":"error","event":"pipeline.synthetic_failure","module":"delivery","result":"failed","errorCode":"SYNTHETIC_DRILL"}'
+          exit 1
