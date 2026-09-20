@@ -1,3 +1,5 @@
+import { ClerkProvider } from "@clerk/nextjs";
+import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Manrope, Newsreader } from "next/font/google";
 
@@ -22,7 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${newsreader.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        <ClerkProvider
+          appearance={{ theme: shadcn }}
+          signInUrl="/sign-in"
+          signUpUrl={undefined}
+        >
+          {children}
+        </ClerkProvider>
+      </body>
     </html>
   );
 }
