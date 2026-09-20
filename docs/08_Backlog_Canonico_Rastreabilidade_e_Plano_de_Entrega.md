@@ -370,7 +370,7 @@ Um item só recebe `done` quando:
 
 ### FND-016 — Smoke e aceite da Fundação
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** TL §26; INF §§25–26.
 - **Objetivo:** provar que a base pode receber funcionalidades.
 - **Descrição:** reconciliar repositório, toolchain, CI, Preview, Neon, migrations, auth, Blob, segurança, logs, backup e rollback.
@@ -817,6 +817,8 @@ Um item só recebe `done` quando:
 É aprovado quando FND-001 a FND-016 estão `done`, ou quando uma exceção explícita identifica item, impacto, prazo e responsável. A exceção nunca pode liberar produção sem MFA, segregação de ambientes, migrations, secrets, CI, backup restaurável e autorização no servidor.
 
 `OPS-002` permite avançar funcionalidades somente em desenvolvimento e Preview com dados sintéticos ou reconstruíveis. Production permanece bloqueada até FND-012, FND-015 e DEC-004 estarem resolvidas.
+
+Estado atual: `GATE-FND` aprovado para desenvolvimento e Preview por `EVID-FND-016-01`; não aprovado para Production.
 
 ### GATE-EDITORIAL — Publicar e ler com segurança
 

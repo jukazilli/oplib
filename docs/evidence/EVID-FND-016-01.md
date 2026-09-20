@@ -2,7 +2,7 @@
 
 ## Resultado da auditoria
 
-**Estado atual:** parcial. A base técnica está apta para desenvolvimento e Preview, condicionada à exceção `OPS-002`. Production permanece bloqueada.
+**Estado atual:** aprovada para desenvolvimento e Preview, condicionada à exceção `OPS-002`. Production permanece bloqueada.
 
 ## Promessa versus evidência
 
@@ -36,7 +36,14 @@ Validações locais executadas nesta branch:
 - `node scripts/validate-repository.mjs`: 29 arquivos de governança aprovados;
 - `git diff --check`: aprovado.
 
-`pnpm db:check` não foi repetido localmente porque `OPS-001` mantém credenciais Neon fora da máquina de desenvolvimento. A prova integrada válida permanece em `EVID-FND-006-01`. O smoke remoto desta branch será registrado após o Preview correspondente existir.
+`pnpm db:check` não foi repetido localmente porque `OPS-001` mantém credenciais Neon fora da máquina de desenvolvimento. A prova integrada válida permanece em `EVID-FND-006-01`.
+
+Validação remota desta branch:
+
+- Preview: `https://oplib-git-feat-fnd-016-foundation-readiness-feather-tecnologias.vercel.app`;
+- E2E: `https://github.com/jukazilli/oplib/actions/runs/35529425596`;
+- resultado: quatro cenários aprovados em Chromium, incluindo página pública, proteção administrativa, acessibilidade básica e health conectado ao Neon;
+- CI, CodeQL, política do repositório e deployment Vercel do PR #16 aprovados.
 
 ## Estado de integração
 
@@ -49,4 +56,18 @@ Os PRs #10 a #14 continuam abertos e encadeados. Seus checks e evidências estã
 - FND-012: rollback produtivo ainda não ensaiado;
 - FND-015: backup restaurável ainda não comprovado.
 
-Nenhuma dessas exceções autoriza go-live. O `GATE-FND` só poderá ser classificado como aprovado para desenvolvimento/Preview após o smoke remoto desta branch; Production continuará bloqueada.
+Nenhuma dessas exceções autoriza go-live. O smoke remoto permite aprovar o `GATE-FND` para desenvolvimento/Preview; Production continua bloqueada.
+
+## Dívidas não bloqueantes registradas
+
+- `pnpm audit` encontrou três vulnerabilidades moderadas transitivas: duas pela árvore de `@clerk/ui` (`uuid` e `stream-json`) e uma de desenvolvimento pela árvore legada do `drizzle-kit` (`esbuild`);
+- o alerta Dependabot #1 da branch padrão corresponde ao `esbuild`; a branch atual já possui versões corrigidas nos caminhos principais, mas ainda carrega `0.18.20` por dependência transitiva do Drizzle;
+- `pnpm/action-setup@v4` emitiu aviso de runtime Node.js 20 descontinuado e foi executado sob Node.js 24 pelo runner;
+- esses itens devem ser tratados na manutenção contínua e reavaliados em `SEC-001` antes de Production, sem ampliar a FND-016.
+
+## Decisão de fechamento
+
+- FND-016: **FECHADA**;
+- `GATE-FND`: **APROVADO PARA DESENVOLVIMENTO E PREVIEW POR EXCEÇÃO**;
+- Production: **BLOQUEADA**;
+- próximo corte funcional pode começar somente com dados sintéticos ou reconstruíveis e sem migration destrutiva ou exclusão permanente dependente de restore.
