@@ -344,7 +344,7 @@ Um item só recebe `done` quando:
 
 ### FND-014 — Configurar observabilidade e saúde
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D06 §13; D07 §21; TL §18; INF §20.
 - **Objetivo:** detectar falhas sem expor conteúdo ou segredos.
 - **Descrição:** logs estruturados, correlation ID, `/api/health`, métricas nativas e alertas de pipeline/uso.

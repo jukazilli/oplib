@@ -39,3 +39,15 @@ test("public home has no critical accessibility violations", async ({
 
   expect(criticalViolations).toEqual([]);
 });
+
+test("health endpoint reports a safe status", async ({ request }) => {
+  const response = await request.get("/api/health");
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()["cache-control"]).toContain("no-store");
+  expect(response.headers()["x-correlation-id"]).toMatch(/^[0-9a-f-]{36}$/);
+  await expect(response.json()).resolves.toMatchObject({
+    status: "healthy",
+    database: true,
+  });
+});
