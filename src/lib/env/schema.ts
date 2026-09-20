@@ -12,6 +12,10 @@ export const databaseEnvSchema = z.object({
   DATABASE_URL_UNPOOLED: z.url().startsWith("postgres", "deve usar PostgreSQL"),
 });
 
+export const migrationEnvSchema = databaseEnvSchema.pick({
+  DATABASE_URL_UNPOOLED: true,
+});
+
 export const identityEnvSchema = z.object({
   ADMIN_CLERK_USER_ID: nonEmptySecret,
   CLERK_SECRET_KEY: nonEmptySecret,

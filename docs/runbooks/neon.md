@@ -4,32 +4,33 @@
 
 - região: `aws-sa-east-1` (São Paulo);
 - branch padrão e produtiva: `production`;
-- branches persistentes não produtivas: `preview`, `development` e `test`;
+- branch não produtiva mínima: `preview`;
+- `development` e `test` podem ser mantidas quando trouxerem valor ao fluxo, sem configuração adicional obrigatória;
 - conexões de runtime usam pooling;
 - migrations usam conexão direta e nunca executam no boot da aplicação.
 
-## Papéis por branch
+## Credencial por branch
 
-- `oplib_runtime`: login sem superusuário, criação de banco, criação de papéis, replicação ou bypass de RLS; possui apenas `CONNECT`, `USAGE` no schema e permissões DML concedidas pelas migrations;
-- `oplib_migration`: login sem privilégios administrativos globais; possui `CONNECT`, `USAGE` e `CREATE` no schema necessário para migrations controladas.
+- A Fundação usa o papel padrão `neondb_owner`, criado e gerenciado pelo Neon.
+- Separar papéis de runtime e migration é um hardening futuro, não um bloqueio para desenvolvimento ou staging.
+- As migrations não devem depender da existência de papéis customizados.
 
-Os papéis devem ser criados por SQL. A criação pelo botão **Add role** do Console Neon associa o usuário ao papel administrativo interno e não atende à separação exigida para runtime.
+Os papéis `oplib_runtime` e `oplib_migration` já criados podem permanecer sem uso. Não é necessário redefinir suas senhas ou configurá-los em cada branch.
 
 ## Segredos
 
 - nenhuma connection string ou senha é registrada no repositório;
-- a senha só é definida ou rotacionada quando puder ser inserida diretamente no cofre do ambiente consumidor;
-- `DATABASE_URL` usa endpoint pooled e o papel de runtime;
-- `DATABASE_URL_UNPOOLED` usa endpoint direto e o papel de migration;
+- `DATABASE_URL` usa endpoint pooled e o papel padrão do Neon;
+- `DATABASE_URL_UNPOOLED` usa endpoint direto e o mesmo papel, apenas em migration ou operação controlada;
 - produção nunca é disponibilizada a Preview, pull request ou teste.
 
 ## Verificação operacional
 
-Em cada branch:
+Em cada branch utilizada:
 
 1. executar `SELECT 1`;
-2. confirmar no catálogo que ambos os papéis são login e não possuem `SUPERUSER`, `CREATEDB`, `CREATEROLE` ou `BYPASSRLS`;
-3. em ambiente não produtivo, assumir temporariamente `oplib_runtime` e comprovar que `CREATE TABLE` falha com `permission denied for schema public`;
-4. remover imediatamente qualquer associação temporária usada apenas para o teste.
+2. confirmar que a aplicação usa endpoint pooled;
+3. confirmar que migrations usam endpoint direto;
+4. nunca disponibilizar a credencial de produção em Preview, pull request ou teste.
 
 IDs, hosts, URLs de conexão e senhas não fazem parte da evidência versionada.

@@ -44,17 +44,17 @@ Nenhum item autoriza mudança silenciosa de produto, UX, arquitetura, stack ou i
 
 ## 2. Fontes canônicas
 
-| Código | Documento |
-|---|---|
-| D02 | `docs/02_Briefing_de_Produto_e_Escopo.md` |
-| D03 | `docs/03_Visao_de_Product_Owner.md` |
-| PUX | `docs/Principios_de_UX_UI.md` |
-| D04 | `docs/04_Direcao_de_UI_e_Design_System.md` |
-| D05 | `docs/05_Especificacao_de_UX_e_Fluxos.md` |
-| D06 | `docs/06_Tecnicas_de_Desenvolvimento.md` |
-| D07 | `docs/07_Engenharia_e_Arquitetura.md` |
-| TL | `docs/Visao_do_Tech_Lead.md` |
-| INF | `docs/Infraestrutura_e_Plano_de_Fundacao.md` |
+| Código | Documento                                    |
+| ------ | -------------------------------------------- |
+| D02    | `docs/02_Briefing_de_Produto_e_Escopo.md`    |
+| D03    | `docs/03_Visao_de_Product_Owner.md`          |
+| PUX    | `docs/Principios_de_UX_UI.md`                |
+| D04    | `docs/04_Direcao_de_UI_e_Design_System.md`   |
+| D05    | `docs/05_Especificacao_de_UX_e_Fluxos.md`    |
+| D06    | `docs/06_Tecnicas_de_Desenvolvimento.md`     |
+| D07    | `docs/07_Engenharia_e_Arquitetura.md`        |
+| TL     | `docs/Visao_do_Tech_Lead.md`                 |
+| INF    | `docs/Infraestrutura_e_Plano_de_Fundacao.md` |
 
 As referências usam o código do documento e o nome da seção para permanecerem compreensíveis mesmo após pequenas alterações editoriais.
 
@@ -62,26 +62,26 @@ As referências usam o código do documento e o nome da seção para permanecere
 
 ### 3.1. Tipos
 
-| Tipo | Uso |
-|---|---|
-| `decision` | escolha humana que não pode ser presumida |
-| `foundation` | habilitador técnico anterior às funcionalidades |
-| `feature` | comportamento com valor direto para visitante ou administrador |
-| `quality` | segurança, acessibilidade, desempenho ou resiliência transversal |
-| `content` | material editorial necessário ao lançamento |
-| `release` | integração, verificação e promoção do produto |
+| Tipo         | Uso                                                              |
+| ------------ | ---------------------------------------------------------------- |
+| `decision`   | escolha humana que não pode ser presumida                        |
+| `foundation` | habilitador técnico anterior às funcionalidades                  |
+| `feature`    | comportamento com valor direto para visitante ou administrador   |
+| `quality`    | segurança, acessibilidade, desempenho ou resiliência transversal |
+| `content`    | material editorial necessário ao lançamento                      |
+| `release`    | integração, verificação e promoção do produto                    |
 
 ### 3.2. Estados
 
-| Estado | Significado |
-|---|---|
-| `ready` | pode iniciar, pois entradas e dependências estão disponíveis |
-| `planned` | aprovado, mas aguarda dependência ou ordem de entrega |
+| Estado          | Significado                                                         |
+| --------------- | ------------------------------------------------------------------- |
+| `ready`         | pode iniciar, pois entradas e dependências estão disponíveis        |
+| `planned`       | aprovado, mas aguarda dependência ou ordem de entrega               |
 | `blocked-human` | exige escolha, login, MFA, compra ou ação exclusiva do proprietário |
-| `in-progress` | implementação iniciada com evidência de trabalho |
-| `review` | implementação concluída, aguardando validação |
-| `done` | critérios, testes e evidências aprovados |
-| `cancelled` | removido por decisão documental explícita |
+| `in-progress`   | implementação iniciada com evidência de trabalho                    |
+| `review`        | implementação concluída, aguardando validação                       |
+| `done`          | critérios, testes e evidências aprovados                            |
+| `cancelled`     | removido por decisão documental explícita                           |
 
 ### 3.3. Prioridade
 
@@ -239,11 +239,11 @@ Um item só recebe `done` quando:
 - **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** D07 §§22–23; TL §7; INF §§7–8 e 11.
 - **Objetivo:** disponibilizar PostgreSQL isolado por ambiente em `aws-sa-east-1`.
-- **Descrição:** criar projeto, branches `production`, `preview`, `development` e `test`, roles de runtime/migration e pooling.
-- **Critérios:** região confirmada antes da criação; branches isoladas; runtime sem DDL; produção inacessível a PRs.
+- **Descrição:** criar projeto, no mínimo as branches `production` e `preview`, e habilitar pooling para runtime.
+- **Critérios:** região confirmada antes da criação; branches isoladas; produção inacessível a PRs; migrations por conexão direta.
 - **Dependências:** FND-004; login humano no Neon.
 - **Riscos:** região incorreta é imutável; uso acidental de produção.
-- **Testes:** `TEST-FND-005-01` `SELECT 1` por ambiente; `TEST-FND-005-02` DDL negado à role de runtime.
+- **Testes:** `TEST-FND-005-01` `SELECT 1` por ambiente utilizado; `TEST-FND-005-02` isolamento entre produção e ambientes não produtivos.
 - **Evidência:** `EVID-FND-005-01` região, nomes de branches e testes sem URLs.
 
 ### FND-006 — Configurar schema e migrations
@@ -832,14 +832,14 @@ Exige todos os gates anteriores, ADM-002, WEB-006, UX-001, QUAL-001, QUAL-002, S
 
 ## 14. Plano de entrega
 
-| Marco | Escopo | Resultado verificável |
-|---|---|---|
-| M0 — Fundação | DEC aplicáveis + FND-001 a FND-016 | `GATE-FND` aprovado |
-| M1 — Núcleo administrativo | AUTH, ADM, TAX, PUB-001 a PUB-003, MED, AUD | rascunho seguro criado e pré-visualizado |
-| M2 — Publicar e ler | PUB-004, PUB-005, PUB-007, PUB-008, WEB-001, WEB-004 | `GATE-EDITORIAL` aprovado |
-| M3 — Descobrir | PUB-006, WEB-002, WEB-003, WEB-005, SEO-001, SEO-002 | `GATE-DISCOVERY` aprovado |
-| M4 — Interagir | LIKE-001, COM-001, MOD-001 a MOD-003 | `GATE-INTERACTIONS` aprovado |
-| M5 — Endurecer e lançar | ADM-002, WEB-006, UX, QUAL, SEC, CNT e REL | `GATE-MVP` e release aprovados |
+| Marco                      | Escopo                                               | Resultado verificável                    |
+| -------------------------- | ---------------------------------------------------- | ---------------------------------------- |
+| M0 — Fundação              | DEC aplicáveis + FND-001 a FND-016                   | `GATE-FND` aprovado                      |
+| M1 — Núcleo administrativo | AUTH, ADM, TAX, PUB-001 a PUB-003, MED, AUD          | rascunho seguro criado e pré-visualizado |
+| M2 — Publicar e ler        | PUB-004, PUB-005, PUB-007, PUB-008, WEB-001, WEB-004 | `GATE-EDITORIAL` aprovado                |
+| M3 — Descobrir             | PUB-006, WEB-002, WEB-003, WEB-005, SEO-001, SEO-002 | `GATE-DISCOVERY` aprovado                |
+| M4 — Interagir             | LIKE-001, COM-001, MOD-001 a MOD-003                 | `GATE-INTERACTIONS` aprovado             |
+| M5 — Endurecer e lançar    | ADM-002, WEB-006, UX, QUAL, SEC, CNT e REL           | `GATE-MVP` e release aprovados           |
 
 ### Caminho crítico
 
@@ -857,43 +857,43 @@ A interação não deve atrasar a validação do núcleo editorial, mas continua
 
 ## 15. Matriz de rastreabilidade de requisitos
 
-| Origem | Necessidade | Itens principais |
-|---|---|---|
-| D02 §8.1 | home, recentes, destaques e áreas | WEB-002, PUB-006, TAX-001 |
-| D02 §8.2 | organização do conteúdo | TAX-001, TAX-002, PUB-003, WEB-003 |
-| D02 §8.3 | estrutura da publicação | PUB-003, WEB-004 |
-| D02 §8.4 | capa responsiva | FND-009, MED-001, QUAL-002 |
-| D02 §8.5 | curtida anônima irreversível | LIKE-001 |
-| D02 §8.6 | comentário imediato sem login | COM-001 |
-| D02 §8.7 | moderação | MOD-001, MOD-002, MOD-003 |
-| D02 §9 | administração | AUTH-001, AUTH-002, ADM-001, PUB, TAX, MOD |
-| D02 §10 | Markdown com preview | PUB-001, PUB-002 |
-| D02 §11 | segurança | FND-013, AUD-001, SEC-001 |
-| D02 §12 | descoberta e compartilhamento | WEB-003, WEB-005, SEO-001, SEO-002 |
-| D03 §7 Jornada 1 | descobrir e ler | WEB-002, WEB-003, WEB-004 |
-| D03 §7 Jornada 2 | publicar conhecimento | AUTH, PUB, MED, TAX |
-| D03 §7 Jornada 3 | interagir sem cadastro | LIKE-001, COM-001 |
-| D03 §7 Jornada 4 | moderar | MOD-001 a MOD-003 |
-| PUX | leitura, baixa densidade, feedback e acessibilidade | WEB, UX-001, QUAL-001 |
-| D04 | identidade “Opala Lunar Editorial” | FND-003, WEB-001, ADM-001, QUAL-001 |
-| D05 §§4–9 | fluxos públicos e estados | WEB-002 a WEB-005, LIKE-001, COM-001, UX-001 |
-| D05 §§10–21 | fluxos administrativos | AUTH, ADM, PUB, MED, TAX, MOD |
-| D06 | qualidade de engenharia | todos FND, QUAL-002, SEC-001 |
-| D07 §§9–19 | módulos e consistência | TAX, PUB, WEB, LIKE, COM, MOD, AUD |
-| TL | stack e bibliotecas | FND-002 a FND-014 |
-| INF §24 | plano de Fundação | FND-001 a FND-016 |
+| Origem           | Necessidade                                         | Itens principais                             |
+| ---------------- | --------------------------------------------------- | -------------------------------------------- |
+| D02 §8.1         | home, recentes, destaques e áreas                   | WEB-002, PUB-006, TAX-001                    |
+| D02 §8.2         | organização do conteúdo                             | TAX-001, TAX-002, PUB-003, WEB-003           |
+| D02 §8.3         | estrutura da publicação                             | PUB-003, WEB-004                             |
+| D02 §8.4         | capa responsiva                                     | FND-009, MED-001, QUAL-002                   |
+| D02 §8.5         | curtida anônima irreversível                        | LIKE-001                                     |
+| D02 §8.6         | comentário imediato sem login                       | COM-001                                      |
+| D02 §8.7         | moderação                                           | MOD-001, MOD-002, MOD-003                    |
+| D02 §9           | administração                                       | AUTH-001, AUTH-002, ADM-001, PUB, TAX, MOD   |
+| D02 §10          | Markdown com preview                                | PUB-001, PUB-002                             |
+| D02 §11          | segurança                                           | FND-013, AUD-001, SEC-001                    |
+| D02 §12          | descoberta e compartilhamento                       | WEB-003, WEB-005, SEO-001, SEO-002           |
+| D03 §7 Jornada 1 | descobrir e ler                                     | WEB-002, WEB-003, WEB-004                    |
+| D03 §7 Jornada 2 | publicar conhecimento                               | AUTH, PUB, MED, TAX                          |
+| D03 §7 Jornada 3 | interagir sem cadastro                              | LIKE-001, COM-001                            |
+| D03 §7 Jornada 4 | moderar                                             | MOD-001 a MOD-003                            |
+| PUX              | leitura, baixa densidade, feedback e acessibilidade | WEB, UX-001, QUAL-001                        |
+| D04              | identidade “Opala Lunar Editorial”                  | FND-003, WEB-001, ADM-001, QUAL-001          |
+| D05 §§4–9        | fluxos públicos e estados                           | WEB-002 a WEB-005, LIKE-001, COM-001, UX-001 |
+| D05 §§10–21      | fluxos administrativos                              | AUTH, ADM, PUB, MED, TAX, MOD                |
+| D06              | qualidade de engenharia                             | todos FND, QUAL-002, SEC-001                 |
+| D07 §§9–19       | módulos e consistência                              | TAX, PUB, WEB, LIKE, COM, MOD, AUD           |
+| TL               | stack e bibliotecas                                 | FND-002 a FND-014                            |
+| INF §24          | plano de Fundação                                   | FND-001 a FND-016                            |
 
 ## 16. Cobertura dos módulos arquiteturais
 
-| Módulo D07 | Itens |
-|---|---|
-| Publishing | PUB-001 a PUB-008 |
-| Taxonomy | TAX-001, TAX-002 |
-| Discovery | WEB-002 a WEB-005, SEO-001, SEO-002 |
-| Interactions | LIKE-001, COM-001, MOD-001 a MOD-003 |
-| Identity and Access | FND-008, AUTH-001, AUTH-002 |
-| Media | FND-009, MED-001 |
-| Cross-cutting | ADM-002, AUD-001, UX-001, QUAL-001, QUAL-002, SEC-001 |
+| Módulo D07          | Itens                                                 |
+| ------------------- | ----------------------------------------------------- |
+| Publishing          | PUB-001 a PUB-008                                     |
+| Taxonomy            | TAX-001, TAX-002                                      |
+| Discovery           | WEB-002 a WEB-005, SEO-001, SEO-002                   |
+| Interactions        | LIKE-001, COM-001, MOD-001 a MOD-003                  |
+| Identity and Access | FND-008, AUTH-001, AUTH-002                           |
+| Media               | FND-009, MED-001                                      |
+| Cross-cutting       | ADM-002, AUD-001, UX-001, QUAL-001, QUAL-002, SEC-001 |
 
 ## 17. Testes mínimos de regressão do MVP
 

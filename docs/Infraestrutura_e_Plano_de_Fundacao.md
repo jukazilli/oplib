@@ -1,14 +1,14 @@
 # OPALIB — Infraestrutura e Plano de Fundação
 
-| Campo | Valor |
-|---|---|
-| Projeto | OPALIB |
-| Documento | Infraestrutura e Plano de Fundação |
-| Versão | 1.0.0 |
-| Estado | Aprovado — canônico |
-| Data | 20 de setembro de 2026 |
-| Responsável | Infraestrutura / Fundação |
-| Repositório | `jukazilli/oplib` |
+| Campo                | Valor                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Projeto              | OPALIB                                                                                                             |
+| Documento            | Infraestrutura e Plano de Fundação                                                                                 |
+| Versão               | 1.0.0                                                                                                              |
+| Estado               | Aprovado — canônico                                                                                                |
+| Data                 | 20 de setembro de 2026                                                                                             |
+| Responsável          | Infraestrutura / Fundação                                                                                          |
+| Repositório          | `jukazilli/oplib`                                                                                                  |
 | Método de referência | Processo de Desenvolvimento de MVP de Software com IA Assistida, commit `12c87840bcb7779e3072eb717814a7bc28c623b8` |
 
 ## 1. Finalidade
@@ -44,20 +44,20 @@ Nenhum provedor, serviço ou conveniência operacional pode alterar silenciosame
 
 ## 3. Perfil de infraestrutura do OPALIB
 
-| Dimensão | Premissa aprovada |
-|---|---|
-| Natureza | projeto pessoal e acervo acadêmico público |
-| Usuários | visitantes externos sem conta e um único administrador |
-| Crescimento esperado | gradual, sem expectativa de pico massivo no MVP |
-| Disponibilidade | melhor esforço no início, sem SLA comercial próprio |
-| Dados | publicações públicas, comentários públicos e identificadores técnicos pseudônimos |
-| Arquivos | somente capas de publicação; sem PDF ou download de trabalhos |
-| Operação | uma pessoa, sem equipe dedicada de DevOps |
-| Estratégia | serviços gerenciados e poucos provedores |
-| Custo | camada gratuita sempre que segura; qualquer cobrança exige aprovação específica |
-| Cloud | preview e produção em nuvem desde a Fundação |
-| Local | edição e checks rápidos sem Docker ou banco local; integração validada em Preview |
-| Região primária | São Paulo, Brasil |
+| Dimensão             | Premissa aprovada                                                                 |
+| -------------------- | --------------------------------------------------------------------------------- |
+| Natureza             | projeto pessoal e acervo acadêmico público                                        |
+| Usuários             | visitantes externos sem conta e um único administrador                            |
+| Crescimento esperado | gradual, sem expectativa de pico massivo no MVP                                   |
+| Disponibilidade      | melhor esforço no início, sem SLA comercial próprio                               |
+| Dados                | publicações públicas, comentários públicos e identificadores técnicos pseudônimos |
+| Arquivos             | somente capas de publicação; sem PDF ou download de trabalhos                     |
+| Operação             | uma pessoa, sem equipe dedicada de DevOps                                         |
+| Estratégia           | serviços gerenciados e poucos provedores                                          |
+| Custo                | camada gratuita sempre que segura; qualquer cobrança exige aprovação específica   |
+| Cloud                | preview e produção em nuvem desde a Fundação                                      |
+| Local                | edição e checks rápidos sem Docker ou banco local; integração validada em Preview |
+| Região primária      | São Paulo, Brasil                                                                 |
 
 O OPALIB não precisa no MVP de filas, workers dedicados, realtime, Redis, scheduler da aplicação, processamento pesado, IA, mecanismos externos de busca ou clusters próprios.
 
@@ -108,11 +108,11 @@ O repositório atual é público. GitHub Actions é gratuito para repositórios 
 
 ## 5. Alternativas de implantação
 
-| Opção | Composição | Custo inicial | Segurança | Decisão |
-|---|---|---:|---|---|
-| A — totalmente gratuita | GitHub público + Vercel Hobby + Neon Free + Blob incluído + Clerk Hobby | US$ 0 | não atende ao MFA obrigatório em produção | rejeitada para produção |
-| B — MVP seguro e enxuto | GitHub público + Vercel Hobby + Neon Free + Blob incluído + Clerk Pro | a partir de US$ 20/mês no Clerk anual | atende à baseline aprovada, respeitados os demais controles | recomendada |
-| C — operação paga ampliada | GitHub + Vercel Pro + Neon Launch + Clerk Pro | Vercel e Clerk fixos, Neon por uso | maior retenção, escala e capacidade operacional | adiada até haver gatilho |
+| Opção                      | Composição                                                              |                         Custo inicial | Segurança                                                   | Decisão                  |
+| -------------------------- | ----------------------------------------------------------------------- | ------------------------------------: | ----------------------------------------------------------- | ------------------------ |
+| A — totalmente gratuita    | GitHub público + Vercel Hobby + Neon Free + Blob incluído + Clerk Hobby |                                 US$ 0 | não atende ao MFA obrigatório em produção                   | rejeitada para produção  |
+| B — MVP seguro e enxuto    | GitHub público + Vercel Hobby + Neon Free + Blob incluído + Clerk Pro   | a partir de US$ 20/mês no Clerk anual | atende à baseline aprovada, respeitados os demais controles | recomendada              |
+| C — operação paga ampliada | GitHub + Vercel Pro + Neon Launch + Clerk Pro                           |    Vercel e Clerk fixos, Neon por uso | maior retenção, escala e capacidade operacional             | adiada até haver gatilho |
 
 ### Decisão INF-001
 
@@ -122,17 +122,17 @@ Se o proprietário decidir não assumir esse custo, a Visão do Tech Lead dever�
 
 ## 6. Topologia aprovada
 
-| Responsabilidade | Serviço |
-|---|---|
-| Código, revisão e automação | GitHub |
-| Aplicação Next.js, API e Server Actions | Vercel Functions com Fluid Compute |
-| CDN, TLS, cache e proteção de borda | Vercel |
-| Banco relacional | Neon PostgreSQL |
-| Identidade administrativa | Clerk |
-| Capas públicas | Vercel Blob público |
-| Backups lógicos criptografados | Vercel Blob privado separado |
-| Logs e métricas iniciais | Vercel Runtime Logs, Vercel Usage e Neon monitoring |
-| Alertas operacionais iniciais | notificações do GitHub, Vercel, Neon e Clerk |
+| Responsabilidade                        | Serviço                                             |
+| --------------------------------------- | --------------------------------------------------- |
+| Código, revisão e automação             | GitHub                                              |
+| Aplicação Next.js, API e Server Actions | Vercel Functions com Fluid Compute                  |
+| CDN, TLS, cache e proteção de borda     | Vercel                                              |
+| Banco relacional                        | Neon PostgreSQL                                     |
+| Identidade administrativa               | Clerk                                               |
+| Capas públicas                          | Vercel Blob público                                 |
+| Backups lógicos criptografados          | Vercel Blob privado separado                        |
+| Logs e métricas iniciais                | Vercel Runtime Logs, Vercel Usage e Neon monitoring |
+| Alertas operacionais iniciais           | notificações do GitHub, Vercel, Neon e Clerk        |
 
 Fluxo de alto nível:
 
@@ -171,13 +171,13 @@ O uso de serviços beta do Neon restritos a outras regiões não justifica mover
 
 ### 8.1. Mapeamento
 
-| Ambiente | Código | Vercel | Neon | Dados | Finalidade |
-|---|---|---|---|---|---|
-| Local | branch Git do trabalho | nenhum | nenhum | nenhum | edição, typecheck, testes unitários e build |
-| Teste de integração | commit/PR | GitHub Actions | `test` | sintéticos e descartáveis | testes automatizados |
-| Preview | pull request | Preview Deployment | `preview` | sintéticos e moderados | validação humana e E2E |
-| Produção | `main` liberada | Production | `production` | reais | site público |
-| Restore test | execução temporária | nenhum | `restore-test-*` | cópia restaurada | prova de recuperação |
+| Ambiente            | Código                 | Vercel             | Neon             | Dados                     | Finalidade                                  |
+| ------------------- | ---------------------- | ------------------ | ---------------- | ------------------------- | ------------------------------------------- |
+| Local               | branch Git do trabalho | nenhum             | nenhum           | nenhum                    | edição, typecheck, testes unitários e build |
+| Teste de integração | commit/PR              | GitHub Actions     | `test`           | sintéticos e descartáveis | testes automatizados                        |
+| Preview             | pull request           | Preview Deployment | `preview`        | sintéticos e moderados    | validação humana e E2E                      |
+| Produção            | `main` liberada        | Production         | `production`     | reais                     | site público                                |
+| Restore test        | execução temporária    | nenhum             | `restore-test-*` | cópia restaurada          | prova de recuperação                        |
 
 O OPALIB não usará Docker nem PostgreSQL local. Depois dos checks locais aplicáveis, cada pull request elegível será validado em um Preview Vercel conectado somente a recursos não produtivos. Esse Preview funciona como staging operacional do projeto.
 
@@ -197,7 +197,7 @@ O OPALIB não usará Docker nem PostgreSQL local. Depois dos checks locais aplic
 
 ### 8.3. Política de branches Neon
 
-O plano Free permite até 10 branches. A Fundação manterá quatro persistentes: `production`, `preview`, `development` e `test`. Branches temporárias só serão criadas para migrations de maior risco ou teste de restore e deverão receber TTL ou exclusão imediata após evidência.
+O plano Free permite até 10 branches. O mínimo da Fundação é `production` e `preview`. As branches `development` e `test` podem ser mantidas enquanto forem úteis ao fluxo, sem configuração adicional obrigatória. Branches temporárias só serão criadas para migrations de maior risco ou teste de restore e deverão receber TTL ou exclusão imediata após evidência.
 
 Se a quantidade se aproximar de oito branches, novas criações são bloqueadas até limpeza ou aprovação de upgrade.
 
@@ -270,18 +270,14 @@ Conexões:
 - SSL obrigatório;
 - `pg` com pool anexado ao ciclo de vida da Vercel Function;
 - credenciais diferentes por ambiente;
-- role de runtime sem privilégios de DDL;
-- role de migration guardada apenas em Vercel/GitHub Environment e nunca exposta à aplicação.
+- nesta fase, o papel padrão `neondb_owner` é usado com credenciais distintas por branch;
+- separar papéis de runtime e migration fica registrado como hardening futuro, sem bloquear o staging.
 
 ### Banco e roles
 
-Cada branch usa o banco lógico e as roles definidos pela Fundação. A aplicação recebe somente:
+Cada ambiente usa sua própria branch e credencial do Neon. A separação entre runtime e migration é feita pelo uso: a URL pooled atende a aplicação e a URL direta atende operações de schema. Nenhuma credencial de produção é disponibilizada a Preview ou testes.
 
-- leitura e escrita nas tabelas necessárias;
-- uso das sequences necessárias;
-- nenhuma permissão para criar/drop de schema, role, banco ou extensão.
-
-A role de migration pode executar DDL, mas não fica disponível no bundle ou no runtime público.
+A adoção de papéis com privilégios mínimos será reavaliada antes da abertura da aplicação a tráfego real ou quando houver automação madura para gerir credenciais sem bloquear o desenvolvimento.
 
 ### Extensões
 
@@ -393,12 +389,12 @@ Proteção em camadas:
 
 Objetivos iniciais:
 
-| Objetivo | Meta do MVP |
-|---|---|
-| RPO | até 24 horas pelo backup diário; até 6 horas quando o histórico Neon for aplicável |
-| RTO | até 4 horas em incidente recuperável pelo runbook |
-| Teste de restore | na Fundação e depois trimestralmente |
-| Retenção | 7 diários + 4 semanais, condicionada à capacidade gratuita |
+| Objetivo         | Meta do MVP                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------- |
+| RPO              | até 24 horas pelo backup diário; até 6 horas quando o histórico Neon for aplicável |
+| RTO              | até 4 horas em incidente recuperável pelo runbook                                  |
+| Teste de restore | na Fundação e depois trimestralmente                                               |
+| Retenção         | 7 diários + 4 semanais, condicionada à capacidade gratuita                         |
 
 O teste de restore deve:
 
@@ -465,18 +461,18 @@ O deploy não é considerado concluído apenas porque a Vercel mostra `READY`. �
 
 ### Decisão INF-011
 
-| Variável | Development | Preview | Production | Sensível |
-|---|---|---|---|---|
-| `DATABASE_URL` | branch development | branch preview | branch production | sim |
-| `DATABASE_URL_UNPOOLED` | migration dev | migration preview | workflow protegido | sim |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | dev | dev/preview | production | não |
-| `CLERK_SECRET_KEY` | dev | dev/preview | production | sim |
-| `ADMIN_CLERK_USER_ID` | admin de teste | admin de teste | proprietário | servidor |
-| `BLOB_READ_WRITE_TOKEN` | se necessário | store preview | evitar no runtime com OIDC | sim |
-| `VISITOR_ID_PEPPER` | próprio | próprio | próprio | sim |
-| `NEXT_PUBLIC_SITE_URL` | localhost | URL preview | URL canônica | não |
-| `BACKUP_BLOB_READ_WRITE_TOKEN` | ausente | ausente | workflow backup | sim |
-| `BACKUP_ENCRYPTION_PUBLIC_KEY` | opcional | ausente | workflow backup | não |
+| Variável                            | Development        | Preview           | Production                 | Sensível |
+| ----------------------------------- | ------------------ | ----------------- | -------------------------- | -------- |
+| `DATABASE_URL`                      | branch development | branch preview    | branch production          | sim      |
+| `DATABASE_URL_UNPOOLED`             | migration dev      | migration preview | workflow protegido         | sim      |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | dev                | dev/preview       | production                 | não      |
+| `CLERK_SECRET_KEY`                  | dev                | dev/preview       | production                 | sim      |
+| `ADMIN_CLERK_USER_ID`               | admin de teste     | admin de teste    | proprietário               | servidor |
+| `BLOB_READ_WRITE_TOKEN`             | se necessário      | store preview     | evitar no runtime com OIDC | sim      |
+| `VISITOR_ID_PEPPER`                 | próprio            | próprio           | próprio                    | sim      |
+| `NEXT_PUBLIC_SITE_URL`              | localhost          | URL preview       | URL canônica               | não      |
+| `BACKUP_BLOB_READ_WRITE_TOKEN`      | ausente            | ausente           | workflow backup            | sim      |
+| `BACKUP_ENCRYPTION_PUBLIC_KEY`      | opcional           | ausente           | workflow backup            | não      |
 
 Regras:
 
@@ -557,15 +553,15 @@ Sentry, drain externo e monitor de uptime são adiados. Serão reavaliados se a 
 
 Estes objetivos são internos e não constituem SLA ao público:
 
-| Indicador | Meta inicial |
-|---|---|
-| disponibilidade mensal observada | ≥ 99,0% após haver medição externa confiável |
-| resposta do health check | < 1 s em condições normais, desconsiderando cold start inicial |
-| taxa de erro 5xx | < 1% em janela de 15 minutos |
-| restauração | RTO ≤ 4 h |
-| perda máxima esperada | RPO ≤ 24 h |
-| sucesso de backup | 100% dos jobs programados ou incidente aberto |
-| deploy | rollback conhecido e smoke concluído |
+| Indicador                        | Meta inicial                                                   |
+| -------------------------------- | -------------------------------------------------------------- |
+| disponibilidade mensal observada | ≥ 99,0% após haver medição externa confiável                   |
+| resposta do health check         | < 1 s em condições normais, desconsiderando cold start inicial |
+| taxa de erro 5xx                 | < 1% em janela de 15 minutos                                   |
+| restauração                      | RTO ≤ 4 h                                                      |
+| perda máxima esperada            | RPO ≤ 24 h                                                     |
+| sucesso de backup                | 100% dos jobs programados ou incidente aberto                  |
+| deploy                           | rollback conhecido e smoke concluído                           |
 
 Sem monitor externo, a disponibilidade não deve ser declarada como comprovada.
 
@@ -653,15 +649,15 @@ Os itens abaixo são habilitadores que deverão ser detalhados no Documento 08 c
 
 ### FND-005 — Provisionar Neon em São Paulo
 
-- criar projeto `aws-sa-east-1` e branches aprovadas;
-- criar roles de runtime e migration;
+- criar projeto `aws-sa-east-1` e no mínimo as branches `production` e `preview`;
+- usar inicialmente o papel padrão gerenciado pelo Neon;
 - conectar Development/Preview/Production sem cruzamento;
 - evidência: região, branches e `SELECT 1` por ambiente sem revelar URLs.
 
 ### FND-006 — Configurar schema e migrations
 
 - Drizzle config, schema inicial e migration zero;
-- aplicar em development, test e preview;
+- aplicar em development e preview; usar `test` somente quando um cenário destrutivo ou isolado justificar;
 - provar controle de versão e conexão direta;
 - evidência: relatório das migrations e teste de restrição.
 
@@ -722,14 +718,14 @@ Os itens abaixo são habilitadores que deverão ser detalhados no Documento 08 c
 
 ## 25. Ordem de execução
 
-| Fase | Itens | Gate de saída |
-|---|---|---|
-| 0 — acessos e decisões | contas, região, admin, COST-GATE-001 e chave de backup | ações humanas identificadas e segredos fora do chat |
-| 1 — repositório e toolchain | FND-001 a FND-004 | build local e checks básicos verdes |
-| 2 — dados e cloud | FND-005 a FND-009 | Preview conectado a recursos não produtivos |
-| 3 — entrega e segurança | FND-010 a FND-014 | pipeline, E2E, release e controles comprovados |
-| 4 — continuidade | FND-015 | backup restaurado fora de produção |
-| 5 — aceite | FND-016 | Fundação Operacional |
+| Fase                        | Itens                                                  | Gate de saída                                       |
+| --------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| 0 — acessos e decisões      | contas, região, admin, COST-GATE-001 e chave de backup | ações humanas identificadas e segredos fora do chat |
+| 1 — repositório e toolchain | FND-001 a FND-004                                      | build local e checks básicos verdes                 |
+| 2 — dados e cloud           | FND-005 a FND-009                                      | Preview conectado a recursos não produtivos         |
+| 3 — entrega e segurança     | FND-010 a FND-014                                      | pipeline, E2E, release e controles comprovados      |
+| 4 — continuidade            | FND-015                                                | backup restaurado fora de produção                  |
+| 5 — aceite                  | FND-016                                                | Fundação Operacional                                |
 
 Funcionalidades do produto só começam depois da Fase 5 ou de exceção documentada no backlog.
 
@@ -761,19 +757,19 @@ Criar contas ou obter um deployment `READY` não basta.
 
 ## 27. Riscos e respostas
 
-| Risco | Resposta planejada |
-|---|---|
-| Clerk Pro não aprovado | reabrir decisão de autenticação; não retirar MFA |
-| Neon Free atingir 0,5 GB | alerta em 80%, exportação e decisão de Launch |
-| limite Hobby interromper recurso | monitorar 80%, reduzir consumo ou aprovar Pro |
-| erro em migration | expand/contract, backup, workflow manual e restore testado |
-| vazamento de segredo | revogar/rotacionar, investigar logs e revisar escopo |
-| abuso de comentários | WAF, rate limit, honeypot e moderação |
-| abuso de curtidas | identificador opaco, unicidade no banco e rate limit |
-| backup corrompido | verificação e restore trimestral |
-| Preview acessar produção | escopo de env, testes de proteção e secrets separados |
-| região criada incorretamente | verificar antes de confirmar; recriar antes de inserir dados |
-| lock-in de provedor | PostgreSQL padrão, Markdown portável e limites de SDK isolados |
+| Risco                            | Resposta planejada                                             |
+| -------------------------------- | -------------------------------------------------------------- |
+| Clerk Pro não aprovado           | reabrir decisão de autenticação; não retirar MFA               |
+| Neon Free atingir 0,5 GB         | alerta em 80%, exportação e decisão de Launch                  |
+| limite Hobby interromper recurso | monitorar 80%, reduzir consumo ou aprovar Pro                  |
+| erro em migration                | expand/contract, backup, workflow manual e restore testado     |
+| vazamento de segredo             | revogar/rotacionar, investigar logs e revisar escopo           |
+| abuso de comentários             | WAF, rate limit, honeypot e moderação                          |
+| abuso de curtidas                | identificador opaco, unicidade no banco e rate limit           |
+| backup corrompido                | verificação e restore trimestral                               |
+| Preview acessar produção         | escopo de env, testes de proteção e secrets separados          |
+| região criada incorretamente     | verificar antes de confirmar; recriar antes de inserir dados   |
+| lock-in de provedor              | PostgreSQL padrão, Markdown portável e limites de SDK isolados |
 
 ## 28. Evidências permitidas
 
