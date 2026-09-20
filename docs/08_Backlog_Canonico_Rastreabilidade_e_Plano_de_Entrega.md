@@ -357,8 +357,8 @@ Um item só recebe `done` quando:
 
 ### FND-015 — Configurar backup e provar restauração
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
-- **Exceção:** congelada por `OPS-002`; deve ser retomada antes de Production ou de conteúdo real insubstituível.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
+- **Exceção:** automação integrada; backup e restore reais permanecem obrigatórios antes de Production ou de conteúdo real insubstituível, conforme `OPS-002`.
 - **Origem:** D07 §23; INF §§14.2 e 15.
 - **Objetivo:** atingir RPO de 24 horas e RTO de 4 horas para o MVP.
 - **Descrição:** snapshot, `pg_dump` diário criptografado, store privado, retenção e restore em branch temporária.
