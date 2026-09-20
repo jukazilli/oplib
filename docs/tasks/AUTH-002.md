@@ -8,8 +8,8 @@
 - [x] Respostas de comando distinguem ausência de sessão (`401`) e identidade sem autorização (`404`).
 - [x] Cliente trata sessão expirada e retorna ao contexto após novo login.
 - [x] Matriz negativa, testes locais e smoke do Preview aprovados.
-- [ ] Sessão expirada validada pelo proprietário no Preview.
-- [x] Backlog, matriz e evidência parcial reconciliados.
+- [x] Sessão expirada validada pelo proprietário no Preview.
+- [x] Backlog, matriz e evidência final reconciliados.
 
 ## Estado de validação
 
@@ -18,7 +18,7 @@
 - Preview imutável `oplib-3edm8mopb-feather-tecnologias.vercel.app` no commit `b4a02ab`.
 - Seis cenários E2E aprovados no run `35532991562`, incluindo página protegida e dois comandos anônimos.
 - Identidade fora da allowlist permanece coberta pela matriz unitária e pelo ensaio Clerk de `EVID-FND-008-01`.
-- O aceite humano de expiração real permanece pendente porque a sessão Clerk não pode ser revogada pela automação sem copiar credenciais para esta máquina ou para o GitHub.
+- O proprietário aprovou no Preview o redirecionamento por sessão expirada, a nova entrada e o retorno ao contexto administrativo em 20/09/2026.
 
 ## Contrato do corte
 

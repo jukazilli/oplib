@@ -2,7 +2,7 @@
 
 ## Resultado atual
 
-**Estado:** implementação e validações automatizadas aprovadas; aceite humano de sessão expirada pendente.
+**Estado:** aprovado.
 
 ## Implementação comprovada
 
@@ -34,14 +34,19 @@ Provas:
 
 ## TEST-AUTH-002-02 — Sessão expirada
 
-O retorno seguro e a mensagem `Sessão expirada. Entre novamente.` estão cobertos por testes unitários. A expiração real aguarda o ensaio humano abaixo:
+O retorno seguro e a mensagem `Sessão expirada. Entre novamente.` estão cobertos por testes unitários. Em 20/09/2026, o proprietário informou `AUTH-002 aprovado` após executar o ensaio no Preview, comprovando:
 
-1. entrar no Preview e manter `/admin` aberto na primeira aba;
-2. abrir `/admin` em uma segunda aba e acionar `Sair`;
-3. voltar à primeira aba, escolher uma capa válida e acionar `Enviar capa`;
-4. confirmar o redirecionamento para `/sign-in` com a mensagem de sessão expirada;
-5. entrar novamente e confirmar o retorno a `/admin`.
+- comando da aba com sessão revogada bloqueado;
+- redirecionamento para `/sign-in` com mensagem de sessão expirada;
+- nova autenticação concluída;
+- retorno ao contexto `/admin`.
+
+Nenhuma credencial ou identidade foi registrada na evidência.
 
 O editor ainda não existe. A preservação efetiva do rascunho editorial local será materializada e validada em PUB-001/PUB-002; AUTH-002 entrega o contrato seguro de retorno ao contexto.
 
-Até o aceite humano, AUTH-002 permanece `in-progress`.
+## Decisão de fechamento
+
+- `TEST-AUTH-002-01`: aprovado pela suíte automatizada, smoke remoto e evidência anterior da allowlist;
+- `TEST-AUTH-002-02`: aprovado por testes unitários e aceite humano no Preview;
+- AUTH-002: **FECHADA**.
