@@ -231,7 +231,7 @@ O branch protection/ruleset será aplicado somente após o primeiro workflow exi
 Será criado um único projeto Vercel ligado a `jukazilli/oplib`, com:
 
 - framework detectado como Next.js;
-- Node.js 24 LTS;
+- Node.js 22 LTS;
 - package manager e lockfile fixados;
 - região de Functions em `gru1`;
 - Fluid Compute habilitado;
@@ -628,7 +628,7 @@ Os itens abaixo são habilitadores que deverão ser detalhados no Documento 08 c
 
 ### FND-002 — Materializar toolchain
 
-- criar Next.js 16, Node 24, TypeScript estrito e pnpm fixado;
+- criar Next.js 16, Node 22, TypeScript estrito e pnpm fixado;
 - instalar somente dependências aprovadas;
 - criar lockfile e scripts canônicos;
 - evidência: instalação limpa, typecheck e build.

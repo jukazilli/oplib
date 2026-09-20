@@ -47,7 +47,7 @@ Em caso de conflito, prevalece o documento mais específico aprovado para o tema
 | Camada | Decisão aprovada | Política de versão |
 |---|---|---|
 | Linguagem | TypeScript em modo estrito | série 5.x, versão exata no lockfile |
-| Runtime | Node.js 24 LTS | versão fixada em `.nvmrc` e `package.json` |
+| Runtime | Node.js 22 LTS | versão fixada em `.nvmrc` e `package.json` |
 | Framework | Next.js App Router | 16.3.x; usar o patch estável corrente |
 | Interface | React | 19.2.x, conforme compatibilidade do Next.js |
 | Hospedagem | Vercel | Functions no runtime Node.js com Fluid Compute |
@@ -80,9 +80,9 @@ Regras:
 - derivar tipos do schema sempre que isso reduzir duplicação;
 - não confiar apenas em tipos TypeScript nas fronteiras HTTP, formulários, cookies, variáveis de ambiente ou banco.
 
-### TL-STACK-002 — Node.js 24 LTS
+### TL-STACK-002 — Node.js 22 LTS
 
-O runtime padrão será Node.js 24 LTS. A série 26 ainda era “Current” na data desta decisão; produção deve usar uma linha LTS. A versão será fixada para desenvolvimento, CI e Vercel.
+O runtime padrão será Node.js 22 LTS, alinhado ao ambiente local de desenvolvimento validado com a versão `22.12.0`. A versão exata será fixada para desenvolvimento, CI e Vercel durante o FND-002.
 
 ### TL-STACK-003 — Runtime Node.js, não Edge por padrão
 
@@ -543,7 +543,7 @@ Antes de adicionar uma biblioteca, o responsável deve responder:
 
 1. A plataforma ou a linguagem já resolve o problema adequadamente?
 2. A biblioteca possui manutenção ativa, licença compatível e documentação oficial?
-3. Ela funciona em Node.js 24, Next.js 16 e React 19?
+3. Ela funciona em Node.js 22, Next.js 16 e React 19?
 4. Ela aumenta o bundle do cliente? Se sim, o custo é justificado?
 5. Ela processará dados não confiáveis ou ampliará a superfície de ataque?
 6. Existe apenas uma biblioteca aprovada para essa responsabilidade?
@@ -556,7 +556,7 @@ Versões principais são atualizadas em mudanças próprias, com changelog revis
 | ID | Decisão | Estado |
 |---|---|---|
 | TL-STACK-001 | TypeScript estrito | aprovado |
-| TL-STACK-002 | Node.js 24 LTS | aprovado |
+| TL-STACK-002 | Node.js 22 LTS | aprovado |
 | TL-STACK-003 | Runtime Node.js por padrão | aprovado |
 | TL-STACK-004 | Next.js 16 App Router | aprovado |
 | TL-STACK-005 | Server-first por superfície | aprovado |

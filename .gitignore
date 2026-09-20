@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Next.js and build output
+.next/
+out/
+coverage/
+playwright-report/
+test-results/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local tooling
+.pnpm-store/
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

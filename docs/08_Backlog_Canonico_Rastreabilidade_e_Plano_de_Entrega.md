@@ -188,7 +188,7 @@ Um item só recebe `done` quando:
 
 ### FND-001 — Proteger e preparar o repositório
 
-- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `ready`.
+- **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D06 §§20–23; INF §§9 e 24.
 - **Objetivo:** tornar o GitHub a origem protegida de código, documentação e automação.
 - **Descrição:** criar README operacional, licença técnica do código quando decidida, templates essenciais, ruleset, Dependabot, secret scanning e CodeQL.
@@ -203,7 +203,7 @@ Um item só recebe `done` quando:
 - **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** TL §§4–6 e 20; INF §24 FND-002.
 - **Objetivo:** criar a base executável coerente com a stack aprovada.
-- **Descrição:** Next.js 16 App Router, React 19.2, Node 24 LTS, TypeScript estrito e pnpm fixado, sem monorepo.
+- **Descrição:** Next.js 16 App Router, React 19.2, Node 22 LTS, TypeScript estrito e pnpm fixado, sem monorepo.
 - **Critérios:** versões exatas registradas; lockfile reproduzível; scripts canônicos existentes; `dev` e `build` funcionam.
 - **Dependências:** FND-001.
 - **Riscos:** scaffolding adicionar recursos ou dependências fora da stack.
@@ -263,7 +263,7 @@ Um item só recebe `done` quando:
 - **Tipo:** `foundation`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** D02 §13; TL §§5–6; INF §§7 e 10.
 - **Objetivo:** executar a aplicação em Vercel Functions `gru1`.
-- **Descrição:** criar/vincular um projeto, configurar Node 24, Fluid Compute, scopes de ambiente e domínio Vercel.
+- **Descrição:** criar/vincular um projeto, configurar Node 22, Fluid Compute, scopes de ambiente e domínio Vercel.
 - **Critérios:** projeto correto ligado; Preview `READY`; região comprovada; Development, Preview e Production separados.
 - **Dependências:** FND-002, FND-004, FND-005; login humano na Vercel.
 - **Riscos:** vínculo ao projeto/time errado; Preview usar segredo de produção.
