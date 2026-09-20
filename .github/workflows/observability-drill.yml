@@ -1,8 +1,6 @@
 name: Observability Drill
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
     inputs:
       confirmation:
@@ -16,7 +14,7 @@ permissions:
 jobs:
   synthetic-failure:
     name: Synthetic pipeline failure
-    if: github.event_name == 'workflow_dispatch' && inputs.confirmation == 'EMIT_TEST_FAILURE'
+    if: inputs.confirmation == 'EMIT_TEST_FAILURE'
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
