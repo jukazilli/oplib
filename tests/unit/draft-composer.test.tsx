@@ -65,7 +65,10 @@ describe("draft composer", () => {
     expect(
       screen.queryByRole("button", { name: "Salvar rascunho" }),
     ).not.toBeInTheDocument();
-    await user.type(screen.getByRole("textbox", { name: "Título" }), " revisado");
+    await user.type(
+      screen.getByRole("textbox", { name: "Título" }),
+      " revisado",
+    );
     await user.click(
       screen.getByRole("button", { name: "Atualizar publicação" }),
     );
