@@ -1,6 +1,6 @@
 # EVID-PUB-003-01 — Metadados, referências e endereço permanente
 
-- **Estado:** técnico concluído; aceite visual do Preview pendente
+- **Estado:** concluído e aprovado pelo proprietário em 21/09/2026
 - **Rota:** `/admin/publicacoes`
 
 ## Entrega comprovada
@@ -23,9 +23,11 @@
 - `pnpm typecheck` — aprovado;
 - `pnpm build` — aprovado.
 
-## Aceite visual pendente
+## Aceite visual
 
-- [ ] controles contextuais não tornam a composição densa;
-- [ ] detalhes continuam operáveis no celular;
-- [ ] prévia apresenta a hierarquia correta;
-- [ ] referências podem ser adicionadas, removidas e reordenadas com clareza.
+- [x] controles contextuais não tornam a composição densa;
+- [x] detalhes continuam operáveis no celular;
+- [x] prévia apresenta a hierarquia correta;
+- [x] referências podem ser adicionadas, removidas e reordenadas com clareza.
+
+O proprietário aprovou o Preview com metadados e referências em painel contextual, preservando a composição fluida.
