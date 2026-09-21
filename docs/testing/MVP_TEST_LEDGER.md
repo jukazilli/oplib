@@ -169,6 +169,10 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: tentar SVG/GIF, MIME divergente dos bytes, arquivo vazio, acima de 5 MB, pathname com travessia e fora do prefixo; confirmar recusa e remoção de qualquer blob divergente já enviado.
 - [ ] `Automatizado/Preview`: inspecionar token de upload e confirmar tipos aprovados, limite de 5 MB, overwrite desativado, UUID/chave do ambiente e cache anual.
 - [ ] `Final`: enviar cada formato aprovado, conferir visualização e alt; simular falha e confirmar que o editor e sua composição permanecem intactos, sem objeto órfão ou acesso ao prefixo de Production.
+- [ ] `Automatizado/Preview`: publicar corpus Markdown com tags HTML, atributos de evento, SVG/MathML, código cercado e links `javascript:`, `data:`, `vbscript:`, `file:` e variações codificadas; confirmar ausência de execução e navegação perigosa na prévia e página pública.
+- [ ] `Automatizado/Preview`: inserir imagem Markdown inline e por referência apontando para servidor monitorado; confirmar que nenhuma requisição é feita, apenas o alt aparece e o editor orienta usar a capa.
+- [ ] `Automatizado/Preview`: publicar comentário com HTML/script no nome e corpo, Markdown e URL; conferir texto literal sem elemento ativo no público e na administração.
+- [ ] `Final`: abrir links HTTP(S) internos/externos legítimos, confirmar destino e proteção de aba externa; repetir conteúdo malicioso com CSP ativa e inspecionar console/rede.
 
 ## QUAL-001 — Acessibilidade e responsividade
 

@@ -38,7 +38,7 @@ describe("administrative comments", () => {
       comments: [
         {
           id: "id",
-          authorName: "Anônimo",
+          authorName: '<img src=x onerror="alert(2)">',
           body: "<script>alert(1)</script> **texto**",
           status: "visible",
           createdAt: new Date("2026-09-21T12:00:00.000Z"),
@@ -55,6 +55,10 @@ describe("administrative comments", () => {
       screen.getByText("<script>alert(1)</script> **texto**"),
     ).toBeInTheDocument();
     expect(document.querySelector("script")).toBeNull();
+    expect(document.querySelector("img")).toBeNull();
+    expect(
+      screen.getByText('<img src=x onerror="alert(2)">'),
+    ).toBeInTheDocument();
     expect(screen.getByText("Visível")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Publicação" })).toHaveAttribute(
       "href",

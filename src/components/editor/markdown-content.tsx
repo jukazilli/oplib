@@ -60,6 +60,8 @@ const components: Components = {
   ),
   td: ({ children }) => <td className="border px-3 py-2">{children}</td>,
   hr: () => <hr className="my-8 border-border" />,
+  img: ({ alt }) =>
+    alt ? <span className="text-muted-foreground">Imagem: {alt}</span> : null,
 };
 
 export function MarkdownContent({

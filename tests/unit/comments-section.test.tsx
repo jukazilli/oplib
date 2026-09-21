@@ -22,7 +22,7 @@ describe("CommentsSection", () => {
         initialComments={[
           {
             id: "one",
-            authorName: "Leitora",
+            authorName: '<img src=x onerror="alert(2)">',
             body: "<script>alert(1)</script> **texto** https://example.com",
             createdAt: "2026-09-21T12:00:00.000Z",
           },
@@ -35,6 +35,10 @@ describe("CommentsSection", () => {
       ),
     ).toBeInTheDocument();
     expect(document.querySelector("script")).toBeNull();
+    expect(document.querySelector("img")).toBeNull();
+    expect(
+      screen.getByText('<img src=x onerror="alert(2)">'),
+    ).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
   it("shows a confirmed comment immediately and clears only after success", async () => {

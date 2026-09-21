@@ -43,3 +43,12 @@ Estado: `in_progress`.
 - Todas as respostas dessas rotas passaram a declarar `Cache-Control: no-store`, inclusive sucesso e erros não autorizativos.
 - Validação do corte: 3 arquivos e 21 testes direcionados; suíte completa com 47 arquivos e 202 testes; format check, lint, typecheck e build aprovados.
 - A prova local não substitui o teste autenticado do Blob real, segregação Preview/Production nem inspeção de objeto no Preview.
+
+## Conteúdo não confiável
+
+- O pipeline compartilhado por prévia e publicação ignora HTML bruto e sanitiza URLs. O corpus cobre `javascript:`, variação de maiúsculas, `data:`, `vbscript:` e `file:` sem `href` navegável.
+- Imagens inline não fazem parte dos elementos Markdown aprovados e contornariam o fluxo gerenciado de capa. O componente `img` agora não cria requisição remota: apresenta somente `Imagem: {texto alternativo}`; o editor orienta `Imagens no texto não são exibidas. Use a capa.` para sintaxe inline ou por referência.
+- O texto é curto, voltado à ação e não expõe detalhes do pipeline. Nenhum novo bloco explicativo foi adicionado à interface.
+- Autor e corpo maliciosos de comentários permanecem texto literal tanto na leitura pública quanto na moderação administrativa; scripts, imagens, Markdown e URLs não viram elementos ativos.
+- Validação do corte: 4 arquivos e 20 testes direcionados; suíte completa com 47 arquivos e 209 testes; format check, lint, typecheck e build aprovados.
+- Restam validação em navegador/Preview e os demais grupos de SEC-001; testes de DOM não equivalem a uma auditoria dinâmica completa de XSS.
