@@ -166,10 +166,7 @@ describe("draft composer", () => {
     );
     await user.type(screen.getByLabelText("Resumo"), "Síntese");
     await user.selectOptions(screen.getByLabelText("Tipo"), "article");
-    await user.type(
-      screen.getByLabelText("Curso"),
-      "Engenharia de Software",
-    );
+    await user.type(screen.getByLabelText("Curso"), "Engenharia de Software");
     await user.type(screen.getByRole("textbox", { name: "Título" }), "Artigo");
     await user.type(
       screen.getByRole("textbox", { name: "Conteúdo" }),
