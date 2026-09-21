@@ -2,9 +2,13 @@
 
 import { ArrowLeft, FileText, MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
-import type { SerializedDraft } from "@/app/admin/publicacoes/actions";
+import {
+  changePublicationStatusAction,
+  type SerializedDraft,
+} from "@/app/admin/publicacoes/actions";
+import { Button } from "@/components/ui/button";
 import { DraftComposer } from "@/components/editor/draft-composer";
 import type { TaxonomyCollection } from "@/modules/taxonomy/repository";
 
@@ -32,6 +36,12 @@ export function PublicationsWorkspace({
   const [composerDraft, setComposerDraft] = useState(initialDraft);
   const [composerOpen, setComposerOpen] = useState(Boolean(initialDraft));
   const [modalView, setModalView] = useState<"composer" | "drafts">("composer");
+  const [statusIntent, setStatusIntent] = useState<{
+    publication: SerializedAdminPublication;
+    intent: "withdraw" | "republish";
+  } | null>(null);
+  const [statusMessage, setStatusMessage] = useState("");
+  const [isStatusPending, startStatusTransition] = useTransition();
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -89,6 +99,31 @@ export function PublicationsWorkspace({
     (publication) => publication.status === "draft",
   );
 
+  function confirmStatusChange() {
+    if (!statusIntent || isStatusPending) return;
+    const { publication, intent } = statusIntent;
+    startStatusTransition(async () => {
+      const result = await changePublicationStatusAction({
+        id: publication.id,
+        version: publication.updatedAt,
+        intent,
+      });
+      setStatusMessage(result.message);
+      if (result.status === "success") {
+        setStatusIntent(null);
+        router.refresh();
+      }
+    });
+  }
+
+  function requestStatusChange(
+    publication: SerializedAdminPublication,
+    intent: "withdraw" | "republish",
+  ) {
+    setStatusMessage("");
+    setStatusIntent({ publication, intent });
+  }
+
   return (
     <section aria-labelledby="publications-title" className="mx-auto max-w-3xl">
       <header className="mb-7">
@@ -102,6 +137,15 @@ export function PublicationsWorkspace({
           Publicações
         </h1>
       </header>
+
+      {statusMessage ? (
+        <p
+          role="status"
+          className="mb-4 rounded-control border bg-surface px-4 py-3 font-interface text-sm text-muted-foreground"
+        >
+          {statusMessage}
+        </p>
+      ) : null}
 
       <button
         type="button"
@@ -174,11 +218,29 @@ export function PublicationsWorkspace({
                     >
                       Editar
                     </button>
-                  ) : (
-                    <span className="block px-3 py-2 font-interface text-xs text-muted-foreground">
-                      Nenhuma ação disponível
-                    </span>
-                  )}
+                  ) : null}
+                  {publication.status === "published" ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        requestStatusChange(publication, "withdraw")
+                      }
+                      className="min-h-10 w-full rounded-md px-3 text-left font-interface text-sm font-semibold hover:bg-muted"
+                    >
+                      Retirar do ar
+                    </button>
+                  ) : null}
+                  {publication.status === "withdrawn" ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        requestStatusChange(publication, "republish")
+                      }
+                      className="min-h-10 w-full rounded-md px-3 text-left font-interface text-sm font-semibold hover:bg-muted"
+                    >
+                      Republicar
+                    </button>
+                  ) : null}
                 </div>
               </details>
             </article>
@@ -303,6 +365,68 @@ export function PublicationsWorkspace({
               </section>
             )}
           </div>
+        </div>
+      ) : null}
+
+      {statusIntent ? (
+        <div
+          className="fixed inset-0 z-[70] grid place-items-center bg-foreground/55 p-5"
+          onPointerDown={(event) => {
+            if (event.target === event.currentTarget && !isStatusPending)
+              setStatusIntent(null);
+          }}
+        >
+          <section
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="status-change-title"
+            aria-describedby="status-change-description"
+            className="w-full max-w-md rounded-card border bg-surface p-6 shadow-2xl"
+          >
+            <h2
+              id="status-change-title"
+              className="font-editorial text-2xl font-semibold"
+            >
+              {statusIntent.intent === "withdraw"
+                ? "Retirar do ar?"
+                : "Republicar?"}
+            </h2>
+            <p
+              id="status-change-description"
+              className="mt-2 text-sm leading-6 text-muted-foreground"
+            >
+              {statusIntent.intent === "withdraw"
+                ? `“${statusIntent.publication.title}” deixará de aparecer no acervo e não poderá ser acessada publicamente.`
+                : `“${statusIntent.publication.title}” voltará a ficar disponível no acervo.`}
+            </p>
+            {statusMessage ? (
+              <p role="status" className="mt-3 text-sm text-destructive">
+                {statusMessage}
+              </p>
+            ) : null}
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={isStatusPending}
+                onClick={() => setStatusIntent(null)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                disabled={isStatusPending}
+                onClick={confirmStatusChange}
+                autoFocus
+              >
+                {isStatusPending
+                  ? "Confirmando…"
+                  : statusIntent.intent === "withdraw"
+                    ? "Retirar do ar"
+                    : "Republicar"}
+              </Button>
+            </div>
+          </section>
         </div>
       ) : null}
     </section>

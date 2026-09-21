@@ -566,7 +566,7 @@ Estado atual: validação e transação de publicação/atualização, confirma�
 
 ### PUB-005 — Retirar e republicar
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D05 §17; D07 §§11 e 18.
 - **Objetivo:** retirar conteúdo de forma reversível e imediata em origem e cache.
 - **Descrição:** transição para `withdrawn`, remoção de listagens/busca/sitemap e republicação controlada.
@@ -575,6 +575,8 @@ Estado atual: validação e transação de publicação/atualização, confirma�
 - **Riscos:** conteúdo retirado continuar no CDN ou sitemap.
 - **Testes:** `TEST-PUB-005-01` retirar em todas as superfícies; `-02` cache; `-03` republicar.
 - **Evidência:** `EVID-PUB-005-01` E2E e inspeção de sitemap/cache.
+
+Estado atual: transições otimistas e transacionais de retirada/republicação, auditoria, invalidação pós-commit, confirmação e ações por estado implementadas em branch empilhada sobre PUB-004. Suíte local aprovada; faltam validação no Preview e comprovação nas superfícies públicas de WEB-001/004.
 
 ### PUB-006 — Definir destaque editorial
 

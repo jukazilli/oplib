@@ -523,3 +523,48 @@ export async function publishPublication(
   }
   return getAdminPublicationById(id, db);
 }
+
+/** Status, editorial timestamp, optimistic version, and audit event commit together. */
+export async function transitionPublicationStatus(
+  id: string,
+  version: Date,
+  intent: "withdraw" | "republish",
+  administratorId: string,
+  database?: Database,
+): Promise<AdminPublication | null> {
+  const db = database ?? getDatabase();
+  const expectedStatus = intent === "withdraw" ? "published" : "withdrawn";
+  const nextStatus = intent === "withdraw" ? "withdrawn" : "published";
+  const changed = await db.transaction(async (tx) => {
+    const rows = await tx
+      .update(posts)
+      .set({
+        status: nextStatus,
+        withdrawnAt: intent === "withdraw" ? new Date() : null,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(posts.id, id),
+          eq(posts.status, expectedStatus),
+          eq(posts.updatedAt, version),
+        ),
+      )
+      .returning({ id: posts.id });
+    if (!rows[0]) return false;
+    await recordAdminAuditEvent(
+      administratorId,
+      {
+        action:
+          intent === "withdraw"
+            ? "publication.withdraw"
+            : "publication.republish",
+        result: "success",
+        entityId: id,
+      },
+      tx,
+    );
+    return true;
+  });
+  return changed ? getAdminPublicationById(id, db) : null;
+}

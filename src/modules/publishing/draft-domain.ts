@@ -2,6 +2,12 @@ import { z } from "zod";
 
 export const draftIdSchema = z.string().uuid();
 
+export const publicationStatusActionSchema = z.object({
+  id: draftIdSchema,
+  version: z.iso.datetime(),
+  intent: z.enum(["withdraw", "republish"]),
+});
+
 export const contentTypeValues = [
   "academic_work",
   "article",

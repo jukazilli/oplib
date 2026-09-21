@@ -8,16 +8,23 @@ import { logEvent } from "@/lib/observability/logger";
 import {
   parseDraftInput,
   parsePublishInput,
+  publicationStatusActionSchema,
 } from "@/modules/publishing/draft-domain";
 import {
   createDraft,
   getAdminPublicationById,
   getDraftById,
   publishPublication,
+  transitionPublicationStatus,
   updateDraft,
   type DraftRecord,
   type DraftValues,
 } from "@/modules/publishing/draft-repository";
+
+export type PublicationStatusActionResult =
+  | { status: "success"; publication: SerializedDraft; message: string }
+  | { status: "conflict"; message: string }
+  | { status: "error"; message: string };
 
 export type DraftActionResult =
   | { status: "success"; draft: SerializedDraft }
@@ -158,6 +165,60 @@ export async function publishPublicationAction(
       status: "error",
       message:
         "Não foi possível concluir. Seu texto continua aqui para tentar novamente.",
+    };
+  }
+}
+
+export async function changePublicationStatusAction(
+  input: unknown,
+): Promise<PublicationStatusActionResult> {
+  const { userId: administratorId } = await requireAdminCommand();
+  const parsed = publicationStatusActionSchema.safeParse(input);
+  if (!parsed.success) return { status: "error", message: "Ação inválida." };
+
+  try {
+    const publication = await transitionPublicationStatus(
+      parsed.data.id,
+      new Date(parsed.data.version),
+      parsed.data.intent,
+      administratorId,
+    );
+    if (!publication)
+      return {
+        status: "conflict",
+        message:
+          "Esta publicação mudou em outra sessão. Recarregue antes de tentar novamente.",
+      };
+
+    try {
+      revalidatePath("/admin");
+      revalidatePath("/admin/publicacoes");
+      revalidatePath("/");
+      revalidatePath("/publicacoes");
+      revalidatePath(`/publicacoes/${publication.slug}`);
+    } catch {
+      logEvent({
+        level: "error",
+        event: "publishing.cache_invalidation",
+        correlationId: randomUUID(),
+        module: "publishing",
+        result: "retry_required",
+        errorCode: "CACHE_INVALIDATION_FAILED",
+      });
+    }
+
+    return {
+      status: "success",
+      publication: serializeDraft(publication),
+      message:
+        parsed.data.intent === "withdraw"
+          ? "Publicação retirada do ar."
+          : "Publicação republicada.",
+    };
+  } catch {
+    return {
+      status: "error",
+      message: "Não foi possível alterar a publicação. Tente novamente.",
     };
   }
 }

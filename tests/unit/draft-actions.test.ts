@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   getAdmin: vi.fn(),
   update: vi.fn(),
   publish: vi.fn(),
+  transitionStatus: vi.fn(),
   revalidate: vi.fn(),
   logEvent: vi.fn(),
 }));
@@ -22,9 +23,11 @@ vi.mock("@/modules/publishing/draft-repository", () => ({
   getAdminPublicationById: mocks.getAdmin,
   updateDraft: mocks.update,
   publishPublication: mocks.publish,
+  transitionPublicationStatus: mocks.transitionStatus,
 }));
 
 import {
+  changePublicationStatusAction,
   publishPublicationAction,
   saveDraftAction,
 } from "@/app/admin/publicacoes/actions";
@@ -42,6 +45,56 @@ beforeEach(() => {
 });
 
 describe("draft actions", () => {
+  it("withdraws a published item and invalidates its public surfaces after commit", async () => {
+    mocks.transitionStatus.mockResolvedValue({
+      id: "10000000-0000-4000-8000-000000000001",
+      slug: "publicacao",
+      status: "withdrawn",
+      updatedAt: new Date("2026-09-21T12:01:00.000Z"),
+    });
+
+    const result = await changePublicationStatusAction({
+      id: "10000000-0000-4000-8000-000000000001",
+      version: "2026-09-21T12:00:00.000Z",
+      intent: "withdraw",
+    });
+
+    expect(mocks.transitionStatus).toHaveBeenCalledWith(
+      "10000000-0000-4000-8000-000000000001",
+      new Date("2026-09-21T12:00:00.000Z"),
+      "withdraw",
+      "admin",
+    );
+    expect(result).toMatchObject({
+      status: "success",
+      message: "Publicação retirada do ar.",
+    });
+    expect(mocks.revalidate).toHaveBeenCalledWith("/publicacoes/publicacao");
+  });
+
+  it("does not invalidate cache when a status transition conflicts", async () => {
+    mocks.transitionStatus.mockResolvedValue(null);
+
+    expect(
+      await changePublicationStatusAction({
+        id: "10000000-0000-4000-8000-000000000001",
+        version: "2026-09-21T12:00:00.000Z",
+        intent: "republish",
+      }),
+    ).toMatchObject({ status: "conflict" });
+    expect(mocks.revalidate).not.toHaveBeenCalled();
+  });
+
+  it("rejects an invalid status transition before reaching the repository", async () => {
+    expect(
+      await changePublicationStatusAction({
+        id: "invalid",
+        intent: "withdraw",
+      }),
+    ).toEqual({ status: "error", message: "Ação inválida." });
+    expect(mocks.transitionStatus).not.toHaveBeenCalled();
+  });
+
   it("publishes a validated draft and revalidates public paths only after commit", async () => {
     const input = draftForm({
       id: "10000000-0000-4000-8000-000000000001",
