@@ -47,9 +47,17 @@ describe("draft actions", () => {
     expect(mocks.authorize).toHaveBeenCalledOnce();
     expect(mocks.create).toHaveBeenCalledWith({
       title: "",
+      slug: "",
+      summary: "",
       markdown: "Primeira ideia",
+      contentType: "",
+      areaIds: [],
       categoryId: "",
       tagIds: [],
+      course: "",
+      discipline: "",
+      originalDate: "",
+      references: [],
       cover: null,
     });
     expect(result).toMatchObject({ status: "success" });

@@ -55,4 +55,54 @@ describe("draft domain", () => {
     );
     expect(result.success).toBe(false);
   });
+
+  it("accepts complete metadata and ordered references", () => {
+    const data = form({
+      id: "",
+      version: "",
+      title: "Virtualização",
+      markdown: "Conteúdo",
+      summary: "Resumo",
+      contentType: "academic_work",
+      originalDate: "2026-09-21",
+      references: JSON.stringify([
+        {
+          id: "",
+          kind: "related_link",
+          title: "NIST",
+          citation: "",
+          url: "https://www.nist.gov/",
+        },
+      ]),
+    });
+    data.append("areaIds", "10000000-0000-4000-8000-000000000001");
+
+    const result = parseDraftInput(data);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.areaIds).toHaveLength(1);
+      expect(result.data.references[0]?.title).toBe("NIST");
+    }
+  });
+
+  it("rejects unsafe reference addresses", () => {
+    const result = parseDraftInput(
+      form({
+        id: "",
+        version: "",
+        title: "Título",
+        markdown: "Conteúdo",
+        references: JSON.stringify([
+          {
+            id: "",
+            kind: "related_link",
+            title: "Endereço",
+            citation: "",
+            url: "javascript:alert(1)",
+          },
+        ]),
+      }),
+    );
+    expect(result.success).toBe(false);
+  });
 });

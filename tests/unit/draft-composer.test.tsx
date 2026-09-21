@@ -54,6 +54,7 @@ describe("draft composer", () => {
       <DraftComposer
         initialDraft={null}
         taxonomy={{
+          areas: [],
           categories: [
             {
               id: "10000000-0000-4000-8000-000000000002",
@@ -101,9 +102,17 @@ describe("draft composer", () => {
       draft: {
         id: "10000000-0000-4000-8000-000000000001",
         title: "Meu rascunho",
+        slug: "meu-rascunho",
+        summary: "",
         markdown: "Primeira ideia",
+        contentType: "",
+        areaIds: [],
         categoryId: "",
         tagIds: [],
+        course: "",
+        discipline: "",
+        originalDate: "",
+        references: [],
         cover: null,
         updatedAt: "2026-09-20T22:30:00.000Z",
       },
@@ -125,6 +134,50 @@ describe("draft composer", () => {
       "/admin/publicacoes?draft=10000000-0000-4000-8000-000000000001",
     );
     expect(await screen.findByText(/Salvo às/)).toBeInTheDocument();
+  });
+
+  it("reveals and submits metadata without densifying the initial composer", async () => {
+    const user = userEvent.setup();
+    mocks.save.mockResolvedValue({
+      status: "success",
+      draft: {
+        id: "10000000-0000-4000-8000-000000000001",
+        title: "Artigo",
+        slug: "artigo",
+        summary: "Síntese",
+        markdown: "Conteúdo",
+        contentType: "article",
+        areaIds: [],
+        categoryId: "",
+        tagIds: [],
+        course: "Engenharia de Software",
+        discipline: "",
+        originalDate: "",
+        references: [],
+        cover: null,
+        updatedAt: "2026-09-21T10:00:00.000Z",
+      },
+    });
+    render(<DraftComposer initialDraft={null} />);
+
+    expect(screen.queryByLabelText("Resumo")).not.toBeInTheDocument();
+    await user.click(
+      screen.getByRole("button", { name: "Detalhes da publicação" }),
+    );
+    await user.type(screen.getByLabelText("Resumo"), "Síntese");
+    await user.selectOptions(screen.getByLabelText("Tipo"), "article");
+    await user.type(screen.getByLabelText("Curso"), "Engenharia de Software");
+    await user.type(screen.getByRole("textbox", { name: "Título" }), "Artigo");
+    await user.type(
+      screen.getByRole("textbox", { name: "Conteúdo" }),
+      "Conteúdo",
+    );
+    await user.click(screen.getByRole("button", { name: "Salvar rascunho" }));
+
+    const submitted = mocks.save.mock.calls[0]?.[0] as FormData;
+    expect(submitted.get("summary")).toBe("Síntese");
+    expect(submitted.get("contentType")).toBe("article");
+    expect(submitted.get("course")).toBe("Engenharia de Software");
   });
 
   it("uses the product dialog before discarding unsaved changes", async () => {
@@ -193,9 +246,17 @@ describe("draft composer", () => {
         initialDraft={{
           id: "10000000-0000-4000-8000-000000000001",
           title: "Título salvo",
+          slug: "titulo-salvo",
+          summary: "",
           markdown: "Texto salvo",
+          contentType: "",
+          areaIds: [],
           categoryId: "",
           tagIds: [],
+          course: "",
+          discipline: "",
+          originalDate: "",
+          references: [],
           cover: null,
           updatedAt: "2026-09-20T20:00:00.000Z",
         }}

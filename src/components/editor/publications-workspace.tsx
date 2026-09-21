@@ -22,7 +22,7 @@ const statusLabels = {
 export function PublicationsWorkspace({
   initialDraft,
   publications,
-  taxonomy = { categories: [], tags: [] },
+  taxonomy = { areas: [], categories: [], tags: [] },
 }: {
   initialDraft: SerializedDraft | null;
   publications: SerializedAdminPublication[];

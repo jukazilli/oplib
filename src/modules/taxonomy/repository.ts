@@ -4,7 +4,14 @@ import { asc, count, eq, ilike, or, sql } from "drizzle-orm";
 import { connection } from "next/server";
 
 import { getDatabase, type Database } from "@/lib/db";
-import { categories, postCategories, postTags, tags } from "@/lib/db/schema";
+import {
+  categories,
+  knowledgeAreas,
+  postCategories,
+  postKnowledgeAreas,
+  postTags,
+  tags,
+} from "@/lib/db/schema";
 import type { TaxonomyKind } from "@/modules/taxonomy/domain";
 
 export type TaxonomyItem = {
@@ -15,6 +22,7 @@ export type TaxonomyItem = {
 };
 
 export type TaxonomyCollection = {
+  areas: TaxonomyItem[];
   categories: TaxonomyItem[];
   tags: TaxonomyItem[];
 };
@@ -33,7 +41,21 @@ export async function listTaxonomy(
     ? or(ilike(tags.name, pattern), ilike(tags.slug, pattern))
     : undefined;
 
-  const [categoryRows, tagRows] = await Promise.all([
+  const [areaRows, categoryRows, tagRows] = await Promise.all([
+    db
+      .select({
+        id: knowledgeAreas.id,
+        name: knowledgeAreas.name,
+        slug: knowledgeAreas.slug,
+        usageCount: count(postKnowledgeAreas.postId),
+      })
+      .from(knowledgeAreas)
+      .leftJoin(
+        postKnowledgeAreas,
+        eq(knowledgeAreas.id, postKnowledgeAreas.knowledgeAreaId),
+      )
+      .groupBy(knowledgeAreas.id)
+      .orderBy(asc(knowledgeAreas.name)),
     db
       .select({
         id: categories.id,
@@ -60,7 +82,7 @@ export async function listTaxonomy(
       .orderBy(asc(tags.name)),
   ]);
 
-  return { categories: categoryRows, tags: tagRows };
+  return { areas: areaRows, categories: categoryRows, tags: tagRows };
 }
 
 export async function createTaxonomyItem(
