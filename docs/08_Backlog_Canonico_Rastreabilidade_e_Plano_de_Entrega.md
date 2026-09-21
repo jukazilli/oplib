@@ -203,7 +203,7 @@ Estado atual: proposta consolidada em `docs/decisions/UX-002.md`, cobrindo desco
 - **Tipo:** `decision`; **Prioridade:** `P1`; **Status:** `review`.
 - **Origem:** feedback do proprietário; referência Obsidian; protótipo privado `jukazilli/graph`; D04 §§20–22; D05 §§3, 11 e 18; D07 §§10, 16 e 30.
 - **Objetivo:** decidir o grafo como navegação operacional complementar e preparar a linguagem de rotas para futuros acervos pessoais.
-- **Descrição:** definir visualizações Lista/Grafo, semântica de nós e arestas, cartão contextual, ações seguras, acessibilidade, desempenho, direção `/@identificador` + `/studio` e permanência de `/admin` como plano de controle exclusivo da plataforma.
+- **Descrição:** definir visualizações Lista/Grafo, semântica de nós e arestas, cartão contextual, ações seguras, acessibilidade, desempenho, direção `/lib/[nome-de-usuario]` + `/studio` e permanência de `/admin` como plano de controle exclusivo da plataforma.
 - **Critérios:** relações não inventadas; lista equivalente; hover não obrigatório; ações por estado; exclusão protegida; teclado/toque/leitor de tela; isolamento futuro no banco e servidor; migração de URL explícita.
 - **Dependências:** ADM-001, PUB-007 e UX-002; implementação depende ainda de relações persistentes entre publicações e decisão arquitetural multiusuário.
 - **Riscos:** grafo decorativo ou ilegível, ação destrutiva acidental, relação semântica falsa, autorização baseada em URL ou migração prematura do MVP.

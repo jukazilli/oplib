@@ -34,3 +34,5 @@ O proprietário deverá revisar os critérios de aceite de `docs/decisions/UX-00
 ## Aceite parcial registrado
 
 Em 20/09/2026, Juliano Zilli confirmou que `/admin` deverá permanecer como seu plano de controle exclusivo da OPALIB para administrar lista de espera, convites, usuários e moderação da plataforma. Esse aceite parcial não libera ainda a implementação multiusuário nem encerra UX-003.
+
+Na mesma data, confirmou `/lib/[nome-de-usuario]` como convenção dos futuros perfis públicos, mantendo `/studio` para a gestão privada do próprio acervo.
