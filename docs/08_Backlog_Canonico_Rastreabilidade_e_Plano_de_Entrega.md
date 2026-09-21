@@ -203,7 +203,7 @@ Estado atual: proposta consolidada em `docs/decisions/UX-002.md`, cobrindo desco
 - **Tipo:** `decision`; **Prioridade:** `P1`; **Status:** `review`.
 - **Origem:** feedback do proprietário; referência Obsidian; protótipo privado `jukazilli/graph`; D04 §§20–22; D05 §§3, 11 e 18; D07 §§10, 16 e 30.
 - **Objetivo:** decidir o grafo como navegação operacional complementar e preparar a linguagem de rotas para futuros acervos pessoais.
-- **Descrição:** definir visualizações Lista/Grafo, semântica de nós e arestas, cartão contextual, ações seguras, acessibilidade, desempenho e direção `/@identificador` + `/studio` sem alterar `/admin` no MVP.
+- **Descrição:** definir visualizações Lista/Grafo, semântica de nós e arestas, cartão contextual, ações seguras, acessibilidade, desempenho, direção `/@identificador` + `/studio` e permanência de `/admin` como plano de controle exclusivo da plataforma.
 - **Critérios:** relações não inventadas; lista equivalente; hover não obrigatório; ações por estado; exclusão protegida; teclado/toque/leitor de tela; isolamento futuro no banco e servidor; migração de URL explícita.
 - **Dependências:** ADM-001, PUB-007 e UX-002; implementação depende ainda de relações persistentes entre publicações e decisão arquitetural multiusuário.
 - **Riscos:** grafo decorativo ou ilegível, ação destrutiva acidental, relação semântica falsa, autorização baseada em URL ou migração prematura do MVP.
@@ -693,8 +693,8 @@ Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados
 - **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
 - **Origem:** D02 §§2, 8.1 e 16; UX-002 “Lista de espera para futuros autores”; INF §19 “LGPD e minimização”.
 - **Objetivo:** medir interesse na evolução multiusuário sem prometer conta ou autoria disponível.
-- **Descrição:** CTA secundário `Quero criar meu acervo`, explicação de indisponibilidade, coleta mínima de e-mail com consentimento específico e confirmação de interesse.
-- **Critérios:** não cria conta; não promete prazo; duplicidade é idempotente; estados de envio, sucesso e erro; proteção contra abuso; remoção acessível; uso restrito ao aviso sobre abertura da plataforma.
+- **Descrição:** CTA secundário `Quero criar meu acervo`, explicação de indisponibilidade, coleta mínima de e-mail com consentimento específico, confirmação de interesse e consulta protegida pelo proprietário em `/admin`.
+- **Critérios:** não cria conta; não promete prazo; duplicidade é idempotente; estados de envio, sucesso e erro; proteção contra abuso; remoção acessível; uso restrito ao aviso sobre abertura da plataforma; lista administrativa minimizada; convite individual, auditável e revogável enquanto não aceito.
 - **Dependências:** UX-002, WEB-001, WEB-006, DEC-003 e decisão técnica sobre armazenamento e envio.
 - **Riscos:** confundir espera com cadastro, coletar dado sem finalidade clara ou transformar a lista em newsletter genérica.
 - **Testes:** `TEST-WEB-007-01` fluxo e estados; `-02` duplicidade; `-03` consentimento e remoção; `-04` abuso e privacidade.

@@ -163,17 +163,17 @@ Total: 57 itens permanentes.
 
 ## 9. Experiência pública e descoberta
 
-| ID      | Origem                                 | Requisito                                      | Destino previsto                                           | Implementação atual | Testes previstos | Evidência esperada | Status    |
-| ------- | -------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------- | ------------------- | ---------------- | ------------------ | --------- |
-| WEB-001 | D04 §13; D05 §3; PUX 001–005           | criar shell público responsivo                 | `src/app/(public)/layout.tsx`, `src/components/editorial/` | —                   | `TEST-WEB-001-*` | `EVID-WEB-001-01`  | `planned` |
-| WEB-002 | D02 §8.1; D04 §14; D05 §4              | criar página inicial editorial                 | `src/app/(public)/page.tsx`, `src/modules/discovery/`      | —                   | `TEST-WEB-002-*` | `EVID-WEB-002-01`  | `planned` |
-| WEB-003 | D02 §§8.1–8.2; D05 §5; D07 §13         | implementar acervo, busca, filtros e paginação | `src/app/(public)/publicacoes/`, `src/modules/discovery/`  | —                   | `TEST-WEB-003-*` | `EVID-WEB-003-01`  | `planned` |
-| WEB-004 | D02 §8.3; D04 §16; D05 §6              | criar página de leitura da publicação          | `src/app/(public)/publicacoes/[slug]/`                     | —                   | `TEST-WEB-004-*` | `EVID-WEB-004-01`  | `planned` |
-| WEB-005 | D02 §12; D05 §7                        | compartilhar por recurso nativo ou copiar link | `src/components/editorial/share-action.tsx`                | —                   | `TEST-WEB-005-*` | `EVID-WEB-005-01`  | `planned` |
-| WEB-006 | D02 §§2,5,12; D04 §19; D05 §3; INF §19 | publicar Sobre e Privacidade                   | `src/app/(public)/sobre/`, `src/app/(public)/privacidade/` | —                   | `TEST-WEB-006-*` | `EVID-WEB-006-01`  | `planned` |
-| WEB-007 | D02 §§2,8.1,16; UX-002; INF §19        | criar lista de espera transparente             | rota pública e módulo de interesse a definir               | —                   | `TEST-WEB-007-*` | `EVID-WEB-007-01`  | `planned` |
-| SEO-001 | D02 §12; TL §17                        | gerar metadata, canonical e prévia social      | Metadata API nas rotas públicas                            | —                   | `TEST-SEO-001-*` | `EVID-SEO-001-01`  | `planned` |
-| SEO-002 | D02 §12; D07 §17; TL §17               | gerar sitemap, robots e dados estruturados     | `src/app/sitemap.ts`, `robots.ts`, JSON-LD                 | —                   | `TEST-SEO-002-*` | `EVID-SEO-002-01`  | `planned` |
+| ID      | Origem                                  | Requisito                                      | Destino previsto                                           | Implementação atual | Testes previstos | Evidência esperada | Status    |
+| ------- | --------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------- | ------------------- | ---------------- | ------------------ | --------- |
+| WEB-001 | D04 §13; D05 §3; PUX 001–005            | criar shell público responsivo                 | `src/app/(public)/layout.tsx`, `src/components/editorial/` | —                   | `TEST-WEB-001-*` | `EVID-WEB-001-01`  | `planned` |
+| WEB-002 | D02 §8.1; D04 §14; D05 §4               | criar página inicial editorial                 | `src/app/(public)/page.tsx`, `src/modules/discovery/`      | —                   | `TEST-WEB-002-*` | `EVID-WEB-002-01`  | `planned` |
+| WEB-003 | D02 §§8.1–8.2; D05 §5; D07 §13          | implementar acervo, busca, filtros e paginação | `src/app/(public)/publicacoes/`, `src/modules/discovery/`  | —                   | `TEST-WEB-003-*` | `EVID-WEB-003-01`  | `planned` |
+| WEB-004 | D02 §8.3; D04 §16; D05 §6               | criar página de leitura da publicação          | `src/app/(public)/publicacoes/[slug]/`                     | —                   | `TEST-WEB-004-*` | `EVID-WEB-004-01`  | `planned` |
+| WEB-005 | D02 §12; D05 §7                         | compartilhar por recurso nativo ou copiar link | `src/components/editorial/share-action.tsx`                | —                   | `TEST-WEB-005-*` | `EVID-WEB-005-01`  | `planned` |
+| WEB-006 | D02 §§2,5,12; D04 §19; D05 §3; INF §19  | publicar Sobre e Privacidade                   | `src/app/(public)/sobre/`, `src/app/(public)/privacidade/` | —                   | `TEST-WEB-006-*` | `EVID-WEB-006-01`  | `planned` |
+| WEB-007 | D02 §§2,8.1,16; UX-002; UX-003; INF §19 | criar lista de espera e gestão administrativa  | rota pública, módulo de interesse e painel `/admin`        | —                   | `TEST-WEB-007-*` | `EVID-WEB-007-01`  | `planned` |
+| SEO-001 | D02 §12; TL §17                         | gerar metadata, canonical e prévia social      | Metadata API nas rotas públicas                            | —                   | `TEST-SEO-001-*` | `EVID-SEO-001-01`  | `planned` |
+| SEO-002 | D02 §12; D07 §17; TL §17                | gerar sitemap, robots e dados estruturados     | `src/app/sitemap.ts`, `robots.ts`, JSON-LD                 | —                   | `TEST-SEO-002-*` | `EVID-SEO-002-01`  | `planned` |
 
 ## 10. Interações e moderação
 
