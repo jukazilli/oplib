@@ -6,6 +6,7 @@ import { cache } from "react";
 
 import { MarkdownContent } from "@/components/editor/markdown-content";
 import { LikeAction } from "@/components/editorial/like-action";
+import { CommentsSection } from "@/components/editorial/comments-section";
 import { ShareAction } from "@/components/editorial/share-action";
 import { getSiteUrl } from "@/lib/seo/metadata";
 import {
@@ -20,6 +21,7 @@ import {
   VISITOR_COOKIE_NAME,
 } from "@/modules/interactions/likes/identity";
 import { getLikeState } from "@/modules/interactions/likes/repository";
+import { listVisibleComments } from "@/modules/interactions/comments/repository";
 
 const getPublication = cache(getPublicPublicationBySlug);
 
@@ -102,10 +104,10 @@ export default async function PublicationPage({
   const visitorId = validVisitorId(
     (await cookies()).get(VISITOR_COOKIE_NAME)?.value,
   );
-  const likeState = await getLikeState(
-    publication.id,
-    visitorId ? hashVisitorId(visitorId) : null,
-  );
+  const [likeState, publicComments] = await Promise.all([
+    getLikeState(publication.id, visitorId ? hashVisitorId(visitorId) : null),
+    listVisibleComments(publication.id),
+  ]);
 
   return (
     <article className="mx-auto w-full max-w-5xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
@@ -229,6 +231,10 @@ export default async function PublicationPage({
           slug={publication.slug}
           initialCount={likeState.count}
           initiallyLiked={likeState.liked}
+        />
+        <CommentsSection
+          slug={publication.slug}
+          initialComments={publicComments}
         />
       </div>
     </article>

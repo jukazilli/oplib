@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   getBySlug: vi.fn(),
   getLikeState: vi.fn(),
+  listComments: vi.fn(),
   notFound: vi.fn(),
 }));
 
@@ -28,6 +29,9 @@ vi.mock("@/modules/interactions/likes/identity", () => ({
 }));
 vi.mock("@/modules/interactions/likes/repository", () => ({
   getLikeState: mocks.getLikeState,
+}));
+vi.mock("@/modules/interactions/comments/repository", () => ({
+  listVisibleComments: mocks.listComments,
 }));
 
 import PublicationPage, {
@@ -68,6 +72,7 @@ describe("public publication page", () => {
   it("renders the published reading hierarchy without inactive interactions", async () => {
     mocks.getBySlug.mockResolvedValue(publication);
     mocks.getLikeState.mockResolvedValue({ count: 3, liked: false });
+    mocks.listComments.mockResolvedValue([]);
     render(
       await PublicationPage({
         params: Promise.resolve({ slug: publication.slug }),
@@ -90,8 +95,13 @@ describe("public publication page", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Curtir/ })).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /comentar/i }),
-    ).not.toBeInTheDocument();
+      screen.getByRole("button", { name: "Publicar comentário" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Ainda não há comentários. Você pode iniciar a conversa.",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("uses the same unavailable state when the public query finds nothing", async () => {

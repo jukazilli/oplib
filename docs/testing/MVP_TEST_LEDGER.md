@@ -107,3 +107,14 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: falha do banco mantém contador e leitura, permitindo nova tentativa segura.
 - [ ] `Final`: confirmar teclado, leitor de tela, celular e feedback `Curtida registrada. Obrigado!`.
 - [ ] `Final`: confirmar ausência de ação, rota ou método para desfazer a curtida.
+
+## COM-001 — Comentários imediatos sem cadastro
+
+- [ ] `Automatizado/Preview`: publicar com nome e sem nome; confirmar `Anônimo`, persistência após recarga, data e ordenação mais recente primeiro.
+- [ ] `Automatizado/Preview`: campo vazio, somente espaços, nome acima de 80 e comentário acima de 1.500 caracteres são recusados sem apagar conteúdo.
+- [ ] `Automatizado/Preview`: HTML, Markdown e URL aparecem literalmente, sem execução, formatação ou link; comentário oculto nunca entra na lista pública.
+- [ ] `Automatizado/Preview`: honeypot, envio rápido, origem cruzada e corpo excessivo são recusados; rascunho e retirada não aceitam comentário.
+- [ ] `Automatizado/Preview`: quatro tentativas no mesmo navegador em cinco minutos retornam limite; validar WAF com tráfego sintético e registrar a limitação entre instâncias/cookies.
+- [ ] `Final`: conferir aviso de privacidade antes do envio, estado `Publicando…`, sucesso somente depois do servidor, novo item destacado e formulário limpo só no sucesso.
+- [ ] `Final`: simular rede indisponível, confirmar texto/nome preservados e repetir sem redigitar; testar celular, teclado, zoom 200%, foco e leitor de tela.
+- [ ] `Final`: conferir lista vazia, acentos, quebras de linha e ausência de e-mail/login/controles sociais.

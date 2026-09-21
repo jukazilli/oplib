@@ -774,7 +774,7 @@ Estado atual: cookie opaco protegido, HMAC com pepper, persistência idempotente
 
 ### COM-001 — Publicar e listar comentários
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
 - **Origem:** D02 §8.6; D05 §9; D07 §15; TL §12.
 - **Objetivo:** permitir comentário imediato sem conta e sem e-mail.
 - **Descrição:** nome opcional de 80 caracteres, “Anônimo” por padrão, texto simples de 1.500, aviso de privacidade e lista visível.
@@ -783,6 +783,8 @@ Estado atual: cookie opaco protegido, HMAC com pepper, persistência idempotente
 - **Riscos:** spam, XSS, conteúdo pessoal ou ofensivo imediato.
 - **Testes:** `TEST-COM-001-01` nome/anônimo; `-02` limites; `-03` payload malicioso; `-04` falha/retry; `-05` rate limit.
 - **Evidência:** `EVID-COM-001-01` E2E e segurança.
+
+Estado atual: leitura e publicação imediata implementadas com validação, proteção básica e testes locais. Banco real, WAF, axe e aceite de navegador permanecem no Preview/final; moderação será entregue em MOD-001–003.
 
 ### MOD-001 — Consultar comentários na administração
 
