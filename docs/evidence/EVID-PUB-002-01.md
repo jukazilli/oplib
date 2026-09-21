@@ -13,7 +13,8 @@
 - links da prévia preservam aparência sem executar navegação;
 - conteúdo não suportado produz aviso curto no contexto da prévia;
 - desktop apresenta escrita e prévia lado a lado;
-- compacto alterna entre `Escrever` e `Prévia` sem ocultar o salvamento.
+- compacto percorre `Composição` e `Prévia` com `Avançar`/`Voltar`;
+- cabeçalho e barra inferior permanecem fixos enquanto apenas o conteúdo central rola.
 
 ## Validações automatizadas
 
@@ -30,6 +31,6 @@
 ## Aceite visual pendente
 
 - [ ] colunas mantêm leitura confortável no desktop;
-- [ ] abas são claras e operáveis no celular;
+- [ ] avanço e retorno entre as duas etapas são claros no celular;
 - [ ] prévia vazia e avisos não tornam o composer denso;
 - [ ] salvamento permanece acessível nos dois modos.

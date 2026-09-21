@@ -505,8 +505,9 @@ Mensagem de sucesso:
 
 ### Celular
 
-- abas “Escrever” e “Prévia”;
-- ação de salvar acessível durante a edição.
+- etapa `Composição` seguida de `Prévia`, com avanço e retorno explícitos;
+- cabeçalho e ações de cancelar, salvar e avançar/voltar permanecem visíveis;
+- somente o conteúdo central rola.
 
 ### Regras
 

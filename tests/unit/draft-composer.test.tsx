@@ -152,7 +152,7 @@ describe("draft composer", () => {
     confirmSpy.mockRestore();
   });
 
-  it("switches to a safe Markdown preview on compact screens", async () => {
+  it("advances to a safe Markdown preview and returns to composition", async () => {
     const user = userEvent.setup();
     render(<DraftComposer initialDraft={null} />);
 
@@ -160,17 +160,22 @@ describe("draft composer", () => {
       screen.getByRole("textbox", { name: "Conteúdo" }),
       "# Ideia{enter}{enter}<script>alert(1)</script>",
     );
-    await user.click(screen.getByRole("tab", { name: "Prévia" }));
+    expect(screen.getByText("1 de 2")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Avançar" }));
 
-    expect(screen.getByRole("tab", { name: "Prévia" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
+    expect(screen.getByText("2 de 2")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Ideia" })).toBeInTheDocument();
     expect(
       screen.getByText("HTML não é exibido na prévia."),
     ).toBeInTheDocument();
     expect(document.querySelector("script")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Voltar" }));
+    expect(screen.getByText("1 de 2")).toBeInTheDocument();
+    expect(
+      (screen.getByRole("textbox", { name: "Conteúdo" }) as HTMLTextAreaElement)
+        .value,
+    ).toContain("# Ideia");
   });
 
   it("recovers a local copy based on the same server version", async () => {

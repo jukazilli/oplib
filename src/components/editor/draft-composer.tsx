@@ -360,8 +360,11 @@ export function DraftComposer({
   }
 
   return (
-    <section aria-labelledby="draft-title">
-      <header className="flex min-h-18 items-center justify-between gap-4 border-b px-5 sm:px-7">
+    <section
+      aria-labelledby="draft-title"
+      className="flex h-svh min-h-0 flex-col overflow-hidden"
+    >
+      <header className="z-10 flex min-h-18 shrink-0 items-center justify-between gap-4 border-b bg-surface px-5 sm:px-7">
         <button
           type="button"
           onClick={closeComposer}
@@ -383,278 +386,296 @@ export function DraftComposer({
         </button>
       </header>
 
-      {recovery ? (
-        <div
-          className="m-5 rounded-card border border-primary/30 bg-muted p-4 sm:m-7"
-          role="alert"
-        >
-          <p className="font-interface text-sm font-semibold">
-            Escolha a versão para continuar
-          </p>
-          <div className="mt-3 flex flex-wrap gap-3">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => restoreLocalCopy(recovery)}
-            >
-              Recuperar minha cópia
-            </Button>
-            <Button type="button" variant="secondary" onClick={keepServerCopy}>
-              Manter versão salva
-            </Button>
-          </div>
-        </div>
-      ) : null}
-
-      <div className="p-5 sm:p-7">
-        <div className="flex items-start gap-3 sm:gap-4">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-foreground font-interface text-xs font-bold text-background">
-            OP
-          </span>
-          <div className="min-w-0 flex-1 border-l pl-4">
-            <div
-              ref={classificationRef}
-              className="relative flex flex-wrap items-center gap-x-2 gap-y-1"
-            >
-              <input
-                ref={titleInputRef}
-                id="draft-post-title"
-                aria-label="Título"
-                placeholder="Título da publicação"
-                value={title}
-                maxLength={240}
-                aria-invalid={fieldError === "title"}
-                onChange={(event) => changeTitle(event.target.value)}
-                className="composer-field min-w-48 flex-1 border-0 bg-transparent font-interface text-base font-bold outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:bg-muted/30 focus-visible:ring-0"
-              />
-              <span aria-hidden="true" className="text-muted-foreground">
-                ›
-              </span>
-              <button
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        {recovery ? (
+          <div
+            className="m-5 rounded-card border border-primary/30 bg-muted p-4 sm:m-7"
+            role="alert"
+          >
+            <p className="font-interface text-sm font-semibold">
+              Escolha a versão para continuar
+            </p>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <Button
                 type="button"
-                onClick={() => setClassificationOpen((open) => !open)}
-                aria-expanded={classificationOpen}
-                className="min-h-10 rounded-full px-2 font-interface text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                variant="secondary"
+                onClick={() => restoreLocalCopy(recovery)}
               >
-                {categoryId || tagIds.length
-                  ? `${(categoryId ? 1 : 0) + tagIds.length} classificações`
-                  : "Adicionar taxonomia"}
-              </button>
-              {classificationOpen ? (
-                <section
-                  aria-label="Taxonomia"
-                  className="absolute top-full right-0 z-20 mt-2 w-[min(24rem,calc(100vw-4rem))] rounded-card border bg-surface p-4 shadow-xl"
-                >
-                  <label className="grid gap-2 font-interface text-sm font-semibold">
-                    Categoria
-                    <select
-                      value={categoryId}
-                      onChange={(event) => {
-                        setCategoryId(event.target.value);
-                        markChanged();
-                      }}
-                      className="min-h-11 rounded-control border bg-background px-3 font-normal"
-                    >
-                      <option value="">Sem categoria</option>
-                      {taxonomy.categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  {taxonomy.tags.length ? (
-                    <fieldset className="mt-4">
-                      <legend className="font-interface text-sm font-semibold">
-                        Tags
-                      </legend>
-                      <div className="mt-2 flex max-h-40 flex-wrap gap-2 overflow-y-auto">
-                        {taxonomy.tags.map((tag) => (
-                          <button
-                            key={tag.id}
-                            type="button"
-                            aria-pressed={tagIds.includes(tag.id)}
-                            onClick={() => toggleTag(tag.id)}
-                            className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
-                          >
-                            {tag.name}
-                          </button>
-                        ))}
-                      </div>
-                    </fieldset>
-                  ) : null}
-                </section>
-              ) : null}
+                Recuperar minha cópia
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={keepServerCopy}
+              >
+                Manter versão salva
+              </Button>
             </div>
+          </div>
+        ) : null}
 
-            <div
-              role="tablist"
-              aria-label="Modo do editor"
-              className="mt-3 grid grid-cols-2 rounded-full bg-muted p-1 md:hidden"
-            >
-              {(["write", "preview"] as const).map((pane) => (
-                <button
-                  key={pane}
-                  type="button"
-                  role="tab"
-                  aria-selected={mobilePane === pane}
-                  onClick={() => setMobilePane(pane)}
-                  className="min-h-10 rounded-full px-4 font-interface text-sm font-semibold text-muted-foreground aria-selected:bg-surface aria-selected:text-foreground aria-selected:shadow-sm"
-                >
-                  {pane === "write" ? "Escrever" : "Prévia"}
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-3 md:grid md:grid-cols-2 md:gap-6">
+        <div className="p-5 sm:p-7">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-foreground font-interface text-xs font-bold text-background">
+              OP
+            </span>
+            <div className="min-w-0 flex-1 border-l pl-4">
               <div
-                className={
-                  mobilePane === "preview" ? "hidden md:block" : "block"
-                }
+                ref={classificationRef}
+                className="relative flex flex-wrap items-center gap-x-2 gap-y-1"
               >
-                <p className="mb-3 hidden font-interface text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase md:block">
-                  Escrever
-                </p>
-                <textarea
-                  id="draft-markdown"
-                  aria-label="Conteúdo"
-                  placeholder="Comece a escrever…"
-                  value={markdown}
-                  rows={10}
-                  aria-invalid={fieldError === "markdown"}
-                  onChange={(event) => changeMarkdown(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (
-                      (event.ctrlKey || event.metaKey) &&
-                      event.key === "Enter"
-                    )
-                      save();
-                  }}
-                  className="composer-field min-h-72 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:bg-muted/20 focus-visible:ring-0"
+                <input
+                  ref={titleInputRef}
+                  id="draft-post-title"
+                  aria-label="Título"
+                  placeholder="Título da publicação"
+                  value={title}
+                  maxLength={240}
+                  aria-invalid={fieldError === "title"}
+                  onChange={(event) => changeTitle(event.target.value)}
+                  className="composer-field min-w-48 flex-1 border-0 bg-transparent font-interface text-base font-bold outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:bg-muted/30 focus-visible:ring-0"
                 />
+                <span aria-hidden="true" className="text-muted-foreground">
+                  ›
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setClassificationOpen((open) => !open)}
+                  aria-expanded={classificationOpen}
+                  className="min-h-10 rounded-full px-2 font-interface text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  {categoryId || tagIds.length
+                    ? `${(categoryId ? 1 : 0) + tagIds.length} classificações`
+                    : "Adicionar taxonomia"}
+                </button>
+                {classificationOpen ? (
+                  <section
+                    aria-label="Taxonomia"
+                    className="absolute top-full right-0 z-20 mt-2 w-[min(24rem,calc(100vw-4rem))] rounded-card border bg-surface p-4 shadow-xl"
+                  >
+                    <label className="grid gap-2 font-interface text-sm font-semibold">
+                      Categoria
+                      <select
+                        value={categoryId}
+                        onChange={(event) => {
+                          setCategoryId(event.target.value);
+                          markChanged();
+                        }}
+                        className="min-h-11 rounded-control border bg-background px-3 font-normal"
+                      >
+                        <option value="">Sem categoria</option>
+                        {taxonomy.categories.map((category) => (
+                          <option key={category.id} value={category.id}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    {taxonomy.tags.length ? (
+                      <fieldset className="mt-4">
+                        <legend className="font-interface text-sm font-semibold">
+                          Tags
+                        </legend>
+                        <div className="mt-2 flex max-h-40 flex-wrap gap-2 overflow-y-auto">
+                          {taxonomy.tags.map((tag) => (
+                            <button
+                              key={tag.id}
+                              type="button"
+                              aria-pressed={tagIds.includes(tag.id)}
+                              onClick={() => toggleTag(tag.id)}
+                              className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+                            >
+                              {tag.name}
+                            </button>
+                          ))}
+                        </div>
+                      </fieldset>
+                    ) : null}
+                  </section>
+                ) : null}
+              </div>
 
-                {cover ? (
-                  <div className="relative mt-4 overflow-hidden rounded-card border">
-                    <Image
-                      src={cover.url}
-                      alt=""
-                      width={960}
-                      height={540}
-                      className="h-auto max-h-72 w-full object-cover"
+              <div className="mt-3 flex items-center gap-2 font-interface text-sm md:hidden">
+                <span className="font-semibold text-foreground">
+                  {mobilePane === "write" ? "Composição" : "Prévia"}
+                </span>
+                <span className="text-muted-foreground">
+                  {mobilePane === "write" ? "1 de 2" : "2 de 2"}
+                </span>
+              </div>
+
+              <div className="mt-3 md:grid md:grid-cols-2 md:gap-6">
+                <div
+                  className={
+                    mobilePane === "preview" ? "hidden md:block" : "block"
+                  }
+                >
+                  <p className="mb-3 hidden font-interface text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase md:block">
+                    Escrever
+                  </p>
+                  <textarea
+                    id="draft-markdown"
+                    aria-label="Conteúdo"
+                    placeholder="Comece a escrever…"
+                    value={markdown}
+                    rows={10}
+                    aria-invalid={fieldError === "markdown"}
+                    onChange={(event) => changeMarkdown(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (
+                        (event.ctrlKey || event.metaKey) &&
+                        event.key === "Enter"
+                      )
+                        save();
+                    }}
+                    className="composer-field min-h-72 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:bg-muted/20 focus-visible:ring-0"
+                  />
+
+                  {cover ? (
+                    <div className="relative mt-4 overflow-hidden rounded-card border">
+                      <Image
+                        src={cover.url}
+                        alt=""
+                        width={960}
+                        height={540}
+                        className="h-auto max-h-72 w-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCover(null);
+                          markChanged("Capa removida.");
+                        }}
+                        aria-label="Remover capa"
+                        className="absolute top-2 right-2 flex size-10 items-center justify-center rounded-full bg-background/90 shadow"
+                      >
+                        <X aria-hidden="true" className="size-5" />
+                      </button>
+                      <label className="block border-t bg-background p-3 font-interface text-sm font-semibold">
+                        Texto alternativo
+                        <input
+                          value={cover.altText}
+                          onChange={(event) => {
+                            setCover({ ...cover, altText: event.target.value });
+                            markChanged();
+                          }}
+                          placeholder="Descreva o conteúdo da imagem"
+                          maxLength={300}
+                          className="composer-field mt-1 min-h-10 w-full border-0 bg-transparent font-normal outline-none focus-visible:bg-muted/30"
+                        />
+                      </label>
+                    </div>
+                  ) : null}
+
+                  <div className="mt-3 flex items-center gap-1 text-muted-foreground">
+                    <input
+                      ref={coverInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/avif"
+                      className="sr-only"
+                      aria-label="Selecionar imagem de capa"
+                      onChange={(event) => {
+                        const file = event.target.files?.[0];
+                        if (file) void attachCover(file);
+                      }}
                     />
                     <button
                       type="button"
-                      onClick={() => {
-                        setCover(null);
-                        markChanged("Capa removida.");
-                      }}
-                      aria-label="Remover capa"
-                      className="absolute top-2 right-2 flex size-10 items-center justify-center rounded-full bg-background/90 shadow"
+                      onClick={() => coverInputRef.current?.click()}
+                      disabled={isUploading}
+                      aria-label={cover ? "Substituir capa" : "Adicionar capa"}
+                      title={cover ? "Substituir capa" : "Adicionar capa"}
+                      className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground disabled:opacity-50"
                     >
-                      <X aria-hidden="true" className="size-5" />
+                      <ImageIcon aria-hidden="true" className="size-5" />
                     </button>
-                    <label className="block border-t bg-background p-3 font-interface text-sm font-semibold">
-                      Texto alternativo
-                      <input
-                        value={cover.altText}
-                        onChange={(event) => {
-                          setCover({ ...cover, altText: event.target.value });
-                          markChanged();
-                        }}
-                        placeholder="Descreva o conteúdo da imagem"
-                        maxLength={300}
-                        className="composer-field mt-1 min-h-10 w-full border-0 bg-transparent font-normal outline-none focus-visible:bg-muted/30"
-                      />
-                    </label>
+                    <button
+                      ref={classificationToolbarRef}
+                      type="button"
+                      onClick={() => setClassificationOpen((open) => !open)}
+                      aria-label="Classificação"
+                      title="Classificação"
+                      className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
+                    >
+                      <Tags aria-hidden="true" className="size-5" />
+                    </button>
                   </div>
-                ) : null}
-
-                <div className="mt-3 flex items-center gap-1 text-muted-foreground">
-                  <input
-                    ref={coverInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,image/avif"
-                    className="sr-only"
-                    aria-label="Selecionar imagem de capa"
-                    onChange={(event) => {
-                      const file = event.target.files?.[0];
-                      if (file) void attachCover(file);
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => coverInputRef.current?.click()}
-                    disabled={isUploading}
-                    aria-label={cover ? "Substituir capa" : "Adicionar capa"}
-                    title={cover ? "Substituir capa" : "Adicionar capa"}
-                    className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground disabled:opacity-50"
-                  >
-                    <ImageIcon aria-hidden="true" className="size-5" />
-                  </button>
-                  <button
-                    ref={classificationToolbarRef}
-                    type="button"
-                    onClick={() => setClassificationOpen((open) => !open)}
-                    aria-label="Classificação"
-                    title="Classificação"
-                    className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
-                  >
-                    <Tags aria-hidden="true" className="size-5" />
-                  </button>
                 </div>
-              </div>
 
-              <section
-                role="tabpanel"
-                aria-label="Prévia"
-                className={
-                  mobilePane === "write"
-                    ? "hidden md:block md:border-l md:pl-6"
-                    : "block md:border-l md:pl-6"
-                }
-              >
-                <p className="mb-3 hidden font-interface text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase md:block">
-                  Prévia
-                </p>
-                {previewWarnings.length ? (
-                  <div
-                    className="mb-4 rounded-control bg-muted p-3"
-                    role="status"
-                  >
-                    {previewWarnings.map((warning) => (
-                      <p
-                        key={warning}
-                        className="font-interface text-sm text-muted-foreground"
-                      >
-                        {warning}
-                      </p>
-                    ))}
-                  </div>
-                ) : null}
-                {markdown.trim() ? (
-                  <MarkdownContent markdown={markdown} linksEnabled={false} />
-                ) : (
-                  <p className="font-editorial text-lg text-muted-foreground">
-                    A prévia aparecerá aqui.
+                <section
+                  role="tabpanel"
+                  aria-label="Prévia"
+                  className={
+                    mobilePane === "write"
+                      ? "hidden md:block md:border-l md:pl-6"
+                      : "block md:border-l md:pl-6"
+                  }
+                >
+                  <p className="mb-3 hidden font-interface text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase md:block">
+                    Prévia
                   </p>
-                )}
-              </section>
+                  {previewWarnings.length ? (
+                    <div
+                      className="mb-4 rounded-control bg-muted p-3"
+                      role="status"
+                    >
+                      {previewWarnings.map((warning) => (
+                        <p
+                          key={warning}
+                          className="font-interface text-sm text-muted-foreground"
+                        >
+                          {warning}
+                        </p>
+                      ))}
+                    </div>
+                  ) : null}
+                  {markdown.trim() ? (
+                    <MarkdownContent markdown={markdown} linksEnabled={false} />
+                  ) : (
+                    <p className="font-editorial text-lg text-muted-foreground">
+                      A prévia aparecerá aqui.
+                    </p>
+                  )}
+                </section>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <footer className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t pt-4">
-          <p
-            aria-live="polite"
-            className="font-interface text-sm text-muted-foreground"
-          >
-            {message}
-          </p>
+      <footer className="z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-t bg-surface px-5 py-4 sm:px-7">
+        <p
+          aria-live="polite"
+          className="min-w-0 flex-1 truncate font-interface text-sm text-muted-foreground"
+        >
+          {message}
+        </p>
+        <div className="flex shrink-0 items-center gap-2">
+          {mobilePane === "preview" ? (
+            <Button
+              type="button"
+              variant="secondary"
+              className="md:hidden"
+              onClick={() => setMobilePane("write")}
+            >
+              Voltar
+            </Button>
+          ) : null}
           <Button type="button" disabled={isPending || !dirty} onClick={save}>
             {isPending ? "Salvando…" : "Salvar rascunho"}
           </Button>
-        </footer>
-      </div>
+          {mobilePane === "write" ? (
+            <Button
+              type="button"
+              variant="secondary"
+              className="md:hidden"
+              onClick={() => setMobilePane("preview")}
+            >
+              Avançar
+            </Button>
+          ) : null}
+        </div>
+      </footer>
 
       {discardIntent ? (
         <div className="fixed inset-0 z-[70] grid place-items-center bg-foreground/55 p-5">

@@ -652,7 +652,7 @@ A composição terá dois modos aprovados: `Criar`, para escrever, classificar e
 
 A referência de redes sociais será absorvida somente no que reduz atrito para o autor:
 
-- diálogo modal de composição aberto por `Nova publicação`;
+- composição aberta por `Nova publicação` em superfície que ocupa toda a viewport disponível;
 - entrada de texto imediata;
 - ferramentas compactas `Capa`, `Classificação`, `Referências e links` e `Mais metadados`;
 - salvamento como rascunho sem exigir preenchimento completo;
@@ -662,7 +662,7 @@ A referência de redes sociais será absorvida somente no que reduz atrito para 
 
 O OPALIB não adotará feed infinito, métricas competitivas, perfis sociais, urgência, recomendação algorítmica ou mecanismos de retenção. A lista continuará sendo uma ferramenta privada de autoria e gestão editorial.
 
-Informações secundárias serão reveladas progressivamente no diálogo de composição ou edição, sem wizard obrigatório. Em telas compactas, o diálogo ocupará a área disponível como painel de uma coluna. Publicação continuará exigindo revisão e confirmação consciente. Áreas aceitarão múltiplos valores; categoria será única; tags aceitarão múltiplos valores. Nenhum desses vocabulários permitirá criação inline no editor.
+Informações secundárias serão reveladas progressivamente na composição ou edição. Em telas compactas, a superfície ocupará a viewport e seguirá duas etapas reversíveis: `Composição` e `Prévia`. Publicação continuará exigindo revisão e confirmação consciente. Áreas aceitarão múltiplos valores; categoria será única; tags aceitarão múltiplos valores. Nenhum desses vocabulários permitirá criação inline no editor.
 
 Referência visual: `assets/reference-threads.png`, imagem fornecida pelo proprietário em 20/09/2026. A referência governa composição leve e ferramentas contextuais, não aparência, marca ou comportamento social literal.
 
@@ -687,10 +687,12 @@ O editor poderá utilizar:
 
 ### Celular
 
-Utilizar abas ou controle segmentado:
+Utilizar duas etapas claras:
 
-- “Escrever”;
-- “Prévia”.
+- `Composição`, com ação `Avançar`;
+- `Prévia`, com ação `Voltar`.
+
+Cabeçalho e barra de ações permanecem fixos; somente o conteúdo editorial rola.
 
 A ação de salvar deverá permanecer encontrável durante a edição.
 
@@ -948,7 +950,7 @@ Possíveis usos:
 - navegação compacta;
 - cards verticais;
 - filtros em painel;
-- editor e prévia em abas;
+- editor e prévia em etapas sequenciais, com avanço e retorno explícitos;
 - margens menores;
 - alvos de toque confortáveis.
 
