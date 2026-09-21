@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -49,6 +49,21 @@ describe("draft composer", () => {
     ).toBeDisabled();
     expect(
       screen.getByRole("button", { name: "Adicionar capa" }),
+    ).toBeInTheDocument();
+    const header = screen
+      .getByRole("heading", { name: "Nova publicação" })
+      .closest("header");
+    expect(header).not.toBeNull();
+    expect(
+      within(header!).getByRole("button", { name: "Adicionar capa" }),
+    ).toBeInTheDocument();
+    expect(
+      within(header!).getByRole("button", { name: "Classificação" }),
+    ).toBeInTheDocument();
+    expect(
+      within(header!).getByRole("button", {
+        name: "Detalhes da publicação",
+      }),
     ).toBeInTheDocument();
     expect(
       screen.queryByText(/pipeline|schema|canônico/i),

@@ -526,7 +526,7 @@ export function DraftComposer({
       aria-labelledby="draft-title"
       className="flex h-svh min-h-0 flex-col overflow-hidden"
     >
-      <header className="z-10 flex min-h-18 shrink-0 items-center justify-between gap-4 border-b bg-surface px-5 sm:px-7">
+      <header className="relative z-10 flex min-h-18 shrink-0 items-center gap-2 border-b bg-surface px-3 sm:px-7">
         <button
           type="button"
           onClick={closeComposer}
@@ -534,18 +534,64 @@ export function DraftComposer({
         >
           Cancelar
         </button>
-        <h2 id="draft-title" className="font-interface text-base font-bold">
+        <h2
+          id="draft-title"
+          className="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 font-interface text-base font-bold sm:block"
+        >
           {id ? "Editar publicação" : "Nova publicação"}
         </h2>
-        <button
-          type="button"
-          onClick={onOpenDrafts}
-          aria-label="Rascunhos"
-          title="Rascunhos"
-          className="flex size-11 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
-        >
-          <FileText aria-hidden="true" className="size-5" />
-        </button>
+        <div className="ml-auto flex items-center text-muted-foreground">
+          <input
+            ref={coverInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/avif"
+            className="sr-only"
+            aria-label="Selecionar imagem de capa"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) void attachCover(file);
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => coverInputRef.current?.click()}
+            disabled={isUploading}
+            aria-label={cover ? "Substituir capa" : "Adicionar capa"}
+            title={cover ? "Substituir capa" : "Adicionar capa"}
+            className="flex size-10 items-center justify-center rounded-full hover:bg-muted hover:text-foreground disabled:opacity-50 sm:size-11"
+          >
+            <ImageIcon aria-hidden="true" className="size-5" />
+          </button>
+          <button
+            ref={classificationToolbarRef}
+            type="button"
+            onClick={() => setClassificationOpen((open) => !open)}
+            aria-label="Classificação"
+            title="Classificação"
+            className="flex size-10 items-center justify-center rounded-full hover:bg-muted hover:text-foreground sm:size-11"
+          >
+            <Tags aria-hidden="true" className="size-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setMetadataOpen((open) => !open)}
+            aria-expanded={metadataOpen}
+            aria-label="Detalhes da publicação"
+            title="Detalhes da publicação"
+            className="flex size-10 items-center justify-center rounded-full hover:bg-muted hover:text-foreground sm:size-11"
+          >
+            <Settings2 aria-hidden="true" className="size-5" />
+          </button>
+          <button
+            type="button"
+            onClick={onOpenDrafts}
+            aria-label="Rascunhos"
+            title="Rascunhos"
+            className="flex size-10 items-center justify-center rounded-full hover:bg-muted hover:text-foreground sm:size-11"
+          >
+            <FileText aria-hidden="true" className="size-5" />
+          </button>
+        </div>
       </header>
 
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -613,7 +659,7 @@ export function DraftComposer({
                 {classificationOpen ? (
                   <section
                     aria-label="Taxonomia"
-                    className="absolute top-full right-0 z-20 mt-2 w-[min(24rem,calc(100vw-4rem))] rounded-card border bg-surface p-4 shadow-xl"
+                    className="fixed top-20 right-4 z-50 w-[min(24rem,calc(100vw-2rem))] rounded-card border bg-surface p-4 shadow-xl"
                   >
                     {taxonomy.areas.length ? (
                       <fieldset className="mb-4">
@@ -757,52 +803,11 @@ export function DraftComposer({
                     </div>
                   ) : null}
 
-                  <div className="relative mt-3 flex items-center gap-1 text-muted-foreground">
-                    <input
-                      ref={coverInputRef}
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp,image/avif"
-                      className="sr-only"
-                      aria-label="Selecionar imagem de capa"
-                      onChange={(event) => {
-                        const file = event.target.files?.[0];
-                        if (file) void attachCover(file);
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => coverInputRef.current?.click()}
-                      disabled={isUploading}
-                      aria-label={cover ? "Substituir capa" : "Adicionar capa"}
-                      title={cover ? "Substituir capa" : "Adicionar capa"}
-                      className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground disabled:opacity-50"
-                    >
-                      <ImageIcon aria-hidden="true" className="size-5" />
-                    </button>
-                    <button
-                      ref={classificationToolbarRef}
-                      type="button"
-                      onClick={() => setClassificationOpen((open) => !open)}
-                      aria-label="Classificação"
-                      title="Classificação"
-                      className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
-                    >
-                      <Tags aria-hidden="true" className="size-5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setMetadataOpen((open) => !open)}
-                      aria-expanded={metadataOpen}
-                      aria-label="Detalhes da publicação"
-                      title="Detalhes da publicação"
-                      className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
-                    >
-                      <Settings2 aria-hidden="true" className="size-5" />
-                    </button>
+                  <div>
                     {metadataOpen ? (
                       <section
                         aria-label="Detalhes da publicação"
-                        className="absolute top-full left-0 z-30 mt-2 max-h-[60svh] w-[min(38rem,calc(100vw-5rem))] overflow-y-auto rounded-card border bg-surface p-5 text-foreground shadow-xl"
+                        className="fixed top-20 right-4 z-50 max-h-[calc(100svh-6rem)] w-[min(38rem,calc(100vw-2rem))] overflow-y-auto rounded-card border bg-surface p-5 text-foreground shadow-xl"
                       >
                         <div className="grid gap-4 sm:grid-cols-2">
                           <label className="grid gap-1 font-interface text-sm font-semibold sm:col-span-2">
