@@ -19,6 +19,7 @@ import {
 } from "@/lib/db/schema";
 import { normalizeRequestedSlug, slugifyPostTitle } from "./metadata";
 import { cleanupDetachedCover } from "@/modules/media/covers";
+import { recordAdminAuditEvent } from "@/modules/identity/audit/repository";
 
 type DraftDatabase =
   Database | Parameters<Parameters<Database["transaction"]>[0]>[0];
@@ -210,6 +211,23 @@ export async function getDraftById(id: string, database?: Database) {
     .where(and(eq(posts.id, id), eq(posts.status, "draft")))
     .limit(1);
   return rows[0] ? enrichDraft(rows[0], db) : null;
+}
+
+export async function getAdminPublicationById(
+  id: string,
+  database?: Database,
+): Promise<AdminPublication | null> {
+  await connection();
+  const db = database ?? getDatabase();
+  const rows = await db
+    .select({ ...draftSelection, status: posts.status })
+    .from(posts)
+    .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
+    .where(eq(posts.id, id))
+    .limit(1);
+  return rows[0]
+    ? { ...(await enrichDraft(rows[0], db)), status: rows[0].status }
+    : null;
 }
 
 export async function listAdminPublications(database?: Database) {
@@ -412,4 +430,96 @@ export async function updateDraft(
     }
   }
   return getDraftById(id, db);
+}
+
+/** The state change, submitted content, relations, and audit event commit together. */
+export async function publishPublication(
+  id: string,
+  version: Date,
+  values: DraftValues,
+  administratorId: string,
+  expectedStatus: "draft" | "published",
+  database?: Database,
+): Promise<AdminPublication | null> {
+  const db = database ?? getDatabase();
+  const previousCoverRows = await db
+    .select({ pathname: coverAssets.pathname })
+    .from(posts)
+    .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
+    .where(eq(posts.id, id))
+    .limit(1);
+  const previousCoverPathname = previousCoverRows[0]?.pathname ?? null;
+  const updated = await db.transaction(async (tx) => {
+    const slug = await availableSlug(tx, values.title, values.slug, id);
+    const coverRows = values.cover
+      ? await tx
+          .insert(coverAssets)
+          .values(values.cover)
+          .onConflictDoUpdate({
+            target: coverAssets.pathname,
+            set: { altText: values.cover.altText },
+          })
+          .returning({ id: coverAssets.id })
+      : [];
+    const rows = await tx
+      .update(posts)
+      .set({
+        title: values.title.trim(),
+        slug,
+        summary: values.summary.trim(),
+        markdown: values.markdown.trim(),
+        contentType: values.contentType || null,
+        course: values.course || null,
+        discipline: values.discipline || null,
+        originalDate: values.originalDate
+          ? new Date(`${values.originalDate}T12:00:00.000Z`)
+          : null,
+        coverAssetId: coverRows[0]?.id ?? null,
+        status: "published",
+        publishedAt: expectedStatus === "draft" ? new Date() : undefined,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(posts.id, id),
+          eq(posts.status, expectedStatus),
+          eq(posts.updatedAt, version),
+        ),
+      )
+      .returning({ id: posts.id });
+    if (!rows[0]) return false;
+    await replaceRelations(tx, id, values);
+    await recordAdminAuditEvent(
+      administratorId,
+      {
+        action:
+          expectedStatus === "draft"
+            ? "publication.publish"
+            : "publication.update",
+        result: "success",
+        entityId: id,
+      },
+      tx,
+    );
+    return true;
+  });
+  if (!updated) return null;
+  if (
+    previousCoverPathname &&
+    previousCoverPathname !== values.cover?.pathname
+  ) {
+    try {
+      await cleanupDetachedCover(previousCoverPathname, db);
+    } catch {
+      logEvent({
+        level: "warn",
+        event: "media.cover_cleanup",
+        correlationId: randomUUID(),
+        module: "media",
+        result: "retry_required",
+        errorCode: "MEDIA_CLEANUP_FAILED",
+      });
+    }
+  }
+  return getAdminPublicationById(id, db);
 }

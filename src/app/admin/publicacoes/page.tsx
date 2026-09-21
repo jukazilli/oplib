@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { PublicationsWorkspace } from "@/components/editor/publications-workspace";
 import { draftIdSchema } from "@/modules/publishing/draft-domain";
 import {
-  getDraftById,
+  getAdminPublicationById,
   listAdminPublications,
 } from "@/modules/publishing/draft-repository";
 import { listTaxonomy } from "@/modules/taxonomy/repository";
@@ -18,7 +18,7 @@ export default async function PublicationsPage({
   if (draftId && !parsedId?.success) notFound();
 
   const [draft, publications, taxonomy] = await Promise.all([
-    parsedId?.success ? getDraftById(parsedId.data) : null,
+    parsedId?.success ? getAdminPublicationById(parsedId.data) : null,
     listAdminPublications(),
     listTaxonomy(),
   ]);

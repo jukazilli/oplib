@@ -552,7 +552,7 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 
 ### PUB-004 — Publicar e atualizar conteúdo público
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D05 §§15–16; D07 §§11 e 18.
 - **Objetivo:** tornar pública somente uma versão validada e confirmada.
 - **Descrição:** validação, confirmação, transação de status/data, atualização explícita e invalidação de cache.
@@ -561,6 +561,8 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 - **Riscos:** estado parcial, cache antigo ou conteúdo não sanitizado.
 - **Testes:** `TEST-PUB-004-01` publicar; `-02` concorrência; `-03` atualizar/cache; `-04` falha transacional.
 - **Evidência:** `EVID-PUB-004-01` E2E e registros de auditoria saneados.
+
+Estado atual: validação e transação de publicação/atualização, confirmação no composer e testes unitários implementados na branch `feat/pub-004-publish-flow`. Faltam prova transacional real em Neon `preview`, verificação responsiva/autenticada, fechamento da evidência e alinhamento da URL pública com WEB-004; não liberar produção.
 
 ### PUB-005 — Retirar e republicar
 

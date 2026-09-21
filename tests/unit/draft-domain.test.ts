@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { parseDraftInput } from "@/modules/publishing/draft-domain";
+import {
+  parseDraftInput,
+  parsePublishInput,
+} from "@/modules/publishing/draft-domain";
 
 function form(values: Record<string, string>) {
   const data = new FormData();
@@ -9,6 +12,34 @@ function form(values: Record<string, string>) {
 }
 
 describe("draft domain", () => {
+  it("requires a saved, complete composition to publish", () => {
+    const incomplete = parsePublishInput(
+      form({ id: "", version: "", title: "", markdown: "" }),
+    );
+    expect(incomplete.success).toBe(false);
+    if (!incomplete.success) {
+      expect(incomplete.error.issues.map((issue) => issue.path[0])).toEqual(
+        expect.arrayContaining([
+          "id",
+          "title",
+          "summary",
+          "markdown",
+          "contentType",
+          "areaIds",
+        ]),
+      );
+    }
+    const complete = form({
+      id: "10000000-0000-4000-8000-000000000001",
+      version: "2026-09-21T12:00:00.000Z",
+      title: "Publicação",
+      summary: "Resumo",
+      markdown: "# Conteúdo",
+      contentType: "article",
+    });
+    complete.append("areaIds", "10000000-0000-4000-8000-000000000002");
+    expect(parsePublishInput(complete).success).toBe(true);
+  });
   it("accepts an incomplete new draft", () => {
     const result = parseDraftInput(
       form({ id: "", version: "", title: "", markdown: "" }),
