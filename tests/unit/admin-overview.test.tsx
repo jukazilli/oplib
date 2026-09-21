@@ -33,10 +33,9 @@ describe("administrative overview", () => {
     expect(
       within(navigation).getByText("Visão geral").closest("a"),
     ).toHaveAttribute("aria-current", "page");
-    expect(within(navigation).getByText("Publicações")).toHaveAttribute(
-      "aria-disabled",
-      "true",
-    );
+    expect(
+      within(navigation).getByRole("link", { name: "Publicações" }),
+    ).toHaveAttribute("href", "/admin/publicacoes");
     expect(
       within(navigation).queryByText("Nova publicação"),
     ).not.toBeInTheDocument();

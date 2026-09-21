@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { label: "Visão geral", icon: LayoutDashboard, href: "/admin" },
-  { label: "Publicações", icon: BookOpenText, href: null },
+  { label: "Publicações", icon: BookOpenText, href: "/admin/publicacoes" },
   { label: "Categorias e tags", icon: FolderTree, href: "/admin/taxonomia" },
   { label: "Comentários", icon: MessageSquareText, href: null },
   { label: "Configurações", icon: Settings2, href: null },

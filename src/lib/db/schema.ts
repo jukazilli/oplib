@@ -124,7 +124,7 @@ export const posts = pgTable(
     slug: varchar("slug", { length: 260 }).notNull(),
     summary: varchar("summary", { length: 600 }).notNull(),
     markdown: text("markdown").notNull(),
-    contentType: contentType("content_type").notNull(),
+    contentType: contentType("content_type"),
     status: postStatus("status").default("draft").notNull(),
     featured: boolean("featured").default(false).notNull(),
     course: varchar("course", { length: 180 }),
@@ -146,9 +146,10 @@ export const posts = pgTable(
     index("posts_publication_idx").on(table.status, table.publishedAt),
     index("posts_featured_idx").on(table.featured, table.publishedAt),
     index("posts_content_type_idx").on(table.contentType),
-    check("posts_title_not_blank", sql`length(trim(${table.title})) > 0`),
-    check("posts_summary_not_blank", sql`length(trim(${table.summary})) > 0`),
-    check("posts_markdown_not_blank", sql`length(trim(${table.markdown})) > 0`),
+    check(
+      "posts_publishable_content",
+      sql`${table.status} = 'draft' OR (length(trim(${table.title})) > 0 AND length(trim(${table.summary})) > 0 AND length(trim(${table.markdown})) > 0 AND ${table.contentType} IS NOT NULL)`,
+    ),
     check(
       "posts_editorial_dates_match_status",
       sql`(${table.status} = 'draft' AND ${table.publishedAt} IS NULL AND ${table.withdrawnAt} IS NULL) OR (${table.status} = 'published' AND ${table.publishedAt} IS NOT NULL AND ${table.withdrawnAt} IS NULL) OR (${table.status} = 'withdrawn' AND ${table.publishedAt} IS NOT NULL AND ${table.withdrawnAt} IS NOT NULL)`,
