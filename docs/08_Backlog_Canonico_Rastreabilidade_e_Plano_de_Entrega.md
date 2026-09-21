@@ -186,7 +186,7 @@ Um item só recebe `done` quando:
 
 ### UX-002 — Contratos de interação do fluxo editorial
 
-- **Tipo:** `decision`; **Prioridade:** `P0`; **Status:** `blocked-human`.
+- **Tipo:** `decision`; **Prioridade:** `P0`; **Status:** `review`.
 - **Origem:** P-UX-018; D04 §24 “Contrato obrigatório”; D05 §12 “Gate de especificação da interface”.
 - **Objetivo:** decidir como cada campo, ação e transição da criação de publicação se comportará antes de implementar o formulário.
 - **Descrição:** produzir e aprovar os contratos da composição integrada: título, resumo, tipo, áreas, categoria, tags, curso, disciplina, data, conteúdo, capa, referências, destaque, slug, expansão/recolhimento, salvamento, saída e publicação.
@@ -196,7 +196,7 @@ Um item só recebe `done` quando:
 - **Testes:** `TEST-UX-002-01` revisão da matriz campo a campo; `-02` protótipo da composição e dos controles ambíguos; `-03` aceite desktop/celular.
 - **Evidência:** `EVID-UX-002-01` contratos e decisões aprovados pelo proprietário.
 
-Estado atual: a composição integrada a Publicações e a lista expansível estão aprovadas; campo Área e demais controles internos permanecem bloqueados para UI até refinamento e aceite humano.
+Estado atual: proposta consolidada em `docs/decisions/UX-002.md`, cobrindo descoberta e leitura públicas, feed/grade, composição em duas etapas, contratos de campos, estados, acessibilidade e responsividade. O aceite do proprietário permanece pendente; `PUB-001` continua bloqueado até a reconciliação final em D04 e D05.
 
 ## 7. Fundação — FND
 
