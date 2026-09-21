@@ -650,7 +650,7 @@ Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, loc
 
 ### WEB-002 — Página inicial editorial
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §8.1; D04 §14; D05 §4.
 - **Objetivo:** apresentar propósito, publicação principal, destaques, recentes e áreas.
 - **Descrição:** home sem rolagem infinita, com falhas isoladas por seção.
@@ -659,6 +659,8 @@ Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, loc
 - **Riscos:** falha de uma consulta inutilizar toda a home.
 - **Testes:** `TEST-WEB-002-01` dados/ordem; `-02` estados; `-03` falha parcial.
 - **Evidência:** `EVID-WEB-002-01` E2E e screenshots.
+
+Estado atual: home editorial, copy aprovada, destaque principal, demais destaques, recentes, pesquisa, áreas públicas e falhas isoladas implementados. Suíte local aprovada; Preview, axe, screenshots, breakpoints e zoom de 200% pendentes.
 
 ### WEB-003 — Acervo, pesquisa, filtros e paginação
 

@@ -60,3 +60,13 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Preview`: criar vários destaques e confirmar principal por `publishedAt DESC, id DESC`.
 - [ ] `Preview`: confirmar que rascunho e retirada não podem ser alterados nem aparecem como destaque público.
 - [ ] `Final`: conferir ações `Destacar` e `Remover destaque` apenas nos estados elegíveis.
+
+## WEB-002 — Página inicial editorial
+
+- [ ] `Automatizado/Preview`: confirmar que principal, demais destaques e recentes contêm somente publicações públicas e ordem determinística.
+- [ ] `Preview`: provocar falha isolada em destaques, recentes e áreas; confirmar que as demais seções permanecem utilizáveis.
+- [ ] `Final`: conferir promessa, ação `Explorar publicações`, busca e hierarquia da primeira dobra em celular, tablet e desktop.
+- [ ] `Final`: conferir capa presente/ausente, títulos acessíveis antes das imagens e ausência de layout de dashboard.
+- [ ] `Final`: abrir publicação principal, recente e caminho por área.
+- [ ] `Automatizado`: executar axe, estados vazio/loading e zoom de 200%.
+- **Evidência:** `docs/evidence/EVID-WEB-002-01.md`; screenshots e axe pendentes no Preview.

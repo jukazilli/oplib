@@ -122,6 +122,40 @@ export async function listFeaturedPublications(database?: Database) {
   return rows.map(mapPublicSummary);
 }
 
+export async function listRecentPublications(database?: Database) {
+  await connection();
+  const db = database ?? getDatabase();
+  const rows = await db
+    .select(publicSummarySelection)
+    .from(posts)
+    .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
+    .where(eq(posts.status, "published"))
+    .orderBy(desc(posts.publishedAt), desc(posts.id))
+    .limit(6);
+  return rows.map(mapPublicSummary);
+}
+
+export async function listPublicAreas(database?: Database) {
+  await connection();
+  const db = database ?? getDatabase();
+  return db
+    .select({
+      id: knowledgeAreas.id,
+      name: knowledgeAreas.name,
+      slug: knowledgeAreas.slug,
+      publicationCount: count(posts.id),
+    })
+    .from(knowledgeAreas)
+    .innerJoin(
+      postKnowledgeAreas,
+      eq(postKnowledgeAreas.knowledgeAreaId, knowledgeAreas.id),
+    )
+    .innerJoin(posts, eq(posts.id, postKnowledgeAreas.postId))
+    .where(eq(posts.status, "published"))
+    .groupBy(knowledgeAreas.id)
+    .orderBy(asc(knowledgeAreas.name));
+}
+
 export async function searchPublications(
   search: PublicSearch,
   database?: Database,
