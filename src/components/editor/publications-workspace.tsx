@@ -200,7 +200,7 @@ export function PublicationsWorkspace({
 
       {composerOpen ? (
         <div
-          className="fixed inset-0 z-50 grid items-end bg-foreground/65 p-0 sm:place-items-center sm:p-6"
+          className={`fixed inset-0 z-50 grid bg-foreground/65 ${modalView === "composer" ? "p-0" : "items-end p-0 sm:place-items-center sm:p-6"}`}
           role="presentation"
         >
           <div
@@ -214,7 +214,11 @@ export function PublicationsWorkspace({
                   ? "Editar publicação"
                   : "Nova publicação"
             }
-            className="max-h-[95svh] w-full overflow-y-auto rounded-t-[1.5rem] bg-surface shadow-2xl sm:max-w-3xl sm:rounded-[1.5rem]"
+            className={
+              modalView === "composer"
+                ? "h-svh w-screen overflow-hidden bg-surface"
+                : "max-h-[95svh] w-full overflow-y-auto rounded-t-[1.5rem] bg-surface shadow-2xl sm:max-w-3xl sm:rounded-[1.5rem]"
+            }
           >
             {modalView === "composer" ? (
               <DraftComposer

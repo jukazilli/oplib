@@ -152,6 +152,32 @@ describe("draft composer", () => {
     confirmSpy.mockRestore();
   });
 
+  it("advances to a safe Markdown preview and returns to composition", async () => {
+    const user = userEvent.setup();
+    render(<DraftComposer initialDraft={null} />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "Conteúdo" }),
+      "# Ideia{enter}{enter}<script>alert(1)</script>",
+    );
+    expect(screen.getByText("1 de 2")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Avançar" }));
+
+    expect(screen.getByText("2 de 2")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Ideia" })).toBeInTheDocument();
+    expect(
+      screen.getByText("HTML não é exibido na prévia."),
+    ).toBeInTheDocument();
+    expect(document.querySelector("script")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Voltar" }));
+    expect(screen.getByText("1 de 2")).toBeInTheDocument();
+    expect(
+      (screen.getByRole("textbox", { name: "Conteúdo" }) as HTMLTextAreaElement)
+        .value,
+    ).toContain("# Ideia");
+  });
+
   it("recovers a local copy based on the same server version", async () => {
     window.localStorage.setItem(
       "oplib:draft:10000000-0000-4000-8000-000000000001",
