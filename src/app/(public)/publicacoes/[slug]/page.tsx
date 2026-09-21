@@ -1,9 +1,69 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 import { MarkdownContent } from "@/components/editor/markdown-content";
 import { getPublicPublicationBySlug } from "@/modules/publishing/draft-repository";
 import { estimateReadingMinutes } from "@/modules/publishing/metadata";
+
+const getPublication = cache(getPublicPublicationBySlug);
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/publicacoes/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const publication = await getPublication(slug);
+  if (!publication) {
+    return {
+      title: "Publicação indisponível",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const path = `/publicacoes/${publication.slug}`;
+  const image = publication.cover
+    ? {
+        url: publication.cover.url,
+        ...(publication.cover.width && publication.cover.height
+          ? {
+              width: publication.cover.width,
+              height: publication.cover.height,
+            }
+          : {}),
+        alt: publication.cover.altText,
+      }
+    : {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "OPALIB — conhecimento para construir, preservar e compartilhar",
+      };
+
+  return {
+    title: publication.title,
+    description: publication.summary,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "article",
+      locale: "pt_BR",
+      siteName: "OPALIB",
+      title: publication.title,
+      description: publication.summary,
+      url: path,
+      publishedTime: publication.publishedAt.toISOString(),
+      modifiedTime: publication.updatedAt.toISOString(),
+      tags: publication.tagNames,
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: publication.title,
+      description: publication.summary,
+      images: [image],
+    },
+  };
+}
 
 const contentTypeLabels = {
   academic_work: "Trabalho acadêmico",
@@ -21,7 +81,7 @@ export default async function PublicationPage({
   params,
 }: PageProps<"/publicacoes/[slug]">) {
   const { slug } = await params;
-  const publication = await getPublicPublicationBySlug(slug);
+  const publication = await getPublication(slug);
   if (!publication) notFound();
 
   return (

@@ -70,3 +70,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Final`: abrir publicação principal, recente e caminho por área.
 - [ ] `Automatizado`: executar axe, estados vazio/loading e zoom de 200%.
 - **Evidência:** `docs/evidence/EVID-WEB-002-01.md`; screenshots e axe pendentes no Preview.
+
+## SEO-001 — Metadados, canonical e prévia social
+
+- [ ] `Automatizado`: confirmar título, descrição, canonical, Open Graph e Twitter de publicação pública.
+- [ ] `Automatizado`: confirmar ausência de canonical e `noindex` para slug inexistente, rascunho ou retirado.
+- [ ] `Automatizado`: confirmar `noindex` em Development/Preview e indexação somente em Production com URL explícita.
+- [ ] `Preview`: inspecionar HTML com bot limitado e confirmar metadados no `head`.
+- [ ] `Preview`: validar card com capa e fallback institucional, incluindo texto alternativo e dimensões.
+- [ ] `Final`: confirmar a origem canônica definitiva antes da publicação em Production.

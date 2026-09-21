@@ -13,7 +13,9 @@ vi.mock("@/modules/publishing/draft-repository", () => ({
   getPublicPublicationBySlug: mocks.getBySlug,
 }));
 
-import PublicationPage from "@/app/(public)/publicacoes/[slug]/page";
+import PublicationPage, {
+  generateMetadata,
+} from "@/app/(public)/publicacoes/[slug]/page";
 
 const publication = {
   id: "10000000-0000-4000-8000-000000000001",
@@ -78,5 +80,68 @@ describe("public publication page", () => {
       } as never),
     ).rejects.toThrow("NEXT_NOT_FOUND");
     expect(mocks.notFound).toHaveBeenCalledOnce();
+  });
+
+  it("generates canonical and social metadata from a published item", async () => {
+    mocks.getBySlug.mockResolvedValue(publication);
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug: publication.slug }),
+    } as never);
+
+    expect(metadata.title).toBe(publication.title);
+    expect(metadata.description).toBe(publication.summary);
+    expect(metadata.alternates?.canonical).toBe(
+      `/publicacoes/${publication.slug}`,
+    );
+    expect(metadata.openGraph).toMatchObject({
+      type: "article",
+      title: publication.title,
+      images: [
+        expect.objectContaining({
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+        }),
+      ],
+    });
+  });
+
+  it("prevents indexing when the slug is not publicly available", async () => {
+    mocks.getBySlug.mockResolvedValue(null);
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug: "rascunho-ou-retirada" }),
+    } as never);
+
+    expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.alternates).toBeUndefined();
+  });
+
+  it("uses cover metadata with its real alternative text and dimensions", async () => {
+    mocks.getBySlug.mockResolvedValue({
+      ...publication,
+      cover: {
+        pathname: "covers/conhecimento.png",
+        url: "https://assets.example/conhecimento.png",
+        altText: "Diagrama sobre conhecimento em movimento",
+        contentType: "image/png",
+        sizeBytes: 2048,
+        width: 1600,
+        height: 900,
+      },
+    });
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ slug: publication.slug }),
+    } as never);
+
+    expect(metadata.openGraph).toMatchObject({
+      images: [
+        {
+          url: "https://assets.example/conhecimento.png",
+          alt: "Diagrama sobre conhecimento em movimento",
+          width: 1600,
+          height: 900,
+        },
+      ],
+    });
   });
 });

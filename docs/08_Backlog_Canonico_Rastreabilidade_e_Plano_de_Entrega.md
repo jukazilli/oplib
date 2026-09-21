@@ -728,7 +728,7 @@ Estado atual: consulta pública protegida por status, rota por slug, hierarquia 
 
 ### SEO-001 — Metadados, canonical e prévia social
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §12; TL §17.
 - **Objetivo:** tornar cada publicação identificável em busca e compartilhamento.
 - **Descrição:** Metadata API, título, descrição, canonical, Open Graph e capa/fallback.
@@ -737,6 +737,8 @@ Estado atual: consulta pública protegida por status, rota por slug, hierarquia 
 - **Riscos:** indexar Preview, rascunho ou URL duplicada.
 - **Testes:** `TEST-SEO-001-01` metadados por status/ambiente; `-02` social card.
 - **Evidência:** `EVID-SEO-001-01` HTML/metadados capturados.
+
+Estado atual: metadata global e por publicação, canonical, Open Graph, Twitter Card, capa/fallback social e política `noindex` por ambiente/status implementados. Suíte local aprovada; HTML de Preview, crawler e card renderizado permanecem pendentes.
 
 ### SEO-002 — Sitemap, robots e dados estruturados
 

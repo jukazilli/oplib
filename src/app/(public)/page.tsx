@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { cache, Suspense } from "react";
 
 import {
@@ -12,6 +13,10 @@ import {
 const getFeaturedPublications = cache(listFeaturedPublications);
 const getRecentPublications = cache(listRecentPublications);
 const getPublicAreas = cache(listPublicAreas);
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 function PublicationImage({
   item,

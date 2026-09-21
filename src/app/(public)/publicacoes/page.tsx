@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 import {
   parsePublicSearch,
@@ -12,6 +13,12 @@ import {
 import { estimateReadingMinutes } from "@/modules/publishing/metadata";
 import { contentTypeValues } from "@/modules/publishing/draft-domain";
 import { listTaxonomy } from "@/modules/taxonomy/repository";
+
+export const metadata: Metadata = {
+  title: "Publicações",
+  description: "Explore artigos, estudos, pesquisas e reflexões no OPALIB.",
+  alternates: { canonical: "/publicacoes" },
+};
 
 const typeLabels: Record<(typeof contentTypeValues)[number], string> = {
   academic_work: "Trabalho acadêmico",
