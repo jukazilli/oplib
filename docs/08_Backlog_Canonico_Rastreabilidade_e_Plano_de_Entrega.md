@@ -496,7 +496,7 @@ Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados
 
 ### PUB-001 — Criar e salvar rascunho manualmente
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `review`.
 - **Origem:** D02 §§9–10; D05 §§12–13.
 - **Objetivo:** iniciar toda publicação como rascunho e salvar conscientemente.
 - **Descrição:** composição editorial integrada à lista de Publicações, estado “Alterações não salvas”, último salvamento e recuperação temporária no navegador.
@@ -505,6 +505,8 @@ Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados
 - **Riscos:** perda de trabalho ou publicação acidental.
 - **Testes:** `TEST-PUB-001-01` rascunho; `-02` saída; `-03` recuperação/conflito.
 - **Evidência:** `EVID-PUB-001-01` E2E do fluxo.
+
+Estado atual: implementação técnica concluída no PR #23, com migration, autorização server-side, salvamento manual, recuperação local, aviso de saída e conflito otimista validados. Aguarda somente aceite autenticado e responsivo no Preview antes de `done`.
 
 ### PUB-002 — Editor e prévia Markdown segura
 
