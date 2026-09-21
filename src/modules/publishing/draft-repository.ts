@@ -1,7 +1,7 @@
 import "server-only";
 
 import { randomUUID } from "node:crypto";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { connection } from "next/server";
 
 import { getDatabase, type Database } from "@/lib/db";
@@ -12,6 +12,11 @@ export type DraftRecord = {
   title: string;
   markdown: string;
   updatedAt: Date;
+};
+
+export type AdminPublication = DraftRecord & {
+  summary: string;
+  status: "draft" | "published" | "withdrawn";
 };
 
 const draftSelection = {
@@ -30,6 +35,19 @@ export async function getDraftById(id: string, database?: Database) {
     .where(and(eq(posts.id, id), eq(posts.status, "draft")))
     .limit(1);
   return rows[0] ?? null;
+}
+
+export async function listAdminPublications(database?: Database) {
+  await connection();
+  const db = database ?? getDatabase();
+  return db
+    .select({
+      ...draftSelection,
+      summary: posts.summary,
+      status: posts.status,
+    })
+    .from(posts)
+    .orderBy(desc(posts.updatedAt));
 }
 
 export async function createDraft(

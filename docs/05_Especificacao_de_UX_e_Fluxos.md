@@ -465,6 +465,7 @@ Uma publicação poderá possuir zero ou várias áreas durante o rascunho e dev
 5. Metadados obrigatórios para publicar são revelados conforme necessário, sem impedir um rascunho incompleto.
 6. O rascunho pode ser salvo e o diálogo pode ser fechado.
 7. Cada publicação na lista oferece `Mais ações`; `Editar` reabre a composição, enquanto outros comandos aparecem somente quando implementados e permitidos pelo estado.
+8. No composer, a ação `Rascunhos` abre a biblioteca de composições não publicadas; selecionar uma retoma o conteúdo e aplica recuperação ou conflito quando necessário.
 8. A prévia e as validações ficam disponíveis antes da mudança de estado.
 9. Publicar exige confirmação explícita.
 10. O sistema apresenta o endereço público e mantém o item na lista com estado atualizado.

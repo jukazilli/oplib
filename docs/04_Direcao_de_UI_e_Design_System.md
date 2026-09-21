@@ -646,6 +646,8 @@ A criação e a gestão das publicações compartilharão a página `Publicaçõ
 
 Cada item da lista usará leitura vertical, separação clara e menu `Mais ações` de três pontos no topo direito. O menu não exibirá comandos futuros ou indisponíveis e respeitará as guardas do estado editorial.
 
+No cabeçalho do diálogo, o ícone de folha será a ação `Rascunhos`. Ele abrirá, no mesmo modal, a lista de composições não publicadas para consulta e continuidade, sempre com rótulo acessível e retorno explícito ao composer.
+
 A composição terá dois modos aprovados: `Criar`, para escrever, classificar e salvar um rascunho incompleto, e `Revisar`, obrigatório antes de publicar. O primeiro campo será `Título`, seguido pelo conteúdo Markdown como maior superfície editorial.
 
 A referência de redes sociais será absorvida somente no que reduz atrito para o autor:

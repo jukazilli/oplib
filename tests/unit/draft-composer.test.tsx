@@ -4,11 +4,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
+  refresh: vi.fn(),
   save: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ replace: mocks.replace }),
+  useRouter: () => ({ replace: mocks.replace, refresh: mocks.refresh }),
 }));
 
 vi.mock("@/app/admin/publicacoes/actions", () => ({
@@ -20,6 +21,7 @@ import { DraftComposer } from "@/components/editor/draft-composer";
 beforeEach(() => {
   window.localStorage.clear();
   mocks.replace.mockReset();
+  mocks.refresh.mockReset();
   mocks.save.mockReset();
 });
 

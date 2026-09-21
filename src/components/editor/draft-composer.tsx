@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { FileText } from "lucide-react";
 
 import {
   saveDraftAction,
@@ -25,8 +25,12 @@ function storageKey(id: string) {
 
 export function DraftComposer({
   initialDraft,
+  onClose,
+  onOpenDrafts,
 }: {
   initialDraft: SerializedDraft | null;
+  onClose?: () => void;
+  onOpenDrafts?: () => void;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -40,8 +44,30 @@ export function DraftComposer({
     null,
   );
   const [recovery, setRecovery] = useState<LocalDraft | null>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
   const key = useMemo(() => storageKey(id), [id]);
+
+  useEffect(() => {
+    titleInputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      if (
+        dirty &&
+        !window.confirm(
+          "Existem alterações não salvas. Deseja fechar mesmo assim?",
+        )
+      )
+        return;
+      onClose?.();
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [dirty, onClose]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(key);
@@ -159,6 +185,7 @@ export function DraftComposer({
           }).format(new Date(result.draft.updatedAt))}`,
         );
         router.replace(`/admin/publicacoes?draft=${result.draft.id}`);
+        router.refresh();
         return;
       }
       if (result.status === "conflict") {
@@ -181,30 +208,44 @@ export function DraftComposer({
     });
   }
 
+  function closeComposer() {
+    if (
+      dirty &&
+      !window.confirm(
+        "Existem alterações não salvas. Deseja fechar mesmo assim?",
+      )
+    )
+      return;
+    onClose?.();
+  }
+
   return (
-    <section aria-labelledby="draft-title" className="space-y-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="font-interface text-xs font-bold tracking-[0.14em] text-primary uppercase">
-            Publicações
-          </p>
-          <h1
-            id="draft-title"
-            className="mt-2 text-3xl font-semibold sm:text-4xl"
-          >
-            {id ? "Editar rascunho" : "Nova publicação"}
-          </h1>
-        </div>
-        {id ? (
-          <Button asChild variant="secondary">
-            <Link href="/admin/publicacoes">Novo rascunho</Link>
-          </Button>
-        ) : null}
+    <section aria-labelledby="draft-title">
+      <header className="flex min-h-18 items-center justify-between gap-4 border-b px-5 sm:px-7">
+        <button
+          type="button"
+          onClick={closeComposer}
+          className="min-h-11 font-interface text-sm font-semibold text-muted-foreground hover:text-foreground"
+        >
+          Cancelar
+        </button>
+        <h2 id="draft-title" className="font-interface text-base font-bold">
+          {id ? "Editar publicação" : "Nova publicação"}
+        </h2>
+        <button
+          type="button"
+          onClick={onOpenDrafts}
+          aria-label="Rascunhos"
+          title="Rascunhos"
+          className="flex size-11 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+        >
+          <FileText aria-hidden="true" className="size-5" />
+        </button>
       </header>
 
       {recovery ? (
         <div
-          className="rounded-card border border-primary/30 bg-muted p-4"
+          className="m-5 rounded-card border border-primary/30 bg-muted p-4 sm:m-7"
           role="alert"
         >
           <p className="font-interface text-sm font-semibold">
@@ -225,7 +266,7 @@ export function DraftComposer({
         </div>
       ) : null}
 
-      <div className="rounded-card border bg-surface shadow-sm">
+      <div>
         <div className="grid gap-5 p-5 sm:p-7">
           <label
             className="grid gap-2 font-interface text-sm font-semibold"
@@ -233,6 +274,7 @@ export function DraftComposer({
           >
             Título
             <input
+              ref={titleInputRef}
               id="draft-post-title"
               value={title}
               maxLength={240}
@@ -250,14 +292,14 @@ export function DraftComposer({
             <textarea
               id="draft-markdown"
               value={markdown}
-              rows={18}
+              rows={12}
               aria-invalid={fieldError === "markdown"}
               onChange={(event) => changeMarkdown(event.target.value)}
               onKeyDown={(event) => {
                 if ((event.ctrlKey || event.metaKey) && event.key === "Enter")
                   save();
               }}
-              className="min-h-80 resize-y rounded-control border bg-background p-4 font-mono text-sm leading-7 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-64 resize-y rounded-control border bg-background p-4 font-mono text-sm leading-7 outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
           </label>
         </div>
