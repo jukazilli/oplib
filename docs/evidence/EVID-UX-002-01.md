@@ -1,7 +1,8 @@
 # EVID-UX-002-01 — Contratos da experiência editorial
 
-- **Estado:** parcial; aceite do proprietário pendente
-- **Decisão em revisão:** `docs/decisions/UX-002.md`
+- **Estado:** concluída
+- **Decisão aprovada:** `docs/decisions/UX-002.md`
+- **Aceite:** Juliano Zilli, em 20/09/2026, integralmente e sem ressalvas
 
 ## Material consolidado
 
@@ -35,8 +36,10 @@
 - feed não substitui a página individual canônica;
 - taxonomia não é criada implicitamente no editor;
 - salvar rascunho, revisar e publicar são ações distintas;
-- itens ainda sujeitos a escolha permanecem identificados como proposta.
+- capacidades futuras e decisões fora do escopo permanecem explicitamente separadas dos contratos aprovados.
 
-## Pendência para conclusão
+## Resultado do aceite
 
-O proprietário deverá revisar e marcar os critérios de aceite de `docs/decisions/UX-002.md`. Depois do aceite, as decisões aprovadas serão reconciliadas em D04 e D05 antes de UX-002 mudar para `done`.
+O proprietário aprovou a `UX-002` como documentada. Todos os critérios de aceite foram marcados, os contratos foram reconciliados em D04 e D05 e a rastreabilidade foi atualizada para `done`.
+
+Com `ADM-001` e `TAX-001` já concluídas, o gate documental de entrada de `PUB-001` está satisfeito. A implementação deverá obedecer aos contratos aprovados e produzir sua própria evidência técnica em `EVID-PUB-001-01`.

@@ -400,9 +400,9 @@ Não haverá gráficos no MVP.
 
 Toda nova publicação começará como rascunho.
 
-### Gate de especificação da interface
+### Contrato aprovado da interface
 
-O formulário não será implementado diretamente a partir da lista de campos. Antes do código, `UX-002` deverá aprovar um contrato de interação por campo e por ação.
+O formulário não será implementado diretamente a partir da lista de campos. A decisão `UX-002`, aprovada em 20/09/2026, é o contrato de interação por campo e por ação e deverá ser seguida pela implementação.
 
 Cada contrato responderá:
 
@@ -415,22 +415,20 @@ Cada contrato responderá:
 7. quando o dado é validado e salvo;
 8. como cancelar, voltar, corrigir ou recuperar.
 
-Nenhuma decisão ausente será preenchida durante a implementação por convenção do framework ou preferência do agente.
+Nenhuma decisão ausente será preenchida durante a implementação por convenção do framework ou preferência do agente. Divergências ou novas lacunas deverão retornar à governança documental antes do código do slice afetado.
 
-#### Lacuna conhecida — campo Área
+#### Contrato aprovado — campo Área
 
-Já está decidido que uma publicação poderá possuir uma ou mais áreas cadastradas e que pelo menos uma será obrigatória para publicar. Ainda precisam de aprovação antes da UI:
+Uma publicação poderá possuir zero ou várias áreas durante o rascunho e deverá possuir pelo menos uma para publicar.
 
-- seleção simples ou múltipla durante o rascunho;
-- lista visível ou combobox pesquisável;
-- quantidade de opções que ativa pesquisa;
-- possibilidade ou proibição de criar uma área sem sair do editor;
-- comportamento quando a busca não encontra resultado;
-- remoção e troca de áreas selecionadas;
-- apresentação no celular e navegação por teclado;
-- relação entre criação inline e a administração de taxonomia.
-
-Até essas decisões serem fechadas em `UX-002`, o campo Área não possui contrato suficiente para implementação.
+- com até oito opções cadastradas, o controle será uma lista multisseleção visível;
+- acima de oito opções, será um combobox multisseleção pesquisável;
+- as opções virão exclusivamente do cadastro estável de áreas;
+- não haverá criação, edição ou exclusão de área dentro do editor;
+- busca sem resultado informará a ausência e oferecerá acesso separado à administração de taxonomia, quando autorizado;
+- valores selecionados poderão ser removidos individualmente, sem apagar os demais;
+- o erro de obrigatoriedade aparecerá junto ao campo ao revisar ou publicar;
+- teclado, foco, leitor de tela e celular seguirão o contrato detalhado de `UX-002`.
 
 ### Campos obrigatórios para publicar
 
@@ -473,7 +471,7 @@ Até essas decisões serem fechadas em `UX-002`, o campo Área não possui contr
 
 ### Comportamento da composição integrada
 
-- a entrada inicial privilegia título provisório ou conteúdo, conforme decisão de `UX-002`;
+- a entrada inicial começa pelo título e apresenta o conteúdo Markdown logo depois;
 - ferramentas usam ícones com nome acessível e tooltip curto quando o símbolo não for inequívoco;
 - capa, referências e metadados abrem controles contextuais sem transformar a composição em modal extenso;
 - a lista é paginada ou carregada por ação explícita; não haverá rolagem infinita;

@@ -365,6 +365,8 @@ O cabeçalho deverá conter:
 - sobre;
 - pesquisa.
 
+Não haverá ações públicas de entrar, cadastrar, seguir ou publicar. A administração permanecerá fora da navegação pública.
+
 No desktop, a pesquisa poderá permanecer visível ou ser aberta por uma ação claramente identificada.
 
 No celular:
@@ -392,18 +394,19 @@ O rodapé poderá utilizar o azul-noturno e deverá conter:
 
 ### Tarefa mental dominante
 
-Descobrir uma publicação relevante.
+Encontrar uma publicação relevante e compreender rapidamente a proposta do acervo.
 
 ### Estrutura
 
 1. cabeçalho;
-2. apresentação curta do OPALIB;
+2. primeira dobra com promessa universal do OPALIB, ação `Explorar publicações` e entrada transparente para a lista de espera;
 3. publicação principal em destaque;
-4. outras publicações em destaque;
-5. publicações mais recentes;
+4. superfície de descoberta com pesquisa, filtros reais e alternância `Feed`/`Grade`;
+5. resultados finitos;
 6. exploração por área;
-7. breve apresentação do autor;
-8. rodapé.
+7. rodapé.
+
+A primeira dobra usará a copy aprovada em `UX-002`, sem apresentar o produto como biblioteca pessoal nem prometer conta ou publicação por visitantes. `Quero criar meu acervo` levará a uma página ou painel dedicado à lista de espera; não será cadastro de conta nem formulário incorporado à dobra principal.
 
 ### Publicação principal
 
@@ -427,13 +430,11 @@ Preferir uma lista editorial ou cards horizontais com:
 - título;
 - resumo curto;
 - data;
-- tempo estimado de leitura, se essa informação for aprovada posteriormente.
+- tempo estimado de leitura calculado conforme a regra aprovada em `UX-002`.
 
 ### Exploração por área
 
-Engenharia de Software e Educação Física deverão aparecer como caminhos equivalentes.
-
-Conteúdos interdisciplinares poderão formar um terceiro caminho, quando houver volume suficiente.
+As áreas cadastradas deverão aparecer como caminhos equivalentes de descoberta, sem dominar a primeira dobra. A interface mostrará somente taxonomia real, sem rotular itens como populares quando não houver dado que sustente essa classificação.
 
 ## 15. Acervo e resultados de pesquisa
 
@@ -451,6 +452,8 @@ Encontrar conteúdo.
 - lista de publicações;
 - paginação;
 - estado sem resultados.
+
+O acervo oferecerá `Feed` como visualização padrão e `Grade` como alternativa. A escolha, os filtros, o termo e a página permanecerão no endereço. O feed poderá expandir uma publicação por vez sob demanda, preservando URL permanente e retorno à posição; a grade sempre abrirá a página individual.
 
 ### Filtros iniciais
 
@@ -641,11 +644,13 @@ Excluir deverá permanecer em posição secundária e exigir confirmação refor
 
 A criação e a gestão das publicações compartilharão a página `Publicações`. Não haverá item separado “Nova publicação” na navegação nem chamada duplicada na visão geral.
 
+A composição terá dois modos aprovados: `Criar`, para escrever, classificar e salvar um rascunho incompleto, e `Revisar`, obrigatório antes de publicar. O primeiro campo será `Título`, seguido pelo conteúdo Markdown como maior superfície editorial.
+
 A referência de redes sociais será absorvida somente no que reduz atrito para o autor:
 
 - caixa de composição no início da lista;
 - entrada de texto imediata;
-- ferramentas compactas para capa, referências e outros recursos aprovados;
+- ferramentas compactas `Capa`, `Classificação`, `Referências e links` e `Mais metadados`;
 - salvamento como rascunho sem exigir preenchimento completo;
 - publicações abaixo em uma lista contínua e finita;
 - itens resumidos que podem ser expandidos para consultar ou editar;
@@ -653,7 +658,7 @@ A referência de redes sociais será absorvida somente no que reduz atrito para 
 
 O OPALIB não adotará feed infinito, métricas competitivas, perfis sociais, urgência, recomendação algorítmica ou mecanismos de retenção. A lista continuará sendo uma ferramenta privada de autoria e gestão editorial.
 
-Informações secundárias serão reveladas progressivamente na própria composição ou edição, sem wizard obrigatório. Publicação continuará exigindo revisão e confirmação consciente.
+Informações secundárias serão reveladas progressivamente na própria composição ou edição, sem wizard obrigatório. Publicação continuará exigindo revisão e confirmação consciente. Áreas aceitarão múltiplos valores; categoria será única; tags aceitarão múltiplos valores. Nenhum desses vocabulários permitirá criação inline no editor.
 
 Referência visual: `assets/reference-threads.png`, imagem fornecida pelo proprietário em 20/09/2026. A referência governa composição leve e ferramentas contextuais, não aparência, marca ou comportamento social literal.
 
@@ -687,9 +692,9 @@ A ação de salvar deverá permanecer encontrável durante a edição.
 
 ### Hierarquia de ações
 
-1. `Salvar rascunho` — ação operacional principal;
-2. `Visualizar` — ação contextual;
-3. `Publicar` — ação de mudança de estado;
+1. `Salvar rascunho` — ação operacional principal em `Criar`;
+2. `Revisar` e `Voltar à edição` — transição explícita entre os dois modos;
+3. `Publicar` ou `Atualizar publicação` — ação de mudança de estado após revisão;
 4. `Retirar do ar` — ação reversível;
 5. `Excluir` — ação destrutiva.
 
@@ -792,6 +797,8 @@ Antes da implementação, a especificação deverá registrar:
 - evidência de aceite.
 
 Se qualquer decisão material estiver ausente, o componente permanece não implementável.
+
+Para o fluxo editorial, os contratos aprovados de campos, estados, persistência, recuperação, conflito, teclado, leitor de tela e celular estão em `docs/decisions/UX-002.md`. Essa decisão é a referência específica quando detalhar as regras gerais deste documento.
 
 ### Ações
 
