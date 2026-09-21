@@ -1,6 +1,6 @@
 # EVID-PUB-007-01 — Lista editorial administrativa e composição modal
 
-- **Estado:** técnico concluído; aceite visual do Preview pendente
+- **Estado:** concluído e aprovado pelo proprietário em 21/09/2026
 - **Rota:** `/admin/publicacoes`
 
 ## Entrega comprovada
@@ -24,14 +24,16 @@
 ## Validações automatizadas
 
 - `pnpm lint` — aprovado;
-- `pnpm test` — 18 arquivos e 67 testes aprovados;
+- `pnpm test` — 18 arquivos e 70 testes aprovados;
 - `pnpm typecheck` — aprovado;
 - `pnpm build` — aprovado.
 
-## Aceite visual pendente
+## Aceite visual
 
-- [ ] box e lista possuem hierarquia correta no desktop;
-- [ ] composer modal corresponde à direção aprovada sem copiar semântica social;
-- [ ] biblioteca de rascunhos permite continuar uma composição;
-- [ ] celular não apresenta corte nem rolagem horizontal;
-- [ ] menu de três pontos permanece acessível e não compete com o conteúdo.
+- [x] box e lista possuem hierarquia correta no desktop;
+- [x] composer modal corresponde à direção aprovada sem copiar semântica social;
+- [x] biblioteca de rascunhos permite continuar uma composição;
+- [x] celular não apresenta corte nem rolagem horizontal;
+- [x] menu de três pontos permanece acessível e não compete com o conteúdo.
+
+O proprietário aprovou o Preview após os refinamentos de composição fluida, taxonomia em popover, capa contextual, confirmação própria do OPALIB e restauração de `Meu perfil`.
