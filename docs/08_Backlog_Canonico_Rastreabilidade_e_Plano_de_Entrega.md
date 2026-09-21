@@ -598,7 +598,7 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 - **Testes:** `TEST-PUB-007-01` filtros/status; `-02` responsividade e teclado.
 - **Evidência:** `EVID-PUB-007-01` E2E.
 
-Estado atual: lista privada, box `Publique algo em seu acervo`, composição modal fluida, taxonomia em popover, capa contextual, menu por item, biblioteca de rascunhos e acesso a `Meu perfil` implementados. Suíte local e checks do PR #24 aprovados; Preview autenticado aceito pelo proprietário em 21/09/2026.
+Estado atual: lista privada, box `Publique algo em seu acervo`, composição modal fluida, taxonomia em modal centralizado, capa contextual, menu por item, biblioteca de rascunhos e acesso a `Meu perfil` implementados. Suíte local e checks do PR #28 aprovados; Preview autenticado aceito pelo proprietário em 21/09/2026.
 
 ### PUB-008 — Excluir publicação permanentemente
 
@@ -614,7 +614,7 @@ Estado atual: lista privada, box `Publique algo em seu acervo`, composição mod
 
 ### AUD-001 — Registrar ações administrativas relevantes
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `review`.
 - **Origem:** D02 §11; D07 §10 “AuditEvent” e §16; D06 §13.
 - **Objetivo:** manter trilha mínima de publicação, retirada, exclusão, destaque e moderação.
 - **Descrição:** evento com ação, entidade, resultado, admin e data, sem segredo ou conteúdo integral.
@@ -623,6 +623,8 @@ Estado atual: lista privada, box `Publique algo em seu acervo`, composição mod
 - **Riscos:** log virar repositório de conteúdo sensível.
 - **Testes:** `TEST-AUD-001-01` matriz de eventos; `-02` redaction.
 - **Evidência:** `EVID-AUD-001-01` eventos sintéticos saneados.
+
+Estado atual: matriz fechada de eventos, writer transacional, minimização de metadados e migration implementados. Prova em banco controlado ainda pendente; integração aos comandos ocorrerá nos respectivos cortes.
 
 ## 10. Experiência pública e descoberta
 
