@@ -15,6 +15,7 @@
 
 ## Pendências
 
+- O deploy explícito de Preview falhou antes do upload com `fetch failed` ao consultar Vercel/npm; a branch remota pode acionar a integração Git, mas esse estado não foi contado como evidência.
 - Consultar uma publicação real na branch Neon `preview`.
 - Confirmar que rascunho, retirada e slug inexistente têm resposta indistinguível.
 - Executar axe e inspeção em celular, tablet, desktop e zoom de 200%.
