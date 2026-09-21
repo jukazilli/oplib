@@ -136,3 +136,11 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: visitante ou conta fora da allowlist não executa a ação, mesmo chamando-a diretamente.
 - [ ] `Final`: após ocultar, `Desfazer` aparece por oito segundos; falha preserva o estado e permite nova tentativa.
 - [ ] `Final`: testar filtro atual, teclado, foco, anúncio de sucesso/erro, celular, zoom e ausência de controles de exclusão antes de MOD-003.
+
+## UX-001 / QUAL-002 — Degradação da leitura
+
+- [ ] `Automatizado/Preview`: provocar falha somente na leitura de curtidas; artigo, referências, compartilhamento e comentários permanecem disponíveis, sem contador falso.
+- [ ] `Automatizado/Preview`: provocar falha somente na leitura de comentários; artigo e curtida permanecem, sem formulário que aparenta publicar.
+- [ ] `Automatizado/Preview`: provocar ambas as falhas; artigo continua legível, mensagens permitem recarga e logs não contêm erros brutos ou conteúdo.
+- [ ] `Final`: repetir em celular e desktop, conferir anúncio das mensagens, foco e recuperação após restabelecer o serviço.
+- [ ] `Final`: completar a matriz UX-001 de carregamento, vazio, sucesso, erro e retry para cada fluxo, incluindo editor com mudanças não salvas.

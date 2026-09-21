@@ -1,19 +1,22 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   getBySlug: vi.fn(),
   getLikeState: vi.fn(),
   listComments: vi.fn(),
   notFound: vi.fn(),
+  log: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
+  unstable_rethrow: vi.fn(),
   notFound: () => {
     mocks.notFound();
     throw new Error("NEXT_NOT_FOUND");
   },
 }));
+vi.mock("@/lib/observability/logger", () => ({ logEvent: mocks.log }));
 vi.mock("@/modules/publishing/draft-repository", () => ({
   getPublicPublicationBySlug: mocks.getBySlug,
 }));
@@ -37,6 +40,11 @@ vi.mock("@/modules/interactions/comments/repository", () => ({
 import PublicationPage, {
   generateMetadata,
 } from "@/app/(public)/publicacoes/[slug]/page";
+
+afterEach(() => {
+  cleanup();
+  vi.clearAllMocks();
+});
 
 const publication = {
   id: "10000000-0000-4000-8000-000000000001",
@@ -112,6 +120,82 @@ describe("public publication page", () => {
       } as never),
     ).rejects.toThrow("NEXT_NOT_FOUND");
     expect(mocks.notFound).toHaveBeenCalledOnce();
+  });
+
+  it("keeps the article readable when only likes fail, without inventing a count", async () => {
+    mocks.getBySlug.mockResolvedValue(publication);
+    mocks.getLikeState.mockRejectedValue(new Error("database secret"));
+    mocks.listComments.mockResolvedValue([]);
+    render(
+      await PublicationPage({
+        params: Promise.resolve({ slug: publication.slug }),
+      } as never),
+    );
+    expect(
+      screen.getByRole("heading", { level: 1, name: publication.title }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Conteúdo publicado.")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Curtidas indisponíveis no momento. Atualize a página para tentar novamente.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Curtir/ }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Publicar comentário" }),
+    ).toBeInTheDocument();
+    expect(mocks.log).toHaveBeenCalledWith(
+      expect.objectContaining({ errorCode: "LIKE_READ_FAILED" }),
+    );
+  });
+
+  it("keeps the article and likes readable when comments fail, without an unsafe form", async () => {
+    mocks.getBySlug.mockResolvedValue(publication);
+    mocks.getLikeState.mockResolvedValue({ count: 3, liked: false });
+    mocks.listComments.mockRejectedValue(new Error("database secret"));
+    render(
+      await PublicationPage({
+        params: Promise.resolve({ slug: publication.slug }),
+      } as never),
+    );
+    expect(screen.getByText("Conteúdo publicado.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Curtir/ })).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Comentários indisponíveis no momento. Atualize a página para tentar novamente.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Publicar comentário" }),
+    ).not.toBeInTheDocument();
+    expect(mocks.log).toHaveBeenCalledWith(
+      expect.objectContaining({ errorCode: "COMMENT_READ_FAILED" }),
+    );
+  });
+
+  it("keeps the article readable when both interaction reads fail", async () => {
+    mocks.getBySlug.mockResolvedValue(publication);
+    mocks.getLikeState.mockRejectedValue(new Error("like secret"));
+    mocks.listComments.mockRejectedValue(new Error("comment secret"));
+    render(
+      await PublicationPage({
+        params: Promise.resolve({ slug: publication.slug }),
+      } as never),
+    );
+    expect(screen.getByText("Conteúdo publicado.")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Curtidas indisponíveis no momento. Atualize a página para tentar novamente.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Comentários indisponíveis no momento. Atualize a página para tentar novamente.",
+      ),
+    ).toBeInTheDocument();
+    expect(JSON.stringify(mocks.log.mock.calls)).not.toContain("secret");
   });
 
   it("generates canonical and social metadata from a published item", async () => {

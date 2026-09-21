@@ -830,7 +830,7 @@ Estado atual: transições condicionais auditadas, ação autorizada e desfazer 
 
 ### UX-001 — Estados, feedback e recuperação
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** PUX P-UX-008 a P-UX-011 e P-UX-016; D05 §§22–25.
 - **Objetivo:** garantir que ações e interrupções permaneçam compreensíveis.
 - **Descrição:** revisar loading, vazio, sucesso, erro, retry, foco e preservação de entrada em todas as superfícies.
@@ -839,6 +839,8 @@ Estado atual: transições condicionais auditadas, ação autorizada e desfazer 
 - **Riscos:** tratamento inconsistente ou perda silenciosa de dados.
 - **Testes:** `TEST-UX-001-01` matriz de estados; `-02` falhas injetadas.
 - **Evidência:** `EVID-UX-001-01` checklist por fluxo.
+
+Estado atual: degradação isolada de curtidas e comentários na página de leitura implementada e testada; matriz transversal, edição com mudanças pendentes e aceite de navegador continuam abertos.
 
 ### QUAL-001 — Acessibilidade e responsividade do MVP
 
@@ -854,7 +856,7 @@ Estado atual: transições condicionais auditadas, ação autorizada e desfazer 
 
 ### QUAL-002 — Desempenho e degradação segura
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D03 §9; D06 §17; D07 §§5, 18 e 20.
 - **Objetivo:** manter leitura rápida e disponível quando interações ou mídia falharem.
 - **Descrição:** validar cache editorial, imagens responsivas, tamanho do cliente e falhas isoladas.
@@ -863,6 +865,8 @@ Estado atual: transições condicionais auditadas, ação autorizada e desfazer 
 - **Riscos:** cache incorreto ou hidratação excessiva.
 - **Testes:** `TEST-QUAL-002-01` falhas simuladas; `-02` Lighthouse/medição; `-03` bundle.
 - **Evidência:** `EVID-QUAL-002-01` relatório de desempenho e degradação.
+
+Estado atual: falhas de leitura das interações não derrubam mais o artigo; cache, bundle, Core Web Vitals e demais falhas isoladas ainda exigem medição.
 
 ### SEC-001 — Regressão de segurança do MVP
 

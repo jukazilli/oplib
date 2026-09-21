@@ -1,7 +1,8 @@
+import { randomUUID } from "node:crypto";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import { cache } from "react";
 
 import { MarkdownContent } from "@/components/editor/markdown-content";
@@ -9,6 +10,7 @@ import { LikeAction } from "@/components/editorial/like-action";
 import { CommentsSection } from "@/components/editorial/comments-section";
 import { ShareAction } from "@/components/editorial/share-action";
 import { getSiteUrl } from "@/lib/seo/metadata";
+import { logEvent } from "@/lib/observability/logger";
 import {
   publicationStructuredData,
   serializeStructuredData,
@@ -104,10 +106,32 @@ export default async function PublicationPage({
   const visitorId = validVisitorId(
     (await cookies()).get(VISITOR_COOKIE_NAME)?.value,
   );
-  const [likeState, publicComments] = await Promise.all([
+  const [likesResult, commentsResult] = await Promise.allSettled([
     getLikeState(publication.id, visitorId ? hashVisitorId(visitorId) : null),
     listVisibleComments(publication.id),
   ]);
+  if (likesResult.status === "rejected") {
+    unstable_rethrow(likesResult.reason);
+    logEvent({
+      level: "error",
+      event: "public.likes.read",
+      correlationId: randomUUID(),
+      module: "likes",
+      result: "degraded",
+      errorCode: "LIKE_READ_FAILED",
+    });
+  }
+  if (commentsResult.status === "rejected") {
+    unstable_rethrow(commentsResult.reason);
+    logEvent({
+      level: "error",
+      event: "public.comments.read",
+      correlationId: randomUUID(),
+      module: "comments",
+      result: "degraded",
+      errorCode: "COMMENT_READ_FAILED",
+    });
+  }
 
   return (
     <article className="mx-auto w-full max-w-5xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
@@ -227,15 +251,46 @@ export default async function PublicationPage({
           text={publication.summary}
           url={canonicalUrl}
         />
-        <LikeAction
-          slug={publication.slug}
-          initialCount={likeState.count}
-          initiallyLiked={likeState.liked}
-        />
-        <CommentsSection
-          slug={publication.slug}
-          initialComments={publicComments}
-        />
+        {likesResult.status === "fulfilled" ? (
+          <LikeAction
+            slug={publication.slug}
+            initialCount={likesResult.value.count}
+            initiallyLiked={likesResult.value.liked}
+          />
+        ) : (
+          <p
+            className="mt-6 font-interface text-sm text-muted-foreground"
+            role="status"
+          >
+            Curtidas indisponíveis no momento. Atualize a página para tentar
+            novamente.
+          </p>
+        )}
+        {commentsResult.status === "fulfilled" ? (
+          <CommentsSection
+            slug={publication.slug}
+            initialComments={commentsResult.value}
+          />
+        ) : (
+          <section
+            aria-labelledby="comments-title"
+            className="mt-12 border-t pt-8"
+          >
+            <h2
+              id="comments-title"
+              className="font-editorial text-3xl font-semibold"
+            >
+              Comentários
+            </h2>
+            <p
+              className="mt-4 font-interface text-sm text-muted-foreground"
+              role="status"
+            >
+              Comentários indisponíveis no momento. Atualize a página para
+              tentar novamente.
+            </p>
+          </section>
+        )}
       </div>
     </article>
   );
