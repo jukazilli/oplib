@@ -1,6 +1,6 @@
 # EVID-AUD-001-01 — Trilha administrativa mínima
 
-- **Estado:** revisão técnica; migration e prova em banco pendentes.
+- **Estado:** infraestrutura concluída na branch Neon `preview`; `production` não alterada.
 - **Migration:** `drizzle/0002_gigantic_retro_girl.sql`.
 
 ## Provas locais
@@ -15,7 +15,10 @@
 - `pnpm lint`, `pnpm typecheck` e `pnpm build`: aprovados.
 - `pnpm db:check`: artefatos consistentes; a verificação não conectou a banco real.
 
-## Pendências de aceite
+## Prova de banco
 
-- Executar migration em banco controlado e verificar um evento sintético sem dados sensíveis.
-- Integrar chamadas de sucesso na transação dos comandos administrativos posteriores.
+- Branch Neon `preview` (`br-still-resonance-acf2ce9r`) confirmada pelo host direto, distinto de `production`.
+- `pnpm db:migrate`: migration aplicada com sucesso somente em `preview`.
+- Consulta de schema: `audit_events.result` existe, é obrigatório e não possui default para novas escritas.
+- Evento sintético `publication.publish`/`failure` foi inserido e lido com metadado contendo somente `errorCode`; o rollback foi confirmado por consulta posterior com contagem zero.
+- Os comandos de publicação e moderação ainda não existem; a integração de cada evento de sucesso/falha relevante permanece critério dos respectivos cortes.

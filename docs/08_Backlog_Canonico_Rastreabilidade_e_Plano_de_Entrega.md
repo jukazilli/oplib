@@ -614,7 +614,7 @@ Estado atual: lista privada, box `Publique algo em seu acervo`, composição mod
 
 ### AUD-001 — Registrar ações administrativas relevantes
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `review`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D02 §11; D07 §10 “AuditEvent” e §16; D06 §13.
 - **Objetivo:** manter trilha mínima de publicação, retirada, exclusão, destaque e moderação.
 - **Descrição:** evento com ação, entidade, resultado, admin e data, sem segredo ou conteúdo integral.
@@ -624,7 +624,7 @@ Estado atual: lista privada, box `Publique algo em seu acervo`, composição mod
 - **Testes:** `TEST-AUD-001-01` matriz de eventos; `-02` redaction.
 - **Evidência:** `EVID-AUD-001-01` eventos sintéticos saneados.
 
-Estado atual: matriz fechada de eventos, writer transacional, minimização de metadados e migration implementados. Prova em banco controlado ainda pendente; integração aos comandos ocorrerá nos respectivos cortes.
+Estado atual: matriz fechada de eventos, writer transacional, minimização de metadados e migration implementados. Migration aplicada em Neon `preview` e evento sintético comprovado com rollback. A integração de cada comando futuro permanece critério do respectivo corte; `production` não foi alterada.
 
 ## 10. Experiência pública e descoberta
 
