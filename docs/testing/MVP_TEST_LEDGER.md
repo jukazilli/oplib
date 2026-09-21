@@ -160,6 +160,8 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado`: sem `Origin` e sem Fetch Metadata, confirmar que `Referer` divergente ou inválido é recusado; `Referer` da própria origem é aceito.
 - [ ] `Preview`: em navegador legítimo, curtir e comentar normalmente; inspecionar headers e confirmar que o endurecimento não bloqueou o fluxo real.
 - [ ] `Final`: repetir tentativa cross-site controlada e conferir resposta genérica, ausência de efeito e logs sem dados privados; concluir a matriz SEC-001 de autorização, XSS, upload, payload, rate limit, dependências e WAF.
+- [ ] `CI`: confirmar que `pnpm audit --prod --audit-level high` executa com instalação congelada e impede merge quando houver alerta alto ou crítico; falha de acesso ao registro não deve ser tratada como sucesso.
+- [ ] `Final`: repetir auditoria de todas as dependências de produção, revisar os alertas moderados transitivos de `@clerk/ui` e registrar resolução ou aceite formal fundamentado; confirmar ausência de alertas altos/críticos antes da promoção.
 
 ## QUAL-001 — Acessibilidade e responsividade
 

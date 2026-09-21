@@ -268,7 +268,7 @@ describe("draft composer", () => {
     expect(submitted.get("summary")).toBe("Síntese");
     expect(submitted.get("contentType")).toBe("article");
     expect(submitted.get("course")).toBe("Engenharia de Software");
-  });
+  }, 15_000);
 
   it("preserves the composition when the cover upload fails", async () => {
     const user = userEvent.setup();

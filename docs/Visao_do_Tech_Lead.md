@@ -1,14 +1,14 @@
 # OPALIB — Visão do Tech Lead
 
-| Campo | Valor |
-|---|---|
-| Projeto | OPALIB |
-| Documento | Visão do Tech Lead |
-| Versão | 1.0.0 |
-| Estado | Aprovado — canônico |
-| Data | 20 de setembro de 2026 |
-| Responsável | Tech Lead |
-| Repositório | `jukazilli/oplib` |
+| Campo                | Valor                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Projeto              | OPALIB                                                                                                             |
+| Documento            | Visão do Tech Lead                                                                                                 |
+| Versão               | 1.0.0                                                                                                              |
+| Estado               | Aprovado — canônico                                                                                                |
+| Data                 | 20 de setembro de 2026                                                                                             |
+| Responsável          | Tech Lead                                                                                                          |
+| Repositório          | `jukazilli/oplib`                                                                                                  |
 | Método de referência | Processo de Desenvolvimento de MVP de Software com IA Assistida, commit `12c87840bcb7779e3072eb717814a7bc28c623b8` |
 
 ## 1. Finalidade
@@ -44,26 +44,26 @@ Em caso de conflito, prevalece o documento mais específico aprovado para o tema
 
 ## 4. Resumo executivo da stack
 
-| Camada | Decisão aprovada | Política de versão |
-|---|---|---|
-| Linguagem | TypeScript em modo estrito | série 5.x, versão exata no lockfile |
-| Runtime | Node.js 22 LTS | versão fixada em `.nvmrc` e `package.json` |
-| Framework | Next.js App Router | 16.3.x; usar o patch estável corrente |
-| Interface | React | 19.2.x, conforme compatibilidade do Next.js |
-| Hospedagem | Vercel | Functions no runtime Node.js com Fluid Compute |
-| Banco | Neon PostgreSQL | PostgreSQL suportado pelo Neon no projeto |
-| Acesso ao banco | Drizzle ORM + Drizzle Kit + `pg` | versões estáveis compatíveis e fixadas |
-| Autenticação administrativa | Clerk para Next.js | `@clerk/nextjs` 7.x |
-| Validação | Zod | 4.x |
-| CSS | Tailwind CSS | 4.x |
-| Componentes | shadcn/ui sobre Radix | CLI v4; componentes copiados seletivamente |
-| Ícones | Lucide React | versão estável fixada |
-| Markdown | `react-markdown`, `remark-gfm`, `rehype-sanitize` | versões estáveis fixadas; HTML bruto proibido |
-| Imagens | `next/image` + Vercel Blob público | SDK estável fixado |
-| Testes unitários/integrados | Vitest + Testing Library | versões estáveis fixadas |
-| Testes ponta a ponta | Playwright + axe-core | versões estáveis fixadas |
-| Qualidade | ESLint flat config + Prettier | versões estáveis compatíveis |
-| Gerenciador | pnpm | versão estável fixada em `packageManager` |
+| Camada                      | Decisão aprovada                                  | Política de versão                             |
+| --------------------------- | ------------------------------------------------- | ---------------------------------------------- |
+| Linguagem                   | TypeScript em modo estrito                        | série 5.x, versão exata no lockfile            |
+| Runtime                     | Node.js 22 LTS                                    | versão fixada em `.nvmrc` e `package.json`     |
+| Framework                   | Next.js App Router                                | 16.3.x; usar o patch estável corrente          |
+| Interface                   | React                                             | 19.2.x, conforme compatibilidade do Next.js    |
+| Hospedagem                  | Vercel                                            | Functions no runtime Node.js com Fluid Compute |
+| Banco                       | Neon PostgreSQL                                   | PostgreSQL suportado pelo Neon no projeto      |
+| Acesso ao banco             | Drizzle ORM + Drizzle Kit + `pg`                  | versões estáveis compatíveis e fixadas         |
+| Autenticação administrativa | Clerk para Next.js                                | `@clerk/nextjs` 7.x                            |
+| Validação                   | Zod                                               | 4.x                                            |
+| CSS                         | Tailwind CSS                                      | 4.x                                            |
+| Componentes                 | shadcn/ui sobre Radix                             | CLI v4; componentes copiados seletivamente     |
+| Ícones                      | Lucide React                                      | versão estável fixada                          |
+| Markdown                    | `react-markdown`, `remark-gfm`, `rehype-sanitize` | versões estáveis fixadas; HTML bruto proibido  |
+| Imagens                     | `next/image` + Vercel Blob público                | SDK estável fixado                             |
+| Testes unitários/integrados | Vitest + Testing Library                          | versões estáveis fixadas                       |
+| Testes ponta a ponta        | Playwright + axe-core                             | versões estáveis fixadas                       |
+| Qualidade                   | ESLint flat config + Prettier                     | versões estáveis compatíveis                   |
+| Gerenciador                 | pnpm                                              | versão estável fixada em `packageManager`      |
 
 A expressão “versão estável fixada” significa que a fundação selecionará uma versão exata, registrará essa versão no manifesto e no lockfile e impedirá atualizações automáticas de versão principal.
 
@@ -106,14 +106,14 @@ Padrões obrigatórios:
 
 ### TL-STACK-005 — Estratégia de renderização
 
-| Superfície | Estratégia |
-|---|---|
-| Início, listagens e publicação | renderização no servidor com cache editorial |
-| Busca e filtros | renderização no servidor orientada por parâmetros da URL |
-| Contador e envio de curtida | resposta dinâmica por Route Handler |
-| Lista e envio de comentários | leitura e mutação dinâmicas, sem incorporar dado privado |
-| Administração | dinâmica, autenticada e sem cache público |
-| Prévia Markdown | Client Component isolado, usando a mesma configuração do renderizador público |
+| Superfície                     | Estratégia                                                                    |
+| ------------------------------ | ----------------------------------------------------------------------------- |
+| Início, listagens e publicação | renderização no servidor com cache editorial                                  |
+| Busca e filtros                | renderização no servidor orientada por parâmetros da URL                      |
+| Contador e envio de curtida    | resposta dinâmica por Route Handler                                           |
+| Lista e envio de comentários   | leitura e mutação dinâmicas, sem incorporar dado privado                      |
+| Administração                  | dinâmica, autenticada e sem cache público                                     |
+| Prévia Markdown                | Client Component isolado, usando a mesma configuração do renderizador público |
 
 ## 7. Banco de dados e persistência
 
@@ -378,13 +378,13 @@ Sentry ou outro serviço externo não faz parte da fundação. Sua adoção exig
 
 ### TL-TEST-001 — Pirâmide pragmática
 
-| Nível | Ferramentas | Cobertura esperada |
-|---|---|---|
-| Unitário | Vitest | regras de domínio, slug, validação, Markdown, permissões e utilitários |
-| Componente | Vitest, Testing Library, jest-dom | componentes interativos e estados acessíveis |
-| Integração | Vitest + banco PostgreSQL isolado | repositórios, migrações, restrições únicas, comentários e curtidas |
-| Ponta a ponta | Playwright | leitura, busca, curtida, comentário, login admin, publicação e moderação |
-| Acessibilidade | axe-core no Playwright + verificação manual | páginas críticas, formulários, foco e navegação por teclado |
+| Nível          | Ferramentas                                 | Cobertura esperada                                                       |
+| -------------- | ------------------------------------------- | ------------------------------------------------------------------------ |
+| Unitário       | Vitest                                      | regras de domínio, slug, validação, Markdown, permissões e utilitários   |
+| Componente     | Vitest, Testing Library, jest-dom           | componentes interativos e estados acessíveis                             |
+| Integração     | Vitest + banco PostgreSQL isolado           | repositórios, migrações, restrições únicas, comentários e curtidas       |
+| Ponta a ponta  | Playwright                                  | leitura, busca, curtida, comentário, login admin, publicação e moderação |
+| Acessibilidade | axe-core no Playwright + verificação manual | páginas críticas, formulários, foco e navegação por teclado              |
 
 ### Casos críticos obrigatórios
 
@@ -430,20 +430,20 @@ Cobertura numérica não substitui cenários. Como guarda inicial, módulos de d
 
 ### TL-TOOL-003 — Scripts mínimos
 
-| Script | Responsabilidade |
-|---|---|
-| `dev` | iniciar desenvolvimento |
-| `build` | produzir build de produção |
-| `start` | executar build produzido |
-| `lint` | validar ESLint |
-| `format:check` | validar formatação |
-| `typecheck` | validar TypeScript sem emitir |
-| `test` | testes rápidos |
-| `test:integration` | testes com PostgreSQL |
-| `test:e2e` | Playwright |
-| `db:generate` | gerar migração Drizzle |
-| `db:migrate` | aplicar migrações com conexão direta |
-| `db:check` | verificar estado de schema/migração |
+| Script             | Responsabilidade                     |
+| ------------------ | ------------------------------------ |
+| `dev`              | iniciar desenvolvimento              |
+| `build`            | produzir build de produção           |
+| `start`            | executar build produzido             |
+| `lint`             | validar ESLint                       |
+| `format:check`     | validar formatação                   |
+| `typecheck`        | validar TypeScript sem emitir        |
+| `test`             | testes rápidos                       |
+| `test:integration` | testes com PostgreSQL                |
+| `test:e2e`         | Playwright                           |
+| `db:generate`      | gerar migração Drizzle               |
+| `db:migrate`       | aplicar migrações com conexão direta |
+| `db:check`         | verificar estado de schema/migração  |
 
 ### TL-TOOL-004 — CI
 
@@ -505,37 +505,37 @@ Regras:
 
 ## 22. Variáveis de ambiente
 
-| Variável | Exposição | Finalidade |
-|---|---|---|
-| `DATABASE_URL` | servidor, segredo | conexão PostgreSQL com pooling |
-| `DATABASE_URL_UNPOOLED` | CI/migração, segredo | conexão direta para migrações |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | pública | identificação do aplicativo Clerk |
-| `CLERK_SECRET_KEY` | servidor, segredo | operações seguras de autenticação |
-| `ADMIN_CLERK_USER_ID` | servidor | allowlist do único administrador |
-| `BLOB_READ_WRITE_TOKEN` | servidor, segredo | upload e remoção de capas |
-| `VISITOR_ID_PEPPER` | servidor, segredo | hash do identificador opaco de curtida |
-| `NEXT_PUBLIC_SITE_URL` | pública | URL canônica do ambiente |
+| Variável                            | Exposição            | Finalidade                             |
+| ----------------------------------- | -------------------- | -------------------------------------- |
+| `DATABASE_URL`                      | servidor, segredo    | conexão PostgreSQL com pooling         |
+| `DATABASE_URL_UNPOOLED`             | CI/migração, segredo | conexão direta para migrações          |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | pública              | identificação do aplicativo Clerk      |
+| `CLERK_SECRET_KEY`                  | servidor, segredo    | operações seguras de autenticação      |
+| `ADMIN_CLERK_USER_ID`               | servidor             | allowlist do único administrador       |
+| `BLOB_READ_WRITE_TOKEN`             | servidor, segredo    | upload e remoção de capas              |
+| `VISITOR_ID_PEPPER`                 | servidor, segredo    | hash do identificador opaco de curtida |
+| `NEXT_PUBLIC_SITE_URL`              | pública              | URL canônica do ambiente               |
 
 Um schema Zod falha cedo quando uma variável obrigatória estiver ausente ou inválida. Arquivos `.env` reais não são versionados; somente um `.env.example` sem valores secretos.
 
 ## 23. Dependências rejeitadas no MVP
 
-| Opção | Decisão | Motivo |
-|---|---|---|
-| Microserviços ou monorepo | rejeitada | complexidade sem necessidade de escala organizacional |
-| Runtime Edge como padrão | rejeitada | compatibilidade inferior com a stack escolhida sem benefício comprovado |
-| Prisma | não adotado | Drizzle oferece controle SQL e migração suficiente com menor camada para este projeto |
-| Driver Neon HTTP como padrão | não adotado | `pg` com pooling e Fluid Compute atende melhor às conexões e transações do aplicativo |
-| Neon Auth | não adotado agora | Clerk atende de forma mais direta MFA e sessão do único administrador |
-| MDX | rejeitado | permite capacidades executáveis desnecessárias ao conteúdo |
-| Editor rich text | rejeitado | requisito aprovado é Markdown simples com prévia |
-| Redux/Zustand | rejeitado | não existe estado global complexo aprovado |
-| TanStack Query/SWR | não adotado | Server Components, URL e Server Actions cobrem o fluxo inicial |
-| Redis | rejeitado | banco e Firewall são suficientes para as invariantes do MVP |
-| Busca externa | rejeitada | PostgreSQL atende ao volume esperado |
-| Sentry | adiado | observabilidade nativa será validada primeiro |
-| Tema escuro | fora do escopo | Design System aprovado é claro |
-| Neon Object Storage beta | rejeitado como núcleo | recurso beta e restrição regional |
+| Opção                        | Decisão               | Motivo                                                                                |
+| ---------------------------- | --------------------- | ------------------------------------------------------------------------------------- |
+| Microserviços ou monorepo    | rejeitada             | complexidade sem necessidade de escala organizacional                                 |
+| Runtime Edge como padrão     | rejeitada             | compatibilidade inferior com a stack escolhida sem benefício comprovado               |
+| Prisma                       | não adotado           | Drizzle oferece controle SQL e migração suficiente com menor camada para este projeto |
+| Driver Neon HTTP como padrão | não adotado           | `pg` com pooling e Fluid Compute atende melhor às conexões e transações do aplicativo |
+| Neon Auth                    | não adotado agora     | Clerk atende de forma mais direta MFA e sessão do único administrador                 |
+| MDX                          | rejeitado             | permite capacidades executáveis desnecessárias ao conteúdo                            |
+| Editor rich text             | rejeitado             | requisito aprovado é Markdown simples com prévia                                      |
+| Redux/Zustand                | rejeitado             | não existe estado global complexo aprovado                                            |
+| TanStack Query/SWR           | não adotado           | Server Components, URL e Server Actions cobrem o fluxo inicial                        |
+| Redis                        | rejeitado             | banco e Firewall são suficientes para as invariantes do MVP                           |
+| Busca externa                | rejeitada             | PostgreSQL atende ao volume esperado                                                  |
+| Sentry                       | adiado                | observabilidade nativa será validada primeiro                                         |
+| Tema escuro                  | fora do escopo        | Design System aprovado é claro                                                        |
+| Neon Object Storage beta     | rejeitado como núcleo | recurso beta e restrição regional                                                     |
 
 ## 24. Política de dependências
 
@@ -553,30 +553,30 @@ Versões principais são atualizadas em mudanças próprias, com changelog revis
 
 ## 25. Registro de decisões técnicas
 
-| ID | Decisão | Estado |
-|---|---|---|
-| TL-STACK-001 | TypeScript estrito | aprovado |
-| TL-STACK-002 | Node.js 22 LTS | aprovado |
-| TL-STACK-003 | Runtime Node.js por padrão | aprovado |
-| TL-STACK-004 | Next.js 16 App Router | aprovado |
-| TL-STACK-005 | Server-first por superfície | aprovado |
-| TL-STACK-006 | Neon PostgreSQL | aprovado |
-| TL-STACK-007 | Clerk para único administrador | aprovado |
-| TL-STACK-008 | Tailwind 4 e shadcn/ui seletivo | aprovado |
-| TL-STACK-009 | Markdown sanitizado sem HTML bruto | aprovado |
-| TL-STACK-010 | Vercel Blob público para capas | aprovado |
-| TL-STACK-011 | Cache Components explícito | aprovado |
-| TL-STACK-012 | Segurança em camadas | aprovado |
-| TL-LIB-001 | Drizzle ORM/Kit e `pg` | aprovado |
-| TL-LIB-002 | shadcn/ui com Radix | aprovado |
-| TL-LIB-003 | Lucide React | aprovado |
-| TL-LIB-004 | Newsreader e Manrope por `next/font` | aprovado |
-| TL-LIB-005 | Zod nas fronteiras | aprovado |
-| TL-TEST-001 | Vitest, Testing Library, Playwright e axe | aprovado |
-| TL-TOOL-001 | pnpm fixado | aprovado |
-| TL-TOOL-002 | ESLint e Prettier | aprovado |
-| TL-TOOL-003 | scripts canônicos | aprovado |
-| TL-TOOL-004 | CI com gates de qualidade | aprovado |
+| ID           | Decisão                                   | Estado   |
+| ------------ | ----------------------------------------- | -------- |
+| TL-STACK-001 | TypeScript estrito                        | aprovado |
+| TL-STACK-002 | Node.js 22 LTS                            | aprovado |
+| TL-STACK-003 | Runtime Node.js por padrão                | aprovado |
+| TL-STACK-004 | Next.js 16 App Router                     | aprovado |
+| TL-STACK-005 | Server-first por superfície               | aprovado |
+| TL-STACK-006 | Neon PostgreSQL                           | aprovado |
+| TL-STACK-007 | Clerk para único administrador            | aprovado |
+| TL-STACK-008 | Tailwind 4 e shadcn/ui seletivo           | aprovado |
+| TL-STACK-009 | Markdown sanitizado sem HTML bruto        | aprovado |
+| TL-STACK-010 | Vercel Blob público para capas            | aprovado |
+| TL-STACK-011 | Cache Components explícito                | aprovado |
+| TL-STACK-012 | Segurança em camadas                      | aprovado |
+| TL-LIB-001   | Drizzle ORM/Kit e `pg`                    | aprovado |
+| TL-LIB-002   | shadcn/ui com Radix                       | aprovado |
+| TL-LIB-003   | Lucide React                              | aprovado |
+| TL-LIB-004   | Newsreader e Manrope por `next/font`      | aprovado |
+| TL-LIB-005   | Zod nas fronteiras                        | aprovado |
+| TL-TEST-001  | Vitest, Testing Library, Playwright e axe | aprovado |
+| TL-TOOL-001  | pnpm fixado                               | aprovado |
+| TL-TOOL-002  | ESLint e Prettier                         | aprovado |
+| TL-TOOL-003  | scripts canônicos                         | aprovado |
+| TL-TOOL-004  | CI com gates de qualidade                 | aprovado |
 
 ## 26. Critérios de prontidão para a fundação
 
