@@ -1,27 +1,33 @@
-import { CoverUpload } from "@/app/admin/cover-upload";
-import { SignOutControl } from "@/components/admin/sign-out-control";
-import { requireAdmin } from "@/modules/identity/admin";
+import { randomUUID } from "node:crypto";
+import { unstable_rethrow } from "next/navigation";
+
+import {
+  AdminOverviewContent,
+  AdminOverviewError,
+} from "@/components/admin/admin-overview";
+import { logEvent } from "@/lib/observability/logger";
+import { getAdminOverview, type AdminOverview } from "@/modules/admin/overview";
 
 export default async function AdminPage() {
-  await requireAdmin();
+  let overview: AdminOverview | null = null;
 
-  return (
-    <div className="min-h-svh bg-background text-foreground">
-      <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-6 sm:px-8 lg:px-12">
-        <span className="font-interface text-xs font-bold tracking-[0.2em]">
-          OPALIB
-        </span>
-        <SignOutControl />
-      </header>
-      <main className="mx-auto w-full max-w-7xl px-5 py-16 sm:px-8 lg:px-12">
-        <p className="font-interface text-xs font-semibold tracking-[0.16em] text-muted-foreground uppercase">
-          Administração
-        </p>
-        <h1 className="mt-4 font-editorial text-5xl font-medium tracking-[-0.04em]">
-          Acervo
-        </h1>
-        <CoverUpload />
-      </main>
-    </div>
+  try {
+    overview = await getAdminOverview();
+  } catch (error) {
+    unstable_rethrow(error);
+    logEvent({
+      level: "error",
+      event: "admin.overview.read",
+      correlationId: randomUUID(),
+      module: "admin",
+      result: "degraded",
+      errorCode: "OVERVIEW_READ_FAILED",
+    });
+  }
+
+  return overview ? (
+    <AdminOverviewContent overview={overview} />
+  ) : (
+    <AdminOverviewError />
   );
 }

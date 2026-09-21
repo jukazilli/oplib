@@ -11,6 +11,7 @@ depends_on:
   - UX-PRINCIPLES
 visual_reference:
   - ./assets/moodboard-opalib.png
+  - ./assets/reference-threads.png
 governs:
   - visual-direction
   - design-system
@@ -23,6 +24,8 @@ governs:
 # Direção de UI e Design System — OPALIB
 
 ![Moodboard visual do OPALIB](./assets/moodboard-opalib.png)
+
+![Referência de composição editorial leve inspirada no Threads](./assets/reference-threads.png)
 
 ## 1. Objetivo
 
@@ -113,40 +116,40 @@ O moodboard deverá orientar atmosfera, cores e tratamento de superfícies. Foto
 
 ### Cores fundamentais
 
-| Token | Cor | Uso |
-|---|---:|---|
-| `background` | `#F7F8F6` | Fundo principal perolado |
-| `surface` | `#FFFFFF` | Conteúdo, formulários e navegação |
-| `surface-soft` | `#EFF3F5` | Áreas secundárias |
-| `surface-blue` | `#EAF5FA` | Destaques suaves |
-| `text-primary` | `#172432` | Texto principal azul-noturno |
-| `text-secondary` | `#596673` | Metadados e textos auxiliares |
-| `text-subtle` | `#7A858F` | Informações de menor hierarquia |
-| `border` | `#D9E1E6` | Bordas e separadores |
-| `border-strong` | `#B8C6CF` | Estados que exigem maior definição |
+| Token            |       Cor | Uso                                |
+| ---------------- | --------: | ---------------------------------- |
+| `background`     | `#F7F8F6` | Fundo principal perolado           |
+| `surface`        | `#FFFFFF` | Conteúdo, formulários e navegação  |
+| `surface-soft`   | `#EFF3F5` | Áreas secundárias                  |
+| `surface-blue`   | `#EAF5FA` | Destaques suaves                   |
+| `text-primary`   | `#172432` | Texto principal azul-noturno       |
+| `text-secondary` | `#596673` | Metadados e textos auxiliares      |
+| `text-subtle`    | `#7A858F` | Informações de menor hierarquia    |
+| `border`         | `#D9E1E6` | Bordas e separadores               |
+| `border-strong`  | `#B8C6CF` | Estados que exigem maior definição |
 
 ### Identidade
 
-| Token | Cor | Uso |
-|---|---:|---|
-| `primary` | `#326F8D` | Ações principais e links |
-| `primary-hover` | `#285B74` | Hover e ação pressionada |
-| `primary-soft` | `#DDEEF5` | Seleções e fundos suaves |
-| `opal-blue` | `#87CAE5` | Reflexo principal |
-| `opal-lilac` | `#AAA1D6` | Conteúdo interdisciplinar e detalhes |
-| `opal-sand` | `#DFC29C` | Calor humano e Educação Física |
-| `opal-mist` | `#C5D9E2` | Elementos decorativos discretos |
-| `midnight` | `#132332` | Rodapé e superfícies especiais |
+| Token           |       Cor | Uso                                  |
+| --------------- | --------: | ------------------------------------ |
+| `primary`       | `#326F8D` | Ações principais e links             |
+| `primary-hover` | `#285B74` | Hover e ação pressionada             |
+| `primary-soft`  | `#DDEEF5` | Seleções e fundos suaves             |
+| `opal-blue`     | `#87CAE5` | Reflexo principal                    |
+| `opal-lilac`    | `#AAA1D6` | Conteúdo interdisciplinar e detalhes |
+| `opal-sand`     | `#DFC29C` | Calor humano e Educação Física       |
+| `opal-mist`     | `#C5D9E2` | Elementos decorativos discretos      |
+| `midnight`      | `#132332` | Rodapé e superfícies especiais       |
 
 ### Cores semânticas
 
-| Token | Cor | Uso |
-|---|---:|---|
-| `success` | `#2E7658` | Ação concluída |
-| `warning` | `#96601F` | Atenção |
-| `danger` | `#B13A35` | Erro e exclusão |
-| `info` | `#326F8D` | Informação |
-| `focus` | `#146F9C` | Indicador de foco |
+| Token     |       Cor | Uso               |
+| --------- | --------: | ----------------- |
+| `success` | `#2E7658` | Ação concluída    |
+| `warning` | `#96601F` | Atenção           |
+| `danger`  | `#B13A35` | Erro e exclusão   |
+| `info`    | `#326F8D` | Informação        |
+| `focus`   | `#146F9C` | Indicador de foco |
 
 As combinações finais deverão passar por validação de contraste WCAG antes da implementação.
 
@@ -248,16 +251,16 @@ Blocos de código utilizarão uma fonte monoespaçada do sistema. Uma família a
 
 ## 8. Escala tipográfica inicial
 
-| Elemento | Desktop | Compacto | Fonte |
-|---|---:|---:|---|
-| Título principal | 56–64 px | 38–44 px | Newsreader |
+| Elemento             |  Desktop | Compacto | Fonte      |
+| -------------------- | -------: | -------: | ---------- |
+| Título principal     | 56–64 px | 38–44 px | Newsreader |
 | Título da publicação | 48–56 px | 34–40 px | Newsreader |
-| Título de seção | 32–40 px | 28–32 px | Newsreader |
-| Subtítulo | 24–28 px | 22–24 px | Newsreader |
-| Corpo de artigo | 19 px | 18 px | Newsreader |
-| Corpo de interface | 16 px | 16 px | Manrope |
-| Texto auxiliar | 14 px | 14 px | Manrope |
-| Rótulo | 12–13 px | 12–13 px | Manrope |
+| Título de seção      | 32–40 px | 28–32 px | Newsreader |
+| Subtítulo            | 24–28 px | 22–24 px | Newsreader |
+| Corpo de artigo      |    19 px |    18 px | Newsreader |
+| Corpo de interface   |    16 px |    16 px | Manrope    |
+| Texto auxiliar       |    14 px |    14 px | Manrope    |
+| Rótulo               | 12–13 px | 12–13 px | Manrope    |
 
 O corpo dos artigos deverá utilizar altura de linha aproximada entre `1.65` e `1.75`.
 
@@ -587,7 +590,6 @@ A administração seguirá o mesmo sistema visual, mas com prioridade maior para
 
 - visão geral;
 - publicações;
-- nova publicação;
 - categorias e tags;
 - comentários;
 - configurações essenciais;
@@ -603,7 +605,6 @@ Poderá apresentar:
 - rascunhos;
 - comentários recentes;
 - comentários ocultos;
-- ação principal “Nova publicação”.
 
 Gráficos não fazem parte do MVP.
 
@@ -635,6 +636,26 @@ Ações:
 Excluir deverá permanecer em posição secundária e exigir confirmação reforçada.
 
 ## 22. Editor Markdown
+
+### Superfície editorial integrada
+
+A criação e a gestão das publicações compartilharão a página `Publicações`. Não haverá item separado “Nova publicação” na navegação nem chamada duplicada na visão geral.
+
+A referência de redes sociais será absorvida somente no que reduz atrito para o autor:
+
+- caixa de composição no início da lista;
+- entrada de texto imediata;
+- ferramentas compactas para capa, referências e outros recursos aprovados;
+- salvamento como rascunho sem exigir preenchimento completo;
+- publicações abaixo em uma lista contínua e finita;
+- itens resumidos que podem ser expandidos para consultar ou editar;
+- estado editorial sempre explícito: rascunho, publicado ou retirado.
+
+O OPALIB não adotará feed infinito, métricas competitivas, perfis sociais, urgência, recomendação algorítmica ou mecanismos de retenção. A lista continuará sendo uma ferramenta privada de autoria e gestão editorial.
+
+Informações secundárias serão reveladas progressivamente na própria composição ou edição, sem wizard obrigatório. Publicação continuará exigindo revisão e confirmação consciente.
+
+Referência visual: `assets/reference-threads.png`, imagem fornecida pelo proprietário em 20/09/2026. A referência governa composição leve e ferramentas contextuais, não aparência, marca ou comportamento social literal.
 
 ### Desktop
 
@@ -727,6 +748,50 @@ A exclusão permanente deverá exigir confirmação explícita com trecho do com
 - editor Markdown;
 - alternância escrever/prévia;
 - mensagem de validação.
+
+#### Escolha do controle
+
+O componente será escolhido pelo contrato do campo, nunca por um padrão genérico:
+
+| Necessidade                         | Controle candidato             | Condição de uso                                                    |
+| ----------------------------------- | ------------------------------ | ------------------------------------------------------------------ |
+| texto sem vocabulário controlado    | campo de texto ou textarea     | o valor pode ser criado livremente                                 |
+| poucas opções exclusivas e estáveis | rádio ou seleção simples       | todas as opções podem ser compreendidas sem pesquisa               |
+| muitas opções exclusivas            | combobox pesquisável           | existe uma fonte controlada e somente um valor pode ser escolhido  |
+| muitas opções combináveis           | multiselect pesquisável        | a cardinalidade múltipla está aprovada                             |
+| selecionar ou criar                 | combobox com criação explícita | criação inline, permissão, validação e duplicidade foram aprovadas |
+| decisão binária independente        | checkbox ou switch             | o estado e o efeito imediato são inequívocos                       |
+
+Um placeholder não substitui rótulo. Criação inline nunca será adicionada apenas porque uma busca não encontrou resultado.
+
+### Escolha da superfície de interação
+
+| Situação                                            | Superfície preferencial                  | Evitar                                                   |
+| --------------------------------------------------- | ---------------------------------------- | -------------------------------------------------------- |
+| formulário longo com edição não linear              | tela integrada com revelação progressiva | wizard obrigatório ou uma página densa                   |
+| processo estritamente sequencial com pré-requisitos | fluxo multi-etapas                       | etapas quando a ordem não produz segurança ou clareza    |
+| tarefa principal com muitos dados                   | tela dedicada                            | diálogo grande ou rolável como página improvisada        |
+| decisão irreversível ou de grande consequência      | diálogo modal curto                      | confirmação para ação rotineira ou facilmente reversível |
+| ação reversível de consequência limitada            | ação direta com feedback e `Desfazer`    | modal de confirmação desnecessário                       |
+| escolha contextual curta                            | popover ou menu                          | esconder processo longo em superfície pequena            |
+| detalhes auxiliares sem abandonar contexto          | gaveta lateral                           | usar gaveta para a tarefa principal no celular           |
+
+### Contrato obrigatório antes do componente
+
+Antes da implementação, a especificação deverá registrar:
+
+- tarefa e resultado esperado;
+- dado, origem, cardinalidade e permissão;
+- controle e justificativa;
+- valor inicial e persistência;
+- estados padrão, foco, carregamento, vazio, sem resultado, erro, sucesso e desabilitado;
+- criar, selecionar, remover, cancelar e desfazer, quando aplicáveis;
+- validação e mensagem junto ao campo;
+- teclado, foco, leitor de tela e comportamento no celular;
+- consequência da ação e necessidade de confirmação;
+- evidência de aceite.
+
+Se qualquer decisão material estiver ausente, o componente permanece não implementável.
 
 ### Ações
 

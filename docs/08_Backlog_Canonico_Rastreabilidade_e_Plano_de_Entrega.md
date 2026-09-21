@@ -184,6 +184,20 @@ Um item só recebe `done` quando:
 - **Testes:** `TEST-DEC-004-01` autenticação com segundo fator e recuperação segura.
 - **Evidência:** `EVID-DEC-004-01` status do gate, sem códigos de recuperação.
 
+### UX-002 — Contratos de interação do fluxo editorial
+
+- **Tipo:** `decision`; **Prioridade:** `P0`; **Status:** `blocked-human`.
+- **Origem:** P-UX-018; D04 §24 “Contrato obrigatório”; D05 §12 “Gate de especificação da interface”.
+- **Objetivo:** decidir como cada campo, ação e transição da criação de publicação se comportará antes de implementar o formulário.
+- **Descrição:** produzir e aprovar os contratos da composição integrada: título, resumo, tipo, áreas, categoria, tags, curso, disciplina, data, conteúdo, capa, referências, destaque, slug, expansão/recolhimento, salvamento, saída e publicação.
+- **Critérios:** dado/origem/cardinalidade; controle justificado; pesquisa e criação; estados; validação; teclado; celular; persistência; cancelamento/recuperação e confirmação definidos para cada interação.
+- **Dependências:** ADM-001, TAX-001.
+- **Riscos:** reproduzir padrões genéricos, criar taxonomia acidental no editor, esconder decisões em componentes ou refazer a UI depois do backend.
+- **Testes:** `TEST-UX-002-01` revisão da matriz campo a campo; `-02` protótipo da composição e dos controles ambíguos; `-03` aceite desktop/celular.
+- **Evidência:** `EVID-UX-002-01` contratos e decisões aprovados pelo proprietário.
+
+Estado atual: a composição integrada a Publicações e a lista expansível estão aprovadas; campo Área e demais controles internos permanecem bloqueados para UI até refinamento e aceite humano.
+
 ## 7. Fundação — FND
 
 ### FND-001 — Proteger e preparar o repositório
@@ -412,15 +426,17 @@ Estado atual: proteção em duas camadas, matriz negativa, smoke do Preview e ac
 
 ### ADM-001 — Shell e visão geral administrativa
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D04 §§20–23; D05 §§3 e 11.
 - **Objetivo:** orientar o autor sem dashboard denso.
-- **Descrição:** navegação para Publicações, Nova publicação, Categorias e tags, Comentários e Sair; resumo de contagens e comentários recentes, sem gráficos.
-- **Critérios:** ação dominante visível; estados vazio/erro; responsivo; não cacheado publicamente.
+- **Descrição:** navegação para Publicações, Categorias e tags, Comentários e Sair; resumo de contagens e comentários recentes, sem gráficos e sem criação duplicada.
+- **Critérios:** estados vazio/erro; responsivo; não cacheado publicamente; criação aparece somente em Publicações.
 - **Dependências:** AUTH-002.
 - **Riscos:** virar dashboard genérico ou expor dados a cache.
 - **Testes:** `TEST-ADM-001-01` E2E desktop/mobile; `-02` cache headers.
 - **Evidência:** `EVID-ADM-001-01` screenshots e teste.
+
+Estado atual: shell responsivo, contagens reais, comentários recentes e estados vazio/erro aprovados no Preview; o upload de capa foi retirado da visão geral após revisão humana. Evidência encerrada em `EVID-ADM-001-01`.
 
 ### ADM-002 — Configurações essenciais do acervo
 
@@ -465,9 +481,9 @@ Estado atual: proteção em duas camadas, matriz negativa, smoke do Preview e ac
 - **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** D02 §§9–10; D05 §§12–13.
 - **Objetivo:** iniciar toda publicação como rascunho e salvar conscientemente.
-- **Descrição:** formulário editorial, estado “Alterações não salvas”, último salvamento e recuperação temporária no navegador.
+- **Descrição:** composição editorial integrada à lista de Publicações, estado “Alterações não salvas”, último salvamento e recuperação temporária no navegador.
 - **Critérios:** novo conteúdo não é público; salvar é manual; saída pendente avisa; recuperação local nunca sobrescreve versão mais nova.
-- **Dependências:** AUTH-002, ADM-001, TAX-001.
+- **Dependências:** AUTH-002, ADM-001, TAX-001, UX-002.
 - **Riscos:** perda de trabalho ou publicação acidental.
 - **Testes:** `TEST-PUB-001-01` rascunho; `-02` saída; `-03` recuperação/conflito.
 - **Evidência:** `EVID-PUB-001-01` E2E do fluxo.
@@ -549,8 +565,8 @@ Estado atual: proteção em duas camadas, matriz negativa, smoke do Preview e ac
 - **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** D02 §9; D04 §21; D05 §11.
 - **Objetivo:** encontrar rascunhos, publicados e retirados para continuar o trabalho.
-- **Descrição:** lista com busca, status, área, atualização e ações coerentes.
-- **Critérios:** filtros preservados quando útil; estados vazios; ações secundárias não competem com editar; curtidas visíveis sem identidade.
+- **Descrição:** página única com caixa de composição e lista de publicações resumidas, expansíveis para consulta ou edição, além de busca, status, área e atualização.
+- **Critérios:** sem rolagem infinita; filtros preservados quando útil; somente uma edição expandida; estados vazios; ações secundárias não competem com editar; curtidas visíveis sem identidade.
 - **Dependências:** ADM-001, PUB-001.
 - **Riscos:** ação destrutiva acidental em lista densa.
 - **Testes:** `TEST-PUB-007-01` filtros/status; `-02` responsividade e teclado.
@@ -826,7 +842,7 @@ Estado atual: `GATE-FND` aprovado para desenvolvimento e Preview por `EVID-FND-0
 
 ### GATE-EDITORIAL — Publicar e ler com segurança
 
-Exige AUTH-001, AUTH-002, ADM-001, TAX-001, PUB-001 a PUB-005, PUB-007, MED-001, AUD-001, WEB-001 e WEB-004.
+Exige AUTH-001, AUTH-002, ADM-001, UX-002, TAX-001, PUB-001 a PUB-005, PUB-007, MED-001, AUD-001, WEB-001 e WEB-004.
 
 ### GATE-DISCOVERY — Encontrar e compartilhar
 
@@ -845,7 +861,7 @@ Exige todos os gates anteriores, ADM-002, WEB-006, UX-001, QUAL-001, QUAL-002, S
 | Marco                      | Escopo                                               | Resultado verificável                    |
 | -------------------------- | ---------------------------------------------------- | ---------------------------------------- |
 | M0 — Fundação              | DEC aplicáveis + FND-001 a FND-016                   | `GATE-FND` aprovado                      |
-| M1 — Núcleo administrativo | AUTH, ADM, TAX, PUB-001 a PUB-003, MED, AUD          | rascunho seguro criado e pré-visualizado |
+| M1 — Núcleo administrativo | AUTH, ADM, UX-002, TAX, PUB-001 a PUB-003, MED, AUD  | rascunho seguro criado e pré-visualizado |
 | M2 — Publicar e ler        | PUB-004, PUB-005, PUB-007, PUB-008, WEB-001, WEB-004 | `GATE-EDITORIAL` aprovado                |
 | M3 — Descobrir             | PUB-006, WEB-002, WEB-003, WEB-005, SEO-001, SEO-002 | `GATE-DISCOVERY` aprovado                |
 | M4 — Interagir             | LIKE-001, COM-001, MOD-001 a MOD-003                 | `GATE-INTERACTIONS` aprovado             |
@@ -867,31 +883,31 @@ A interação não deve atrasar a validação do núcleo editorial, mas continua
 
 ## 15. Matriz de rastreabilidade de requisitos
 
-| Origem           | Necessidade                                         | Itens principais                             |
-| ---------------- | --------------------------------------------------- | -------------------------------------------- |
-| D02 §8.1         | home, recentes, destaques e áreas                   | WEB-002, PUB-006, TAX-001                    |
-| D02 §8.2         | organização do conteúdo                             | TAX-001, TAX-002, PUB-003, WEB-003           |
-| D02 §8.3         | estrutura da publicação                             | PUB-003, WEB-004                             |
-| D02 §8.4         | capa responsiva                                     | FND-009, MED-001, QUAL-002                   |
-| D02 §8.5         | curtida anônima irreversível                        | LIKE-001                                     |
-| D02 §8.6         | comentário imediato sem login                       | COM-001                                      |
-| D02 §8.7         | moderação                                           | MOD-001, MOD-002, MOD-003                    |
-| D02 §9           | administração                                       | AUTH-001, AUTH-002, ADM-001, PUB, TAX, MOD   |
-| D02 §10          | Markdown com preview                                | PUB-001, PUB-002                             |
-| D02 §11          | segurança                                           | FND-013, AUD-001, SEC-001                    |
-| D02 §12          | descoberta e compartilhamento                       | WEB-003, WEB-005, SEO-001, SEO-002           |
-| D03 §7 Jornada 1 | descobrir e ler                                     | WEB-002, WEB-003, WEB-004                    |
-| D03 §7 Jornada 2 | publicar conhecimento                               | AUTH, PUB, MED, TAX                          |
-| D03 §7 Jornada 3 | interagir sem cadastro                              | LIKE-001, COM-001                            |
-| D03 §7 Jornada 4 | moderar                                             | MOD-001 a MOD-003                            |
-| PUX              | leitura, baixa densidade, feedback e acessibilidade | WEB, UX-001, QUAL-001                        |
-| D04              | identidade “Opala Lunar Editorial”                  | FND-003, WEB-001, ADM-001, QUAL-001          |
-| D05 §§4–9        | fluxos públicos e estados                           | WEB-002 a WEB-005, LIKE-001, COM-001, UX-001 |
-| D05 §§10–21      | fluxos administrativos                              | AUTH, ADM, PUB, MED, TAX, MOD                |
-| D06              | qualidade de engenharia                             | todos FND, QUAL-002, SEC-001                 |
-| D07 §§9–19       | módulos e consistência                              | TAX, PUB, WEB, LIKE, COM, MOD, AUD           |
-| TL               | stack e bibliotecas                                 | FND-002 a FND-014                            |
-| INF §24          | plano de Fundação                                   | FND-001 a FND-016                            |
+| Origem           | Necessidade                                      | Itens principais                             |
+| ---------------- | ------------------------------------------------ | -------------------------------------------- |
+| D02 §8.1         | home, recentes, destaques e áreas                | WEB-002, PUB-006, TAX-001                    |
+| D02 §8.2         | organização do conteúdo                          | TAX-001, TAX-002, PUB-003, WEB-003           |
+| D02 §8.3         | estrutura da publicação                          | PUB-003, WEB-004                             |
+| D02 §8.4         | capa responsiva                                  | FND-009, MED-001, QUAL-002                   |
+| D02 §8.5         | curtida anônima irreversível                     | LIKE-001                                     |
+| D02 §8.6         | comentário imediato sem login                    | COM-001                                      |
+| D02 §8.7         | moderação                                        | MOD-001, MOD-002, MOD-003                    |
+| D02 §9           | administração                                    | AUTH-001, AUTH-002, ADM-001, PUB, TAX, MOD   |
+| D02 §10          | Markdown com preview                             | PUB-001, PUB-002                             |
+| D02 §11          | segurança                                        | FND-013, AUD-001, SEC-001                    |
+| D02 §12          | descoberta e compartilhamento                    | WEB-003, WEB-005, SEO-001, SEO-002           |
+| D03 §7 Jornada 1 | descobrir e ler                                  | WEB-002, WEB-003, WEB-004                    |
+| D03 §7 Jornada 2 | publicar conhecimento                            | AUTH, PUB, MED, TAX                          |
+| D03 §7 Jornada 3 | interagir sem cadastro                           | LIKE-001, COM-001                            |
+| D03 §7 Jornada 4 | moderar                                          | MOD-001 a MOD-003                            |
+| PUX              | princípios, contratos, feedback e acessibilidade | WEB, UX-001, UX-002, QUAL-001                |
+| D04              | identidade “Opala Lunar Editorial”               | FND-003, WEB-001, ADM-001, QUAL-001          |
+| D05 §§4–9        | fluxos públicos e estados                        | WEB-002 a WEB-005, LIKE-001, COM-001, UX-001 |
+| D05 §§10–21      | fluxos administrativos                           | AUTH, ADM, PUB, MED, TAX, MOD                |
+| D06              | qualidade de engenharia                          | todos FND, QUAL-002, SEC-001                 |
+| D07 §§9–19       | módulos e consistência                           | TAX, PUB, WEB, LIKE, COM, MOD, AUD           |
+| TL               | stack e bibliotecas                              | FND-002 a FND-014                            |
+| INF §24          | plano de Fundação                                | FND-001 a FND-016                            |
 
 ## 16. Cobertura dos módulos arquiteturais
 

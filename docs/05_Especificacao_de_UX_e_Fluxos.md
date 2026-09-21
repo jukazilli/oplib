@@ -92,7 +92,6 @@ A administração não será divulgada na navegação pública.
 
 - Visão geral;
 - Publicações;
-- Nova publicação;
 - Categorias e tags;
 - Comentários;
 - Configurações essenciais;
@@ -394,13 +393,44 @@ A tela deverá apresentar apenas informações úteis para continuar o trabalho:
 - publicações retiradas do ar;
 - comentários recentes;
 - comentários ocultos;
-- ação “Nova publicação”.
 
 Não haverá gráficos no MVP.
 
 ## 12. Criação de publicação
 
 Toda nova publicação começará como rascunho.
+
+### Gate de especificação da interface
+
+O formulário não será implementado diretamente a partir da lista de campos. Antes do código, `UX-002` deverá aprovar um contrato de interação por campo e por ação.
+
+Cada contrato responderá:
+
+1. qual dado está sendo editado e de onde vêm suas opções;
+2. se aceita nenhum, um ou vários valores;
+3. se permite pesquisar, criar, editar ou remover opções;
+4. qual controle será usado e por quê;
+5. quais são os estados vazio, sem resultado, carregando, erro e desabilitado;
+6. como funcionam teclado, foco, leitor de tela e celular;
+7. quando o dado é validado e salvo;
+8. como cancelar, voltar, corrigir ou recuperar.
+
+Nenhuma decisão ausente será preenchida durante a implementação por convenção do framework ou preferência do agente.
+
+#### Lacuna conhecida — campo Área
+
+Já está decidido que uma publicação poderá possuir uma ou mais áreas cadastradas e que pelo menos uma será obrigatória para publicar. Ainda precisam de aprovação antes da UI:
+
+- seleção simples ou múltipla durante o rascunho;
+- lista visível ou combobox pesquisável;
+- quantidade de opções que ativa pesquisa;
+- possibilidade ou proibição de criar uma área sem sair do editor;
+- comportamento quando a busca não encontra resultado;
+- remoção e troca de áreas selecionadas;
+- apresentação no celular e navegação por teclado;
+- relação entre criação inline e a administração de taxonomia.
+
+Até essas decisões serem fechadas em `UX-002`, o campo Área não possui contrato suficiente para implementação.
 
 ### Campos obrigatórios para publicar
 
@@ -430,16 +460,28 @@ Toda nova publicação começará como rascunho.
 
 ### Fluxo
 
-1. O autor seleciona “Nova publicação”.
-2. O sistema cria o contexto de um novo rascunho.
-3. O autor preenche os metadados.
-4. Escreve em Markdown.
-5. Consulta a prévia.
-6. Salva o rascunho.
-7. Corrige eventuais validações.
-8. Seleciona “Publicar”.
-9. Confirma a publicação.
-10. O sistema apresenta o endereço público.
+1. O autor abre `Publicações`.
+2. A caixa de composição aparece antes da lista de publicações.
+3. Ao iniciar o texto, o sistema cria o contexto de um rascunho.
+4. Ferramentas contextuais permitem adicionar capa, referências e demais recursos aprovados.
+5. Metadados obrigatórios para publicar são revelados conforme necessário, sem impedir um rascunho incompleto.
+6. O rascunho pode ser salvo e recolhido na própria lista.
+7. Ao selecionar uma publicação resumida, o autor expande seu conteúdo para consultar ou editar.
+8. A prévia e as validações ficam disponíveis antes da mudança de estado.
+9. Publicar exige confirmação explícita.
+10. O sistema apresenta o endereço público e mantém o item na lista com estado atualizado.
+
+### Comportamento da composição integrada
+
+- a entrada inicial privilegia título provisório ou conteúdo, conforme decisão de `UX-002`;
+- ferramentas usam ícones com nome acessível e tooltip curto quando o símbolo não for inequívoco;
+- capa, referências e metadados abrem controles contextuais sem transformar a composição em modal extenso;
+- a lista é paginada ou carregada por ação explícita; não haverá rolagem infinita;
+- itens recolhidos exibem somente título, resumo curto, estado, área e atualização;
+- somente um item deve permanecer em edição expandida por vez;
+- recolher ou trocar de item preserva o rascunho e respeita o aviso de alterações não salvas;
+- filtros e busca pertencem à mesma página, mas não competem com a composição;
+- no celular, composição e item expandido ocupam a largura disponível, com ferramentas roláveis ou agrupadas sem esconder ações essenciais.
 
 Mensagem de sucesso:
 
