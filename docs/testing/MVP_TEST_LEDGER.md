@@ -79,3 +79,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Preview`: inspecionar HTML com bot limitado e confirmar metadados no `head`.
 - [ ] `Preview`: validar card com capa e fallback institucional, incluindo texto alternativo e dimensões.
 - [ ] `Final`: confirmar a origem canônica definitiva antes da publicação em Production.
+
+## WEB-005 — Compartilhar publicação
+
+- [ ] `Automatizado/Preview`: confirmar payload de título, resumo e URL na Web Share API.
+- [ ] `Automatizado/Preview`: sem Web Share API, confirmar cópia da URL canônica e mensagem `Link copiado`.
+- [ ] `Automatizado`: confirmar que cancelamento nativo não apresenta erro.
+- [ ] `Automatizado/Preview`: bloquear clipboard e confirmar orientação para cópia pela barra do navegador.
+- [ ] `Final`: testar compartilhamento em celular compatível e desktop sem suporte nativo.
+- [ ] `Final`: confirmar que o link recebido abre a mesma publicação pública e não uma URL de Preview.

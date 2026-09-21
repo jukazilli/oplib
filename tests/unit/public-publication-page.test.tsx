@@ -68,7 +68,10 @@ describe("public publication page", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Virtualização")).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /curtir|comentar|compartilhar/i }),
+      screen.getByRole("button", { name: "Compartilhar" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /curtir|comentar/i }),
     ).not.toBeInTheDocument();
   });
 

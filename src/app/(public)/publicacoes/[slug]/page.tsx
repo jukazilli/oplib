@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 
 import { MarkdownContent } from "@/components/editor/markdown-content";
+import { ShareAction } from "@/components/editorial/share-action";
+import { getSiteUrl } from "@/lib/seo/metadata";
 import { getPublicPublicationBySlug } from "@/modules/publishing/draft-repository";
 import { estimateReadingMinutes } from "@/modules/publishing/metadata";
 
@@ -188,6 +190,15 @@ export default async function PublicationPage({
               ))}
           </footer>
         ) : null}
+
+        <ShareAction
+          title={publication.title}
+          text={publication.summary}
+          url={new URL(
+            `/publicacoes/${publication.slug}`,
+            getSiteUrl(),
+          ).toString()}
+        />
       </div>
     </article>
   );

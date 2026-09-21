@@ -692,7 +692,7 @@ Estado atual: consulta pública protegida por status, rota por slug, hierarquia 
 
 ### WEB-005 — Compartilhar publicação
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §12; D05 §7.
 - **Objetivo:** compartilhar o endereço permanente sem login.
 - **Descrição:** Web Share API quando suportada e cópia de link como fallback.
@@ -701,6 +701,8 @@ Estado atual: consulta pública protegida por status, rota por slug, hierarquia 
 - **Riscos:** compartilhar Preview ou URL transitória.
 - **Testes:** `TEST-WEB-005-01` share suportado; `-02` clipboard; `-03` falha.
 - **Evidência:** `EVID-WEB-005-01` E2E compatível.
+
+Estado atual: Web Share API, fallback por clipboard, confirmação, cancelamento neutro, erro recuperável e URL canônica implementados. Suíte local aprovada; dispositivos e navegadores reais permanecem pendentes no Preview/final.
 
 ### WEB-006 — Sobre e Política de Privacidade
 
