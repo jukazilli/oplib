@@ -9,8 +9,10 @@ import { adminAuthorizationResponse } from "@/modules/identity/authorization";
 import {
   ALLOWED_COVER_TYPES,
   detectCoverType,
+  isManagedCoverPathname,
   MAX_COVER_BYTES,
 } from "@/modules/media/cover-policy";
+import { cleanupDetachedCover } from "@/modules/media/covers";
 
 export async function POST(request: Request) {
   try {
@@ -21,15 +23,7 @@ export async function POST(request: Request) {
       onBeforeGenerateToken: async (pathname) => {
         await requireAdminCommand();
         const env = mediaEnvSchema.parse(process.env);
-        const escapedPrefix = env.BLOB_COVERS_PREFIX.replace(
-          /[.*+?^${}()|[\]\\]/g,
-          "\\$&",
-        );
-        const immutablePath = new RegExp(
-          `^${escapedPrefix}/[0-9a-f-]{36}\\.(?:jpg|png|webp|avif)$`,
-        );
-
-        if (!immutablePath.test(pathname)) {
+        if (!isManagedCoverPathname(env.BLOB_COVERS_PREFIX, pathname)) {
           throw new Error("Caminho de capa inválido.");
         }
 
@@ -70,6 +64,44 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       { error: "Não foi possível enviar a capa." },
+      { status: 400 },
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    await requireAdminCommand();
+    const { pathname } = await readLimitedJson<{ pathname?: string }>(request);
+    const env = mediaEnvSchema.parse(process.env);
+    if (
+      !pathname ||
+      !isManagedCoverPathname(env.BLOB_COVERS_PREFIX, pathname)
+    ) {
+      return NextResponse.json({ error: "Capa inválida." }, { status: 400 });
+    }
+    await cleanupDetachedCover(pathname);
+    return NextResponse.json({ deleted: true });
+  } catch (error) {
+    const authorizationResponse = adminAuthorizationResponse(error);
+    if (authorizationResponse) return authorizationResponse;
+    if (error instanceof PayloadTooLargeError) {
+      return NextResponse.json(
+        { error: "A requisição excede o limite permitido." },
+        { status: 413 },
+      );
+    }
+    if (
+      error instanceof Error &&
+      error.message.includes("ainda está vinculada")
+    ) {
+      return NextResponse.json(
+        { error: "A capa ainda está em uso." },
+        { status: 409 },
+      );
+    }
+    return NextResponse.json(
+      { error: "Não foi possível remover a capa." },
       { status: 400 },
     );
   }

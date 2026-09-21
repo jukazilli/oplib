@@ -19,6 +19,13 @@ export class CoverValidationError extends Error {
   }
 }
 
+export function isManagedCoverPathname(prefix: string, pathname: string) {
+  const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(
+    `^${escapedPrefix}/[0-9a-f-]{36}\\.(?:jpg|png|webp|avif)$`,
+  ).test(pathname);
+}
+
 function startsWith(bytes: Uint8Array, signature: number[]) {
   return signature.every((byte, index) => bytes[index] === byte);
 }

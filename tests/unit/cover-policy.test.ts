@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   assertCoverCanBeDeleted,
   CoverValidationError,
+  isManagedCoverPathname,
   MAX_COVER_BYTES,
   validateCoverFile,
 } from "@/modules/media/cover-policy";
@@ -48,5 +49,20 @@ describe("cover policy", () => {
   it("prevents deleting a cover that is still referenced", () => {
     expect(() => assertCoverCanBeDeleted(true)).toThrow("ainda está vinculada");
     expect(() => assertCoverCanBeDeleted(false)).not.toThrow();
+  });
+
+  it("accepts only immutable managed cover pathnames", () => {
+    expect(
+      isManagedCoverPathname(
+        "covers/preview",
+        "covers/preview/10000000-0000-4000-8000-000000000001.webp",
+      ),
+    ).toBe(true);
+    expect(
+      isManagedCoverPathname("covers/preview", "covers/preview/../other.webp"),
+    ).toBe(false);
+    expect(
+      isManagedCoverPathname("covers/preview", "covers/production/file.webp"),
+    ).toBe(false);
   });
 });

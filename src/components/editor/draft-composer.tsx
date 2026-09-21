@@ -23,7 +23,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { MarkdownContent } from "@/components/editor/markdown-content";
 import { adminSignInUrl } from "@/modules/identity/redirect";
-import { validateCoverFile } from "@/modules/media/cover-policy";
+import {
+  CoverValidationError,
+  validateCoverFile,
+} from "@/modules/media/cover-policy";
 import type {
   DraftCover,
   DraftReference,
@@ -119,6 +122,9 @@ export function DraftComposer({
   const [recovery, setRecovery] = useState<LocalDraft | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
+  const persistedCoverPathnameRef = useRef(
+    initialDraft?.cover?.pathname ?? null,
+  );
   const classificationRef = useRef<HTMLDivElement>(null);
   const classificationToolbarRef = useRef<HTMLButtonElement>(null);
 
@@ -351,6 +357,8 @@ export function DraftComposer({
         setId(result.draft.id);
         setVersion(result.draft.updatedAt);
         setSlug(result.draft.slug);
+        persistedCoverPathnameRef.current =
+          result.draft.cover?.pathname ?? null;
         setDirty(false);
         setRecovery(null);
         setMessage(
@@ -420,6 +428,32 @@ export function DraftComposer({
     markChanged();
   }
 
+  async function cleanupTransientCover(candidate: DraftCover | null) {
+    if (!candidate || candidate.pathname === persistedCoverPathnameRef.current)
+      return;
+    try {
+      await fetch("/api/admin/covers", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pathname: candidate.pathname }),
+      });
+    } catch {
+      // Cleanup remains retryable server-side and must not discard the editor.
+    }
+  }
+
+  async function coverDimensions(file: File) {
+    if (typeof createImageBitmap !== "function") return null;
+    try {
+      const bitmap = await createImageBitmap(file);
+      const dimensions = { width: bitmap.width, height: bitmap.height };
+      bitmap.close();
+      return dimensions;
+    } catch {
+      return null;
+    }
+  }
+
   async function attachCover(file: File) {
     setIsUploading(true);
     setMessage("Enviando capa…");
@@ -440,26 +474,29 @@ export function DraftComposer({
       }
       if (!pathnameResponse.ok || !prepared.pathname)
         throw new Error(prepared.error ?? "Não foi possível preparar o envio.");
+      const previousCover = cover;
       const blob = await upload(prepared.pathname, file, {
         access: "public",
         contentType: file.type,
         handleUploadUrl: "/api/admin/covers",
       });
+      const dimensions = await coverDimensions(file);
       setCover({
         pathname: blob.pathname,
         url: blob.url,
         altText: "",
         contentType: file.type,
         sizeBytes: file.size,
-        width: null,
-        height: null,
+        width: dimensions?.width ?? null,
+        height: dimensions?.height ?? null,
       });
+      void cleanupTransientCover(previousCover);
       markChanged("Capa anexada. Descreva a imagem antes de salvar.");
     } catch (error) {
       setMessage(
-        error instanceof Error
+        error instanceof CoverValidationError
           ? error.message
-          : "Não foi possível enviar a capa.",
+          : "Não foi possível enviar a imagem. A publicação ainda pode ser salva sem capa.",
       );
     } finally {
       setIsUploading(false);
@@ -477,6 +514,7 @@ export function DraftComposer({
     window.localStorage.removeItem(key);
     window.localStorage.removeItem(newDraftKey);
     const intent = discardIntent;
+    void cleanupTransientCover(cover);
     setDiscardIntent(null);
     setDirty(false);
     if (intent.kind === "navigate") window.location.assign(intent.href);
@@ -694,6 +732,7 @@ export function DraftComposer({
                       <button
                         type="button"
                         onClick={() => {
+                          void cleanupTransientCover(cover);
                           setCover(null);
                           markChanged("Capa removida.");
                         }}

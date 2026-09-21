@@ -538,7 +538,7 @@ Estado atual: metadados, áreas e referências foram integrados ao rascunho e à
 
 ### MED-001 — Enviar, substituir e remover capa
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `review`.
 - **Origem:** D02 §8.4; D05 §19; D07 §19; TL §13.
 - **Objetivo:** associar uma capa responsiva opcional sem arriscar o conteúdo editorial.
 - **Descrição:** upload autenticado, preview, alt obrigatório, substituição e remoção; falha não apaga o editor.
@@ -547,6 +547,8 @@ Estado atual: metadados, áreas e referências foram integrados ao rascunho e à
 - **Riscos:** arquivo malicioso, capa órfã ou lentidão.
 - **Testes:** `TEST-MED-001-01` fluxo válido; `-02` tipo/tamanho; `-03` falha do Blob.
 - **Evidência:** `EVID-MED-001-01` E2E e inspeção responsiva.
+
+Estado atual: upload autenticado, validação em duas camadas, prévia, texto alternativo, substituição, remoção e limpeza de objetos desvinculados integrados ao composer. Aguarda inspeção autenticada no Preview.
 
 ### PUB-004 — Publicar e atualizar conteúdo público
 

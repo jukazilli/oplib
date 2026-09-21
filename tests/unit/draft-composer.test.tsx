@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
   refresh: vi.fn(),
   save: vi.fn(),
+  upload: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
@@ -15,6 +16,7 @@ vi.mock("next/navigation", () => ({
 vi.mock("@/app/admin/publicacoes/actions", () => ({
   saveDraftAction: mocks.save,
 }));
+vi.mock("@vercel/blob/client", () => ({ upload: mocks.upload }));
 
 import { DraftComposer } from "@/components/editor/draft-composer";
 
@@ -23,9 +25,14 @@ beforeEach(() => {
   mocks.replace.mockReset();
   mocks.refresh.mockReset();
   mocks.save.mockReset();
+  mocks.upload.mockReset();
+  vi.stubGlobal("fetch", vi.fn());
 });
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 
 describe("draft composer", () => {
   it("starts with the two approved creation fields", () => {
@@ -178,6 +185,44 @@ describe("draft composer", () => {
     expect(submitted.get("summary")).toBe("Síntese");
     expect(submitted.get("contentType")).toBe("article");
     expect(submitted.get("course")).toBe("Engenharia de Software");
+  });
+
+  it("preserves the composition when the cover upload fails", async () => {
+    const user = userEvent.setup();
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ pathname: "covers/new.png" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    mocks.upload.mockRejectedValue(new Error("storage unavailable"));
+    render(<DraftComposer initialDraft={null} />);
+
+    await user.type(screen.getByRole("textbox", { name: "Título" }), "Artigo");
+    await user.type(
+      screen.getByRole("textbox", { name: "Conteúdo" }),
+      "Texto preservado",
+    );
+    await user.upload(
+      screen.getByLabelText("Selecionar imagem de capa"),
+      new File(
+        [new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])],
+        "capa.png",
+        { type: "image/png" },
+      ),
+    );
+
+    expect(
+      await screen.findByText(
+        "Não foi possível enviar a imagem. A publicação ainda pode ser salva sem capa.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Título" })).toHaveValue(
+      "Artigo",
+    );
+    expect(screen.getByRole("textbox", { name: "Conteúdo" })).toHaveValue(
+      "Texto preservado",
+    );
   });
 
   it("uses the product dialog before discarding unsaved changes", async () => {
