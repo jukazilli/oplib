@@ -40,6 +40,88 @@ export type PublicSearchResult = {
 
 const PAGE_SIZE = 9;
 
+const publicSummarySelection = {
+  id: posts.id,
+  slug: posts.slug,
+  title: posts.title,
+  summary: posts.summary,
+  markdown: posts.markdown,
+  contentType: posts.contentType,
+  publishedAt: posts.publishedAt,
+  coverUrl: coverAssets.url,
+  coverAltText: coverAssets.altText,
+  areaNames: sql<string[]>`coalesce((
+    select array_agg(${knowledgeAreas.name} order by ${knowledgeAreas.name})
+    from ${postKnowledgeAreas}
+    inner join ${knowledgeAreas} on ${knowledgeAreas.id} = ${postKnowledgeAreas.knowledgeAreaId}
+    where ${postKnowledgeAreas.postId} = ${posts.id}
+  ), array[]::varchar[])`,
+  categoryName: sql<string>`coalesce((
+    select ${categories.name}
+    from ${postCategories}
+    inner join ${categories} on ${categories.id} = ${postCategories.categoryId}
+    where ${postCategories.postId} = ${posts.id}
+    limit 1
+  ), '')`,
+  tagNames: sql<string[]>`coalesce((
+    select array_agg(${tags.name} order by ${tags.name})
+    from ${postTags}
+    inner join ${tags} on ${tags.id} = ${postTags.tagId}
+    where ${postTags.postId} = ${posts.id}
+  ), array[]::varchar[])`,
+};
+
+function mapPublicSummary(
+  row: typeof publicSummarySelection extends Record<string, unknown>
+    ? {
+        id: string;
+        slug: string;
+        title: string;
+        summary: string;
+        markdown: string;
+        contentType: (typeof contentTypeValues)[number] | null;
+        publishedAt: Date | null;
+        coverUrl: string | null;
+        coverAltText: string | null;
+        areaNames: string[];
+        categoryName: string;
+        tagNames: string[];
+      }
+    : never,
+): PublicPublicationSummary {
+  if (!row.contentType || !row.publishedAt)
+    throw new Error("Published post violates database constraints.");
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    summary: row.summary,
+    markdown: row.markdown,
+    contentType: row.contentType,
+    publishedAt: row.publishedAt,
+    cover:
+      row.coverUrl && row.coverAltText
+        ? { url: row.coverUrl, altText: row.coverAltText }
+        : null,
+    areaNames: row.areaNames,
+    categoryName: row.categoryName,
+    tagNames: row.tagNames,
+  };
+}
+
+export async function listFeaturedPublications(database?: Database) {
+  await connection();
+  const db = database ?? getDatabase();
+  const rows = await db
+    .select(publicSummarySelection)
+    .from(posts)
+    .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
+    .where(and(eq(posts.status, "published"), eq(posts.featured, true)))
+    .orderBy(desc(posts.publishedAt), desc(posts.id))
+    .limit(4);
+  return rows.map(mapPublicSummary);
+}
+
 export async function searchPublications(
   search: PublicSearch,
   database?: Database,
@@ -90,36 +172,7 @@ export async function searchPublications(
   const page = Math.min(search.pagina, pageCount);
   const direction = search.ordem === "antigas" ? asc : desc;
   const rows = await db
-    .select({
-      id: posts.id,
-      slug: posts.slug,
-      title: posts.title,
-      summary: posts.summary,
-      markdown: posts.markdown,
-      contentType: posts.contentType,
-      publishedAt: posts.publishedAt,
-      coverUrl: coverAssets.url,
-      coverAltText: coverAssets.altText,
-      areaNames: sql<string[]>`coalesce((
-        select array_agg(${knowledgeAreas.name} order by ${knowledgeAreas.name})
-        from ${postKnowledgeAreas}
-        inner join ${knowledgeAreas} on ${knowledgeAreas.id} = ${postKnowledgeAreas.knowledgeAreaId}
-        where ${postKnowledgeAreas.postId} = ${posts.id}
-      ), array[]::varchar[])`,
-      categoryName: sql<string>`coalesce((
-        select ${categories.name}
-        from ${postCategories}
-        inner join ${categories} on ${categories.id} = ${postCategories.categoryId}
-        where ${postCategories.postId} = ${posts.id}
-        limit 1
-      ), '')`,
-      tagNames: sql<string[]>`coalesce((
-        select array_agg(${tags.name} order by ${tags.name})
-        from ${postTags}
-        inner join ${tags} on ${tags.id} = ${postTags.tagId}
-        where ${postTags.postId} = ${posts.id}
-      ), array[]::varchar[])`,
-    })
+    .select(publicSummarySelection)
     .from(posts)
     .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
     .where(where)
@@ -127,26 +180,7 @@ export async function searchPublications(
     .limit(PAGE_SIZE)
     .offset((page - 1) * PAGE_SIZE);
 
-  const items = rows.map((row): PublicPublicationSummary => {
-    if (!row.contentType || !row.publishedAt)
-      throw new Error("Published post violates database constraints.");
-    return {
-      id: row.id,
-      slug: row.slug,
-      title: row.title,
-      summary: row.summary,
-      markdown: row.markdown,
-      contentType: row.contentType,
-      publishedAt: row.publishedAt,
-      cover:
-        row.coverUrl && row.coverAltText
-          ? { url: row.coverUrl, altText: row.coverAltText }
-          : null,
-      areaNames: row.areaNames,
-      categoryName: row.categoryName,
-      tagNames: row.tagNames,
-    };
-  });
+  const items = rows.map(mapPublicSummary);
 
   return { items, total, page, pageCount };
 }

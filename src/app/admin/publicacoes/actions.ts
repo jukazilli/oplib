@@ -8,6 +8,7 @@ import { logEvent } from "@/lib/observability/logger";
 import {
   parseDraftInput,
   parsePublishInput,
+  publicationFeatureActionSchema,
   publicationStatusActionSchema,
 } from "@/modules/publishing/draft-domain";
 import {
@@ -15,6 +16,7 @@ import {
   getAdminPublicationById,
   getDraftById,
   publishPublication,
+  setPublicationFeatured,
   transitionPublicationStatus,
   updateDraft,
   type DraftRecord,
@@ -23,6 +25,11 @@ import {
 
 export type PublicationStatusActionResult =
   | { status: "success"; publication: SerializedDraft; message: string }
+  | { status: "conflict"; message: string }
+  | { status: "error"; message: string };
+
+export type PublicationFeatureActionResult =
+  | { status: "success"; message: string }
   | { status: "conflict"; message: string }
   | { status: "error"; message: string };
 
@@ -219,6 +226,56 @@ export async function changePublicationStatusAction(
     return {
       status: "error",
       message: "Não foi possível alterar a publicação. Tente novamente.",
+    };
+  }
+}
+
+export async function changePublicationFeatureAction(
+  input: unknown,
+): Promise<PublicationFeatureActionResult> {
+  const { userId: administratorId } = await requireAdminCommand();
+  const parsed = publicationFeatureActionSchema.safeParse(input);
+  if (!parsed.success) return { status: "error", message: "Ação inválida." };
+
+  try {
+    const publication = await setPublicationFeatured(
+      parsed.data.id,
+      new Date(parsed.data.version),
+      parsed.data.featured,
+      administratorId,
+    );
+    if (!publication)
+      return {
+        status: "conflict",
+        message:
+          "Esta publicação mudou ou não está pública. Recarregue antes de tentar novamente.",
+      };
+
+    try {
+      revalidatePath("/admin");
+      revalidatePath("/admin/publicacoes");
+      revalidatePath("/");
+    } catch {
+      logEvent({
+        level: "error",
+        event: "publishing.cache_invalidation",
+        correlationId: randomUUID(),
+        module: "publishing",
+        result: "retry_required",
+        errorCode: "CACHE_INVALIDATION_FAILED",
+      });
+    }
+
+    return {
+      status: "success",
+      message: parsed.data.featured
+        ? "Publicação destacada."
+        : "Destaque removido.",
+    };
+  } catch {
+    return {
+      status: "error",
+      message: "Não foi possível alterar o destaque. Tente novamente.",
     };
   }
 }

@@ -8,6 +8,12 @@ export const publicationStatusActionSchema = z.object({
   intent: z.enum(["withdraw", "republish"]),
 });
 
+export const publicationFeatureActionSchema = z.object({
+  id: draftIdSchema,
+  version: z.iso.datetime(),
+  featured: z.boolean(),
+});
+
 export const contentTypeValues = [
   "academic_work",
   "article",

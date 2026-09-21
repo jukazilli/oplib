@@ -85,6 +85,7 @@ export type DraftRecord = {
 
 export type AdminPublication = DraftRecord & {
   status: "draft" | "published" | "withdrawn";
+  featured: boolean;
 };
 
 export type PublicPublication = DraftRecord & {
@@ -227,13 +228,21 @@ export async function getAdminPublicationById(
   await connection();
   const db = database ?? getDatabase();
   const rows = await db
-    .select({ ...draftSelection, status: posts.status })
+    .select({
+      ...draftSelection,
+      status: posts.status,
+      featured: posts.featured,
+    })
     .from(posts)
     .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
     .where(eq(posts.id, id))
     .limit(1);
   return rows[0]
-    ? { ...(await enrichDraft(rows[0], db)), status: rows[0].status }
+    ? {
+        ...(await enrichDraft(rows[0], db)),
+        status: rows[0].status,
+        featured: rows[0].featured,
+      }
     : null;
 }
 
@@ -244,6 +253,7 @@ export async function listAdminPublications(database?: Database) {
     .select({
       ...draftSelection,
       status: posts.status,
+      featured: posts.featured,
     })
     .from(posts)
     .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
@@ -252,6 +262,7 @@ export async function listAdminPublications(database?: Database) {
     rows.map(async (row) => ({
       ...(await enrichDraft(row, db)),
       status: row.status,
+      featured: row.featured,
     })),
   );
 }
@@ -611,6 +622,42 @@ export async function transitionPublicationStatus(
           intent === "withdraw"
             ? "publication.withdraw"
             : "publication.republish",
+        result: "success",
+        entityId: id,
+      },
+      tx,
+    );
+    return true;
+  });
+  return changed ? getAdminPublicationById(id, db) : null;
+}
+
+/** Eligibility, optimistic version, and audit event commit together. */
+export async function setPublicationFeatured(
+  id: string,
+  version: Date,
+  featured: boolean,
+  administratorId: string,
+  database?: Database,
+): Promise<AdminPublication | null> {
+  const db = database ?? getDatabase();
+  const changed = await db.transaction(async (tx) => {
+    const rows = await tx
+      .update(posts)
+      .set({ featured, updatedAt: new Date() })
+      .where(
+        and(
+          eq(posts.id, id),
+          eq(posts.status, "published"),
+          eq(posts.updatedAt, version),
+        ),
+      )
+      .returning({ id: posts.id });
+    if (!rows[0]) return false;
+    await recordAdminAuditEvent(
+      administratorId,
+      {
+        action: "publication.feature",
         result: "success",
         entityId: id,
       },

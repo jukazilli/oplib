@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   update: vi.fn(),
   publish: vi.fn(),
   transitionStatus: vi.fn(),
+  setFeatured: vi.fn(),
   revalidate: vi.fn(),
   logEvent: vi.fn(),
 }));
@@ -24,9 +25,11 @@ vi.mock("@/modules/publishing/draft-repository", () => ({
   updateDraft: mocks.update,
   publishPublication: mocks.publish,
   transitionPublicationStatus: mocks.transitionStatus,
+  setPublicationFeatured: mocks.setFeatured,
 }));
 
 import {
+  changePublicationFeatureAction,
   changePublicationStatusAction,
   publishPublicationAction,
   saveDraftAction,
@@ -45,6 +48,47 @@ beforeEach(() => {
 });
 
 describe("draft actions", () => {
+  it("features a public item and invalidates the home only after commit", async () => {
+    mocks.setFeatured.mockResolvedValue({
+      id: "10000000-0000-4000-8000-000000000001",
+      slug: "publicacao",
+      status: "published",
+      featured: true,
+      updatedAt: new Date("2026-09-21T12:01:00.000Z"),
+    });
+
+    const result = await changePublicationFeatureAction({
+      id: "10000000-0000-4000-8000-000000000001",
+      version: "2026-09-21T12:00:00.000Z",
+      featured: true,
+    });
+
+    expect(mocks.setFeatured).toHaveBeenCalledWith(
+      "10000000-0000-4000-8000-000000000001",
+      new Date("2026-09-21T12:00:00.000Z"),
+      true,
+      "admin",
+    );
+    expect(result).toEqual({
+      status: "success",
+      message: "Publicação destacada.",
+    });
+    expect(mocks.revalidate).toHaveBeenCalledWith("/");
+  });
+
+  it("does not invalidate the home when highlight eligibility conflicts", async () => {
+    mocks.setFeatured.mockResolvedValue(null);
+
+    expect(
+      await changePublicationFeatureAction({
+        id: "10000000-0000-4000-8000-000000000001",
+        version: "2026-09-21T12:00:00.000Z",
+        featured: false,
+      }),
+    ).toMatchObject({ status: "conflict" });
+    expect(mocks.revalidate).not.toHaveBeenCalled();
+  });
+
   it("withdraws a published item and invalidates its public surfaces after commit", async () => {
     mocks.transitionStatus.mockResolvedValue({
       id: "10000000-0000-4000-8000-000000000001",

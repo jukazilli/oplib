@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 
 import {
+  changePublicationFeatureAction,
   changePublicationStatusAction,
   type SerializedDraft,
 } from "@/app/admin/publicacoes/actions";
@@ -15,6 +16,7 @@ import type { TaxonomyCollection } from "@/modules/taxonomy/repository";
 export type SerializedAdminPublication = SerializedDraft & {
   summary: string;
   status: "draft" | "published" | "withdrawn";
+  featured: boolean;
 };
 
 const statusLabels = {
@@ -124,6 +126,22 @@ export function PublicationsWorkspace({
     setStatusIntent({ publication, intent });
   }
 
+  function changeFeature(publication: SerializedAdminPublication) {
+    if (isStatusPending) return;
+    setStatusMessage(
+      publication.featured ? "Removendo destaque…" : "Destacando…",
+    );
+    startStatusTransition(async () => {
+      const result = await changePublicationFeatureAction({
+        id: publication.id,
+        version: publication.updatedAt,
+        featured: !publication.featured,
+      });
+      setStatusMessage(result.message);
+      if (result.status === "success") router.refresh();
+    });
+  }
+
   return (
     <section aria-labelledby="publications-title" className="mx-auto max-w-3xl">
       <header className="mb-7">
@@ -180,6 +198,12 @@ export function PublicationsWorkspace({
                     <span className="text-muted-foreground">
                       {statusLabels[publication.status]}
                     </span>
+                    {publication.featured &&
+                    publication.status === "published" ? (
+                      <span className="font-semibold text-primary">
+                        Destaque
+                      </span>
+                    ) : null}
                     <span className="text-muted-foreground">·</span>
                     <time
                       className="text-muted-foreground"
@@ -217,6 +241,16 @@ export function PublicationsWorkspace({
                       className="min-h-10 w-full rounded-md px-3 text-left font-interface text-sm font-semibold hover:bg-muted"
                     >
                       Editar
+                    </button>
+                  ) : null}
+                  {publication.status === "published" ? (
+                    <button
+                      type="button"
+                      disabled={isStatusPending}
+                      onClick={() => changeFeature(publication)}
+                      className="min-h-10 w-full rounded-md px-3 text-left font-interface text-sm font-semibold hover:bg-muted disabled:opacity-50"
+                    >
+                      {publication.featured ? "Remover destaque" : "Destacar"}
                     </button>
                   ) : null}
                   {publication.status === "published" ? (

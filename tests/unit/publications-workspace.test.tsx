@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   refresh: vi.fn(),
   save: vi.fn(),
   changeStatus: vi.fn(),
+  changeFeature: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
@@ -16,6 +17,7 @@ vi.mock("next/navigation", () => ({
 vi.mock("@/app/admin/publicacoes/actions", () => ({
   saveDraftAction: mocks.save,
   changePublicationStatusAction: mocks.changeStatus,
+  changePublicationFeatureAction: mocks.changeFeature,
 }));
 
 import { PublicationsWorkspace } from "@/components/editor/publications-workspace";
@@ -36,6 +38,7 @@ const publication = {
   references: [],
   cover: null,
   status: "draft" as const,
+  featured: false,
   updatedAt: "2026-09-20T22:30:00.000Z",
 };
 
@@ -44,6 +47,7 @@ beforeEach(() => {
   mocks.refresh.mockReset();
   mocks.save.mockReset();
   mocks.changeStatus.mockReset();
+  mocks.changeFeature.mockReset();
 });
 
 afterEach(cleanup);
@@ -181,5 +185,49 @@ describe("publications workspace", () => {
     expect(
       screen.queryByRole("button", { name: "Editar" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("toggles editorial highlight only for a published item", async () => {
+    const user = userEvent.setup();
+    mocks.changeFeature.mockResolvedValue({
+      status: "success",
+      message: "Publicação destacada.",
+    });
+    render(
+      <PublicationsWorkspace
+        initialDraft={null}
+        publications={[{ ...publication, status: "published" }]}
+      />,
+    );
+
+    await user.click(
+      screen.getByLabelText("Mais ações para Conhecimento em movimento"),
+    );
+    await user.click(screen.getByRole("button", { name: "Destacar" }));
+
+    expect(mocks.changeFeature).toHaveBeenCalledWith({
+      id: publication.id,
+      version: publication.updatedAt,
+      featured: true,
+    });
+    expect(mocks.refresh).toHaveBeenCalledOnce();
+  });
+
+  it("shows the highlight state and offers removal", async () => {
+    const user = userEvent.setup();
+    render(
+      <PublicationsWorkspace
+        initialDraft={null}
+        publications={[{ ...publication, status: "published", featured: true }]}
+      />,
+    );
+
+    expect(screen.getByText("Destaque")).toBeInTheDocument();
+    await user.click(
+      screen.getByLabelText("Mais ações para Conhecimento em movimento"),
+    );
+    expect(
+      screen.getByRole("button", { name: "Remover destaque" }),
+    ).toBeInTheDocument();
   });
 });

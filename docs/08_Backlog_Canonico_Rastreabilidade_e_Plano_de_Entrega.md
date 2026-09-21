@@ -580,7 +580,7 @@ Estado atual: transições otimistas e transacionais de retirada/republicação,
 
 ### PUB-006 — Definir destaque editorial
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §§8.1 e 9; D04 §14; D07 §9.1.
 - **Objetivo:** controlar a publicação principal e outros destaques sem ranking automático.
 - **Descrição:** ação administrativa para destacar/remover destaque em publicação pública.
@@ -589,6 +589,8 @@ Estado atual: transições otimistas e transacionais de retirada/republicação,
 - **Riscos:** múltiplas publicações principais sem regra determinística.
 - **Testes:** `TEST-PUB-006-01` elegibilidade e ordenação; `-02` cache.
 - **Evidência:** `EVID-PUB-006-01` E2E admin/home.
+
+Estado atual: comando transacional e auditado, elegibilidade pública, ação administrativa e seleção determinística do principal/ demais destaques implementados. Suíte local aprovada; Preview e integração visual com WEB-002 pendentes.
 
 ### PUB-007 — Listar e localizar publicações na administração
 

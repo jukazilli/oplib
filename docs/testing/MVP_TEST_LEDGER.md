@@ -52,3 +52,11 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Preview`: retirar uma publicação e confirmar ausência imediata do acervo e da pesquisa.
 - [ ] `Preview`: medir consulta representativa e registrar plano se houver degradação.
 - [ ] `Automatizado`: executar axe e responsividade dos filtros em celular, tablet e desktop.
+
+## PUB-006 — Destaque editorial
+
+- [ ] `Automatizado/Preview`: destacar uma publicação pública e confirmar feedback, auditoria e invalidação da home.
+- [ ] `Automatizado/Preview`: remover o destaque e confirmar ausência nas seleções públicas.
+- [ ] `Preview`: criar vários destaques e confirmar principal por `publishedAt DESC, id DESC`.
+- [ ] `Preview`: confirmar que rascunho e retirada não podem ser alterados nem aparecem como destaque público.
+- [ ] `Final`: conferir ações `Destacar` e `Remover destaque` apenas nos estados elegíveis.
