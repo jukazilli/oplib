@@ -60,3 +60,12 @@ Estado: `in_progress`.
 - O SQL compilado contém placeholders e nenhum trecho do ataque; busca, filtros, tipo e ano aparecem somente em `params`. O contrato de URL continua rejeitando slugs fora de `[a-z0-9-]` e limita a busca a 120 caracteres.
 - A varredura dos repositórios encontrou uso dos operadores parametrizados do Drizzle e templates `sql`; não encontrou `sql.raw`. Essa prova cobre composição e compilação, mas o corpus ainda deve ser repetido contra PostgreSQL isolado no Preview.
 - Validação do corte: 2 arquivos e 3 testes direcionados; suíte completa com 48 arquivos e 210 testes; format check, lint, typecheck e build aprovados.
+
+## Rate limit local de comentários
+
+- A regra permanece em três tentativas por visitante pseudônimo em uma janela móvel de cinco minutos, sem persistir IP bruto.
+- O estado em memória agora aceita no máximo 10.000 visitantes com janela ativa. Ao atingir o teto, janelas totalmente vencidas são removidas; se todas ainda estiverem ativas, uma nova chave é recusada de forma fechada, sem ampliar a memória.
+- Visitantes já rastreados continuam sujeitos ao próprio contador mesmo com o mapa cheio. `tests/unit/comments-rate-limit.test.ts` cobre janela, isolamento, teto, falha fechada e recuperação de espaço vencido.
+- O limite local é uma proteção por instância e pode ser contornado por rotação de cookie ou distribuição entre instâncias. O WAF deve impor limites distintos para comentários e curtidas no Preview antes da promoção.
+- Validação do corte: 3 testes direcionados; suíte completa com 48 arquivos e 212 testes; format check, lint, typecheck e build aprovados.
+- Ainda devem ser verificados no Preview o `429`, a mensagem preservando o formulário, o reset após cinco minutos e o comportamento da borda. Esta seção não aprova SEC-001 nem o WAF.

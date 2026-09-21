@@ -880,7 +880,7 @@ Estado atual: falhas de leitura das interações não derrubam mais o artigo; ca
 - **Testes:** `TEST-SEC-001-01` matriz OWASP aplicável; `-02` auth; `-03` Markdown/comentário; `-04` upload; `-05` scanning.
 - **Evidência:** `EVID-SEC-001-01` relatório saneado e exceções aprovadas.
 
-Estado atual: proveniência das mutações públicas, payload de comentários, rotas de capa, conteúdo não confiável, consultas parametrizadas e gate de vulnerabilidades altas/críticas cobertos localmente; a matriz restante, alertas moderados, Preview e WAF continuam pendentes.
+Estado atual: proveniência das mutações públicas, payload de comentários, rotas de capa, conteúdo não confiável, consultas parametrizadas, rate limit local de comentários com memória limitada e gate de vulnerabilidades altas/críticas cobertos localmente; a matriz restante, alertas moderados, Preview e WAF continuam pendentes.
 
 ### CNT-001 — Preparar conteúdo inaugural
 

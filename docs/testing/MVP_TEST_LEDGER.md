@@ -176,6 +176,10 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: pesquisar e filtrar com aspas, `%`, `_`, tautologia, comentário, `UNION`, múltiplas instruções e Unicode; confirmar consulta válida, nenhum erro bruto, nenhuma ampliação indevida de resultados e nenhuma alteração no banco.
 - [ ] `Automatizado`: compilar filtros públicos e confirmar que todos os valores não confiáveis permanecem em `params`, nunca no texto SQL; varrer por `sql.raw` e concatenação antes do gate final.
 - [ ] `Final`: repetir o corpus nos campos administrativos de taxonomia, título, slug e comentários; conferir validação segura, dados preservados e logs sem query ou connection string.
+- [ ] `Automatizado/Preview`: enviar três comentários válidos pelo mesmo visitante em menos de cinco minutos; o quarto deve retornar `429`, sem persistência, e outro visitante deve continuar autorizado.
+- [ ] `Preview`: após o `429`, confirmar mensagem clara e preservação do nome/texto; repetir depois de cinco minutos e confirmar novo envio sem trocar o cookie.
+- [ ] `Automatizado`: preencher 10.000 janelas locais distintas, confirmar recusa fechada da chave seguinte sem crescimento do estado e aceitação após o vencimento liberar espaço.
+- [ ] `Preview/WAF`: aplicar tráfego sintético controlado a comentários e curtidas, confirmar limites distintos na borda e documentar que múltiplas instâncias e rotação de cookie não dependem apenas da memória local.
 
 ## QUAL-001 — Acessibilidade e responsividade
 
