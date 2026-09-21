@@ -186,8 +186,8 @@ Um item só recebe `done` quando:
 
 ### UX-002 — Contratos de interação do fluxo editorial
 
-- **Tipo:** `decision`; **Prioridade:** `P0`; **Status:** `blocked-human`.
-- **Origem:** P-UX-018; D04 §24 “Contrato obrigatório”; D05 §12 “Gate de especificação da interface”.
+- **Tipo:** `decision`; **Prioridade:** `P0`; **Status:** `done`.
+- **Origem:** P-UX-018; D04 §24 “Contrato obrigatório”; D05 §12 “Contrato aprovado da interface”.
 - **Objetivo:** decidir como cada campo, ação e transição da criação de publicação se comportará antes de implementar o formulário.
 - **Descrição:** produzir e aprovar os contratos da composição integrada: título, resumo, tipo, áreas, categoria, tags, curso, disciplina, data, conteúdo, capa, referências, destaque, slug, expansão/recolhimento, salvamento, saída e publicação.
 - **Critérios:** dado/origem/cardinalidade; controle justificado; pesquisa e criação; estados; validação; teclado; celular; persistência; cancelamento/recuperação e confirmação definidos para cada interação.
@@ -196,7 +196,21 @@ Um item só recebe `done` quando:
 - **Testes:** `TEST-UX-002-01` revisão da matriz campo a campo; `-02` protótipo da composição e dos controles ambíguos; `-03` aceite desktop/celular.
 - **Evidência:** `EVID-UX-002-01` contratos e decisões aprovados pelo proprietário.
 
-Estado atual: a composição integrada a Publicações e a lista expansível estão aprovadas; campo Área e demais controles internos permanecem bloqueados para UI até refinamento e aceite humano.
+Estado atual: decisão aprovada integralmente pelo proprietário em 20/09/2026, sem ressalvas, e reconciliada em D04 e D05. A evidência `docs/evidence/EVID-UX-002-01.md` está concluída; com `ADM-001` e `TAX-001` também concluídas, `PUB-001` está formalmente liberada para implementação.
+
+### UX-003 — Grafo do acervo e evolução para perfis isolados
+
+- **Tipo:** `decision`; **Prioridade:** `P1`; **Status:** `review`.
+- **Origem:** feedback do proprietário; referência Obsidian; protótipo privado `jukazilli/graph`; D04 §§20–22; D05 §§3, 11 e 18; D07 §§10, 16 e 30.
+- **Objetivo:** decidir o grafo como navegação operacional complementar e preparar a linguagem de rotas para futuros acervos pessoais.
+- **Descrição:** definir visualizações Lista/Grafo, semântica de nós e arestas, cartão contextual, ações seguras, acessibilidade, desempenho, direção `/lib/[nome-de-usuario]` + `/studio` e permanência de `/admin` como plano de controle exclusivo da plataforma.
+- **Critérios:** relações não inventadas; lista equivalente; hover não obrigatório; ações por estado; exclusão protegida; teclado/toque/leitor de tela; isolamento futuro no banco e servidor; migração de URL explícita.
+- **Dependências:** ADM-001, PUB-007 e UX-002; implementação depende ainda de relações persistentes entre publicações e decisão arquitetural multiusuário.
+- **Riscos:** grafo decorativo ou ilegível, ação destrutiva acidental, relação semântica falsa, autorização baseada em URL ou migração prematura do MVP.
+- **Testes:** `TEST-UX-003-01` contratos do grafo; `-02` modalidades de interação; `-03` rotas e isolamento.
+- **Evidência:** `EVID-UX-003-01` proposta, referências e aceite do proprietário.
+
+Estado atual: proposta consolidada em `docs/decisions/UX-003.md`; nenhuma mudança de código ou rota autorizada até aceite e decomposição das dependências técnicas.
 
 ## 7. Fundação — FND
 
@@ -673,6 +687,18 @@ Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados
 - **Riscos:** política divergente da implementação.
 - **Testes:** `TEST-WEB-006-01` links/conteúdo; `-02` revisão de correspondência técnica.
 - **Evidência:** `EVID-WEB-006-01` páginas em Preview e aprovação humana.
+
+### WEB-007 — Lista de espera para futuros autores
+
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Origem:** D02 §§2, 8.1 e 16; UX-002 “Lista de espera para futuros autores”; INF §19 “LGPD e minimização”.
+- **Objetivo:** medir interesse na evolução multiusuário sem prometer conta ou autoria disponível.
+- **Descrição:** CTA secundário `Quero criar meu acervo`, explicação de indisponibilidade, coleta mínima de e-mail com consentimento específico, confirmação de interesse e consulta protegida pelo proprietário em `/admin`.
+- **Critérios:** não cria conta; não promete prazo; duplicidade é idempotente; estados de envio, sucesso e erro; proteção contra abuso; remoção acessível; uso restrito ao aviso sobre abertura da plataforma; lista administrativa minimizada; convite individual, auditável e revogável enquanto não aceito.
+- **Dependências:** UX-002, WEB-001, WEB-006, DEC-003 e decisão técnica sobre armazenamento e envio.
+- **Riscos:** confundir espera com cadastro, coletar dado sem finalidade clara ou transformar a lista em newsletter genérica.
+- **Testes:** `TEST-WEB-007-01` fluxo e estados; `-02` duplicidade; `-03` consentimento e remoção; `-04` abuso e privacidade.
+- **Evidência:** `EVID-WEB-007-01` E2E, correspondência com Política de Privacidade e aceite humano da copy.
 
 ### SEO-001 — Metadados, canonical e prévia social
 
