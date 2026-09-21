@@ -127,6 +127,8 @@ export function DraftComposer({
   );
   const classificationRef = useRef<HTMLDivElement>(null);
   const classificationToolbarRef = useRef<HTMLButtonElement>(null);
+  const classificationDialogRef = useRef<HTMLElement>(null);
+  const metadataDialogRef = useRef<HTMLElement>(null);
 
   const key = useMemo(() => storageKey(id), [id]);
   const previewWarnings = useMemo(() => markdownWarnings(markdown), [markdown]);
@@ -134,6 +136,42 @@ export function DraftComposer({
   useEffect(() => {
     titleInputRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    const dialog = classificationOpen
+      ? classificationDialogRef.current
+      : metadataOpen
+        ? metadataDialogRef.current
+        : null;
+    if (!dialog) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    dialog
+      .querySelector<HTMLElement>("button, select, textarea, input")
+      ?.focus();
+    const keepFocus = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const controls = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), select:not([disabled]), textarea:not([disabled]), input:not([disabled]), [tabindex="0"]',
+        ),
+      );
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", keepFocus);
+    return () => {
+      document.removeEventListener("keydown", keepFocus);
+      previousFocus?.focus();
+    };
+  }, [classificationOpen, metadataOpen]);
 
   useEffect(() => {
     if (!classificationOpen) return;
@@ -165,6 +203,10 @@ export function DraftComposer({
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       event.preventDefault();
+      if (metadataOpen) {
+        setMetadataOpen(false);
+        return;
+      }
       if (discardIntent) {
         setDiscardIntent(null);
         return;
@@ -174,7 +216,7 @@ export function DraftComposer({
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [dirty, discardIntent, onClose]);
+  }, [dirty, discardIntent, metadataOpen, onClose]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(key);
@@ -657,76 +699,87 @@ export function DraftComposer({
                     : "Adicionar taxonomia"}
                 </button>
                 {classificationOpen ? (
-                  <section
-                    aria-label="Taxonomia"
-                    className="fixed top-20 right-4 z-50 w-[min(24rem,calc(100vw-2rem))] rounded-card border bg-surface p-4 shadow-xl"
+                  <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/55 p-4"
+                    onPointerDown={(event) => {
+                      if (event.target === event.currentTarget)
+                        setClassificationOpen(false);
+                    }}
                   >
-                    {taxonomy.areas.length ? (
-                      <fieldset className="mb-4">
-                        <legend className="font-interface text-sm font-semibold">
-                          Áreas
-                        </legend>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {taxonomy.areas.map((area) => (
-                            <button
-                              key={area.id}
-                              type="button"
-                              aria-pressed={areaIds.includes(area.id)}
-                              onClick={() => {
-                                setAreaIds((current) =>
-                                  current.includes(area.id)
-                                    ? current.filter((id) => id !== area.id)
-                                    : [...current, area.id],
-                                );
-                                markChanged();
-                              }}
-                              className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
-                            >
-                              {area.name}
-                            </button>
+                    <section
+                      ref={classificationDialogRef}
+                      role="dialog"
+                      aria-modal="true"
+                      aria-label="Taxonomia"
+                      className="max-h-[calc(100svh-2rem)] w-full max-w-96 overflow-y-auto rounded-card border bg-surface p-5 shadow-xl"
+                    >
+                      {taxonomy.areas.length ? (
+                        <fieldset className="mb-4">
+                          <legend className="font-interface text-sm font-semibold">
+                            Áreas
+                          </legend>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {taxonomy.areas.map((area) => (
+                              <button
+                                key={area.id}
+                                type="button"
+                                aria-pressed={areaIds.includes(area.id)}
+                                onClick={() => {
+                                  setAreaIds((current) =>
+                                    current.includes(area.id)
+                                      ? current.filter((id) => id !== area.id)
+                                      : [...current, area.id],
+                                  );
+                                  markChanged();
+                                }}
+                                className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+                              >
+                                {area.name}
+                              </button>
+                            ))}
+                          </div>
+                        </fieldset>
+                      ) : null}
+                      <label className="grid gap-2 font-interface text-sm font-semibold">
+                        Categoria
+                        <select
+                          value={categoryId}
+                          onChange={(event) => {
+                            setCategoryId(event.target.value);
+                            markChanged();
+                          }}
+                          className="min-h-11 rounded-control border bg-background px-3 font-normal"
+                        >
+                          <option value="">Sem categoria</option>
+                          {taxonomy.categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
                           ))}
-                        </div>
-                      </fieldset>
-                    ) : null}
-                    <label className="grid gap-2 font-interface text-sm font-semibold">
-                      Categoria
-                      <select
-                        value={categoryId}
-                        onChange={(event) => {
-                          setCategoryId(event.target.value);
-                          markChanged();
-                        }}
-                        className="min-h-11 rounded-control border bg-background px-3 font-normal"
-                      >
-                        <option value="">Sem categoria</option>
-                        {taxonomy.categories.map((category) => (
-                          <option key={category.id} value={category.id}>
-                            {category.name}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
-                    {taxonomy.tags.length ? (
-                      <fieldset className="mt-4">
-                        <legend className="font-interface text-sm font-semibold">
-                          Tags
-                        </legend>
-                        <div className="mt-2 flex max-h-40 flex-wrap gap-2 overflow-y-auto">
-                          {taxonomy.tags.map((tag) => (
-                            <button
-                              key={tag.id}
-                              type="button"
-                              aria-pressed={tagIds.includes(tag.id)}
-                              onClick={() => toggleTag(tag.id)}
-                              className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
-                            >
-                              {tag.name}
-                            </button>
-                          ))}
-                        </div>
-                      </fieldset>
-                    ) : null}
-                  </section>
+                        </select>
+                      </label>
+                      {taxonomy.tags.length ? (
+                        <fieldset className="mt-4">
+                          <legend className="font-interface text-sm font-semibold">
+                            Tags
+                          </legend>
+                          <div className="mt-2 flex max-h-40 flex-wrap gap-2 overflow-y-auto">
+                            {taxonomy.tags.map((tag) => (
+                              <button
+                                key={tag.id}
+                                type="button"
+                                aria-pressed={tagIds.includes(tag.id)}
+                                onClick={() => toggleTag(tag.id)}
+                                className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+                              >
+                                {tag.name}
+                              </button>
+                            ))}
+                          </div>
+                        </fieldset>
+                      ) : null}
+                    </section>
+                  </div>
                 ) : null}
               </div>
 
@@ -805,263 +858,281 @@ export function DraftComposer({
 
                   <div>
                     {metadataOpen ? (
-                      <section
-                        aria-label="Detalhes da publicação"
-                        className="fixed top-20 right-4 z-50 max-h-[calc(100svh-6rem)] w-[min(38rem,calc(100vw-2rem))] overflow-y-auto rounded-card border bg-surface p-5 text-foreground shadow-xl"
+                      <div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/55 p-4"
+                        onPointerDown={(event) => {
+                          if (event.target === event.currentTarget)
+                            setMetadataOpen(false);
+                        }}
                       >
-                        <div className="grid gap-4 sm:grid-cols-2">
-                          <label className="grid gap-1 font-interface text-sm font-semibold sm:col-span-2">
-                            Resumo
-                            <textarea
-                              value={summary}
-                              maxLength={600}
-                              rows={3}
-                              onChange={(event) => {
-                                setSummary(event.target.value);
-                                markChanged();
-                              }}
-                              placeholder="Apresente a ideia central"
-                              className="composer-field resize-none border-0 border-b bg-transparent py-2 font-normal outline-none"
-                            />
-                          </label>
-                          <label className="grid gap-1 font-interface text-sm font-semibold">
-                            Tipo
-                            <select
-                              value={contentType}
-                              onChange={(event) => {
-                                setContentType(
-                                  event.target
-                                    .value as DraftValues["contentType"],
-                                );
-                                markChanged();
-                              }}
-                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
-                            >
-                              <option value="">Não definido</option>
-                              <option value="academic_work">
-                                Trabalho acadêmico
-                              </option>
-                              <option value="article">Artigo</option>
-                              <option value="research">Pesquisa</option>
-                              <option value="study">Estudo</option>
-                              <option value="reflection">Reflexão</option>
-                              <option value="project">Projeto</option>
-                            </select>
-                          </label>
-                          <label className="grid gap-1 font-interface text-sm font-semibold">
-                            Data original
-                            <input
-                              type="date"
-                              value={originalDate}
-                              onChange={(event) => {
-                                setOriginalDate(event.target.value);
-                                markChanged();
-                              }}
-                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
-                            />
-                          </label>
-                          <label className="grid gap-1 font-interface text-sm font-semibold">
-                            Curso
-                            <input
-                              value={course}
-                              maxLength={180}
-                              onChange={(event) => {
-                                setCourse(event.target.value);
-                                markChanged();
-                              }}
-                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
-                            />
-                          </label>
-                          <label className="grid gap-1 font-interface text-sm font-semibold">
-                            Disciplina
-                            <input
-                              value={discipline}
-                              maxLength={180}
-                              onChange={(event) => {
-                                setDiscipline(event.target.value);
-                                markChanged();
-                              }}
-                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
-                            />
-                          </label>
-                          <label className="grid gap-1 font-interface text-sm font-semibold sm:col-span-2">
-                            Endereço permanente
-                            <span className="flex items-center border-b font-normal">
-                              <span className="text-muted-foreground">
-                                /publicacoes/
-                              </span>
-                              <input
-                                value={slug}
-                                maxLength={260}
+                        <section
+                          ref={metadataDialogRef}
+                          role="dialog"
+                          aria-modal="true"
+                          aria-label="Detalhes da publicação"
+                          className="max-h-[calc(100svh-2rem)] w-full max-w-2xl overflow-y-auto rounded-card border bg-surface p-5 text-foreground shadow-xl"
+                        >
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <label className="grid gap-1 font-interface text-sm font-semibold sm:col-span-2">
+                              Resumo
+                              <textarea
+                                value={summary}
+                                maxLength={600}
+                                rows={3}
                                 onChange={(event) => {
-                                  setSlug(event.target.value);
+                                  setSummary(event.target.value);
                                   markChanged();
                                 }}
-                                placeholder="gerado pelo título ao salvar"
-                                className="min-h-11 min-w-0 flex-1 border-0 bg-transparent outline-none"
+                                placeholder="Apresente a ideia central"
+                                className="composer-field resize-none border-0 border-b bg-transparent py-2 font-normal outline-none"
                               />
-                            </span>
-                          </label>
-                        </div>
-
-                        <div className="mt-6 border-t pt-4">
-                          <div className="flex items-center justify-between gap-3">
-                            <h3 className="font-interface text-sm font-bold">
-                              Referências e links
-                            </h3>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setReferences((current) => [
-                                  ...current,
-                                  {
-                                    id: "",
-                                    kind: "bibliography",
-                                    title: "",
-                                    citation: "",
-                                    url: "",
-                                  },
-                                ]);
-                                markChanged();
-                              }}
-                              className="flex min-h-10 items-center gap-1 rounded-full px-3 font-interface text-sm font-semibold hover:bg-muted"
-                            >
-                              <Plus aria-hidden="true" className="size-4" />
-                              Adicionar
-                            </button>
-                          </div>
-                          <div className="mt-3 grid gap-4">
-                            {references.map((reference, index) => (
-                              <fieldset
-                                key={`${reference.id}-${index}`}
-                                className="grid gap-3 border-t pt-3 first:border-t-0 first:pt-0"
+                            </label>
+                            <label className="grid gap-1 font-interface text-sm font-semibold">
+                              Tipo
+                              <select
+                                value={contentType}
+                                onChange={(event) => {
+                                  setContentType(
+                                    event.target
+                                      .value as DraftValues["contentType"],
+                                  );
+                                  markChanged();
+                                }}
+                                className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
                               >
-                                <legend className="sr-only">
-                                  Referência {index + 1}
-                                </legend>
-                                <div className="flex items-center gap-2">
-                                  <select
-                                    aria-label={`Tipo da referência ${index + 1}`}
-                                    value={reference.kind}
-                                    onChange={(event) => {
-                                      setReferences((current) =>
-                                        current.map((item, itemIndex) =>
-                                          itemIndex === index
-                                            ? {
-                                                ...item,
-                                                kind: event.target
-                                                  .value as DraftReference["kind"],
-                                              }
-                                            : item,
-                                        ),
-                                      );
-                                      markChanged();
-                                    }}
-                                    className="min-h-10 flex-1 border-0 border-b bg-transparent font-interface text-sm"
-                                  >
-                                    <option value="bibliography">
-                                      Bibliografia
-                                    </option>
-                                    <option value="related_link">
-                                      Link relacionado
-                                    </option>
-                                  </select>
-                                  <button
-                                    type="button"
-                                    disabled={index === 0}
-                                    aria-label={`Mover referência ${index + 1} para cima`}
-                                    onClick={() => {
-                                      setReferences((current) => {
-                                        const next = [...current];
-                                        const [moving] = next.splice(index, 1);
-                                        if (moving)
-                                          next.splice(index - 1, 0, moving);
-                                        return next;
-                                      });
-                                      markChanged();
-                                    }}
-                                    className="flex size-10 items-center justify-center rounded-full hover:bg-muted disabled:opacity-30"
-                                  >
-                                    <ArrowUp
-                                      aria-hidden="true"
-                                      className="size-4"
-                                    />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    disabled={index === references.length - 1}
-                                    aria-label={`Mover referência ${index + 1} para baixo`}
-                                    onClick={() => {
-                                      setReferences((current) => {
-                                        const next = [...current];
-                                        const [moving] = next.splice(index, 1);
-                                        if (moving)
-                                          next.splice(index + 1, 0, moving);
-                                        return next;
-                                      });
-                                      markChanged();
-                                    }}
-                                    className="flex size-10 items-center justify-center rounded-full hover:bg-muted disabled:opacity-30"
-                                  >
-                                    <ArrowDown
-                                      aria-hidden="true"
-                                      className="size-4"
-                                    />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    aria-label={`Remover referência ${index + 1}`}
-                                    onClick={() => {
-                                      setReferences((current) =>
-                                        current.filter(
-                                          (_, itemIndex) => itemIndex !== index,
-                                        ),
-                                      );
-                                      markChanged();
-                                    }}
-                                    className="flex size-10 items-center justify-center rounded-full hover:bg-muted"
-                                  >
-                                    <Trash2
-                                      aria-hidden="true"
-                                      className="size-4"
-                                    />
-                                  </button>
-                                </div>
-                                {(["title", "citation", "url"] as const).map(
-                                  (field) => (
-                                    <input
-                                      key={field}
-                                      aria-label={`${field === "title" ? "Título" : field === "citation" ? "Citação" : "Endereço"} da referência ${index + 1}`}
-                                      value={reference[field]}
-                                      placeholder={
-                                        field === "title"
-                                          ? "Título"
-                                          : field === "citation"
-                                            ? "Citação"
-                                            : "https://"
-                                      }
+                                <option value="">Não definido</option>
+                                <option value="academic_work">
+                                  Trabalho acadêmico
+                                </option>
+                                <option value="article">Artigo</option>
+                                <option value="research">Pesquisa</option>
+                                <option value="study">Estudo</option>
+                                <option value="reflection">Reflexão</option>
+                                <option value="project">Projeto</option>
+                              </select>
+                            </label>
+                            <label className="grid gap-1 font-interface text-sm font-semibold">
+                              Data original
+                              <input
+                                type="date"
+                                value={originalDate}
+                                onChange={(event) => {
+                                  setOriginalDate(event.target.value);
+                                  markChanged();
+                                }}
+                                className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
+                              />
+                            </label>
+                            <label className="grid gap-1 font-interface text-sm font-semibold">
+                              Curso
+                              <input
+                                value={course}
+                                maxLength={180}
+                                onChange={(event) => {
+                                  setCourse(event.target.value);
+                                  markChanged();
+                                }}
+                                className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
+                              />
+                            </label>
+                            <label className="grid gap-1 font-interface text-sm font-semibold">
+                              Disciplina
+                              <input
+                                value={discipline}
+                                maxLength={180}
+                                onChange={(event) => {
+                                  setDiscipline(event.target.value);
+                                  markChanged();
+                                }}
+                                className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
+                              />
+                            </label>
+                            <label className="grid gap-1 font-interface text-sm font-semibold sm:col-span-2">
+                              Endereço permanente
+                              <span className="flex items-center border-b font-normal">
+                                <span className="text-muted-foreground">
+                                  /publicacoes/
+                                </span>
+                                <input
+                                  value={slug}
+                                  maxLength={260}
+                                  onChange={(event) => {
+                                    setSlug(event.target.value);
+                                    markChanged();
+                                  }}
+                                  placeholder="gerado pelo título ao salvar"
+                                  className="min-h-11 min-w-0 flex-1 border-0 bg-transparent outline-none"
+                                />
+                              </span>
+                            </label>
+                          </div>
+
+                          <div className="mt-6 border-t pt-4">
+                            <div className="flex items-center justify-between gap-3">
+                              <h3 className="font-interface text-sm font-bold">
+                                Referências e links
+                              </h3>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setReferences((current) => [
+                                    ...current,
+                                    {
+                                      id: "",
+                                      kind: "bibliography",
+                                      title: "",
+                                      citation: "",
+                                      url: "",
+                                    },
+                                  ]);
+                                  markChanged();
+                                }}
+                                className="flex min-h-10 items-center gap-1 rounded-full px-3 font-interface text-sm font-semibold hover:bg-muted"
+                              >
+                                <Plus aria-hidden="true" className="size-4" />
+                                Adicionar
+                              </button>
+                            </div>
+                            <div className="mt-3 grid gap-4">
+                              {references.map((reference, index) => (
+                                <fieldset
+                                  key={`${reference.id}-${index}`}
+                                  className="grid gap-3 border-t pt-3 first:border-t-0 first:pt-0"
+                                >
+                                  <legend className="sr-only">
+                                    Referência {index + 1}
+                                  </legend>
+                                  <div className="flex items-center gap-2">
+                                    <select
+                                      aria-label={`Tipo da referência ${index + 1}`}
+                                      value={reference.kind}
                                       onChange={(event) => {
                                         setReferences((current) =>
                                           current.map((item, itemIndex) =>
                                             itemIndex === index
                                               ? {
                                                   ...item,
-                                                  [field]: event.target.value,
+                                                  kind: event.target
+                                                    .value as DraftReference["kind"],
                                                 }
                                               : item,
                                           ),
                                         );
                                         markChanged();
                                       }}
-                                      className="min-h-10 border-0 border-b bg-transparent font-interface text-sm outline-none"
-                                    />
-                                  ),
-                                )}
-                              </fieldset>
-                            ))}
+                                      className="min-h-10 flex-1 border-0 border-b bg-transparent font-interface text-sm"
+                                    >
+                                      <option value="bibliography">
+                                        Bibliografia
+                                      </option>
+                                      <option value="related_link">
+                                        Link relacionado
+                                      </option>
+                                    </select>
+                                    <button
+                                      type="button"
+                                      disabled={index === 0}
+                                      aria-label={`Mover referência ${index + 1} para cima`}
+                                      onClick={() => {
+                                        setReferences((current) => {
+                                          const next = [...current];
+                                          const [moving] = next.splice(
+                                            index,
+                                            1,
+                                          );
+                                          if (moving)
+                                            next.splice(index - 1, 0, moving);
+                                          return next;
+                                        });
+                                        markChanged();
+                                      }}
+                                      className="flex size-10 items-center justify-center rounded-full hover:bg-muted disabled:opacity-30"
+                                    >
+                                      <ArrowUp
+                                        aria-hidden="true"
+                                        className="size-4"
+                                      />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      disabled={index === references.length - 1}
+                                      aria-label={`Mover referência ${index + 1} para baixo`}
+                                      onClick={() => {
+                                        setReferences((current) => {
+                                          const next = [...current];
+                                          const [moving] = next.splice(
+                                            index,
+                                            1,
+                                          );
+                                          if (moving)
+                                            next.splice(index + 1, 0, moving);
+                                          return next;
+                                        });
+                                        markChanged();
+                                      }}
+                                      className="flex size-10 items-center justify-center rounded-full hover:bg-muted disabled:opacity-30"
+                                    >
+                                      <ArrowDown
+                                        aria-hidden="true"
+                                        className="size-4"
+                                      />
+                                    </button>
+                                    <button
+                                      type="button"
+                                      aria-label={`Remover referência ${index + 1}`}
+                                      onClick={() => {
+                                        setReferences((current) =>
+                                          current.filter(
+                                            (_, itemIndex) =>
+                                              itemIndex !== index,
+                                          ),
+                                        );
+                                        markChanged();
+                                      }}
+                                      className="flex size-10 items-center justify-center rounded-full hover:bg-muted"
+                                    >
+                                      <Trash2
+                                        aria-hidden="true"
+                                        className="size-4"
+                                      />
+                                    </button>
+                                  </div>
+                                  {(["title", "citation", "url"] as const).map(
+                                    (field) => (
+                                      <input
+                                        key={field}
+                                        aria-label={`${field === "title" ? "Título" : field === "citation" ? "Citação" : "Endereço"} da referência ${index + 1}`}
+                                        value={reference[field]}
+                                        placeholder={
+                                          field === "title"
+                                            ? "Título"
+                                            : field === "citation"
+                                              ? "Citação"
+                                              : "https://"
+                                        }
+                                        onChange={(event) => {
+                                          setReferences((current) =>
+                                            current.map((item, itemIndex) =>
+                                              itemIndex === index
+                                                ? {
+                                                    ...item,
+                                                    [field]: event.target.value,
+                                                  }
+                                                : item,
+                                            ),
+                                          );
+                                          markChanged();
+                                        }}
+                                        className="min-h-10 border-0 border-b bg-transparent font-interface text-sm outline-none"
+                                      />
+                                    ),
+                                  )}
+                                </fieldset>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      </section>
+                        </section>
+                      </div>
                     ) : null}
                   </div>
                 </div>
