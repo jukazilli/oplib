@@ -16,6 +16,7 @@ Memória de produto para a composição administrativa de publicações. Estas r
 8. **Cada refinamento visual precisa preservar persistência.** Seleção, recuperação local, conflito otimista e vínculo da capa não podem virar apenas simulação visual.
 9. **Navegação refinada não remove capacidades existentes.** Antes de simplificar o shell, conferir acesso a perfil, saída e demais utilidades pessoais. `Meu perfil` é gestão da conta administrativa; não equivale ao perfil público futuro.
 10. **Editores longos usam a viewport e preservam ações.** Composição extensa não deve ficar dentro de um cartão parcialmente rolável. Cabeçalho e barra de ações permanecem fixos; no compacto, composição e prévia formam duas etapas reversíveis.
+11. **Ferramentas recorrentes acompanham o cabeçalho.** Capa, classificação, detalhes e rascunhos permanecem juntos no topo do composer; a área editorial fica reservada para escrever e revisar o conteúdo.
 
 ## Evidências que originaram as regras
 

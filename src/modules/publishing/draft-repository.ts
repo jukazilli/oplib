@@ -5,6 +5,7 @@ import { and, desc, eq, ne, sql } from "drizzle-orm";
 import { connection } from "next/server";
 
 import { getDatabase, type Database } from "@/lib/db";
+import { logEvent } from "@/lib/observability/logger";
 import {
   categories,
   coverAssets,
@@ -17,6 +18,7 @@ import {
   tags,
 } from "@/lib/db/schema";
 import { normalizeRequestedSlug, slugifyPostTitle } from "./metadata";
+import { cleanupDetachedCover } from "@/modules/media/covers";
 
 type DraftDatabase =
   Database | Parameters<Parameters<Database["transaction"]>[0]>[0];
@@ -342,6 +344,13 @@ export async function updateDraft(
   database?: Database,
 ): Promise<DraftRecord | null> {
   const db = database ?? getDatabase();
+  const previousCoverRows = await db
+    .select({ pathname: coverAssets.pathname })
+    .from(posts)
+    .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
+    .where(eq(posts.id, id))
+    .limit(1);
+  const previousCoverPathname = previousCoverRows[0]?.pathname ?? null;
   const updated = await db.transaction(async (tx) => {
     const slug = await availableSlug(tx, values.title, values.slug, id);
     const coverRows = values.cover
@@ -383,5 +392,24 @@ export async function updateDraft(
     await replaceRelations(tx, id, values);
     return true;
   });
-  return updated ? getDraftById(id, db) : null;
+  if (!updated) return null;
+  if (
+    previousCoverPathname &&
+    previousCoverPathname !== values.cover?.pathname
+  ) {
+    try {
+      await cleanupDetachedCover(previousCoverPathname, db);
+    } catch {
+      // The detached database record is retained for a later cleanup retry.
+      logEvent({
+        level: "warn",
+        event: "media.cover_cleanup",
+        correlationId: randomUUID(),
+        module: "media",
+        result: "retry_required",
+        errorCode: "MEDIA_CLEANUP_FAILED",
+      });
+    }
+  }
+  return getDraftById(id, db);
 }
