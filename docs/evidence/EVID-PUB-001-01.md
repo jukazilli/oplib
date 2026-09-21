@@ -1,6 +1,7 @@
 # EVID-PUB-001-01 — Criação e salvamento manual de rascunho
 
-- **Estado:** técnico concluído; aceite autenticado do Preview pendente
+- **Estado:** concluída como fundação funcional
+- **Aceite:** proprietário, em 21/09/2026, condicionado à evolução visual registrada em `PUB-007`
 - **Implementação:** PR #23
 - **Rota:** `/admin/publicacoes`
 
@@ -25,15 +26,15 @@
 - `pnpm db:verify:drafts` — aprovado no banco configurado, com dados sintéticos revertidos;
 - CI do PR #23 — Quality, CodeQL, política do repositório e Vercel aprovados.
 
-## Aceite pendente no Preview
+## Aceite do Preview e ressalva de evolução
 
-O Preview exige SSO da Vercel e autenticação administrativa. A automação isolada não possui essas sessões e não tentou contornar as proteções.
+O proprietário aceitou o resultado como Preview e confirmou que ele não representa a UI final de `Publicações`.
 
-O proprietário deverá verificar:
+Ficou determinado para `PUB-007`:
 
-- [ ] desktop: título, conteúdo e ação `Salvar rascunho` possuem hierarquia clara;
-- [ ] celular: composição em uma coluna, sem corte ou rolagem horizontal;
-- [ ] após editar, aparece `Alterações não salvas`;
-- [ ] ao salvar, o endereço recebe `?draft=<uuid>` e aparece `Salvo às HH:mm`;
-- [ ] recarregar o endereço preserva o rascunho salvo;
-- [ ] sair com mudanças pendentes apresenta aviso.
+- lista editorial administrativa somente das publicações do proprietário, inspirada no ritmo de `docs/assets/navegacao-formato-feed.png`;
+- menu de três pontos no topo de cada publicação;
+- `Nova publicação` abrindo diálogo modal inspirado em `docs/assets/reference-threads.png`;
+- preservação integral do backend, salvamento, recuperação e conflito entregues por `PUB-001`.
+
+A referência visual não autoriza feed social, mistura de autores ou conteúdo de terceiros na administração. O feed público do visitante pertence aos slices WEB de descoberta.

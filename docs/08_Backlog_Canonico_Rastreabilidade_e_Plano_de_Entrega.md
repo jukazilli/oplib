@@ -496,7 +496,7 @@ Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados
 
 ### PUB-001 — Criar e salvar rascunho manualmente
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `review`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D02 §§9–10; D05 §§12–13.
 - **Objetivo:** iniciar toda publicação como rascunho e salvar conscientemente.
 - **Descrição:** composição editorial integrada à lista de Publicações, estado “Alterações não salvas”, último salvamento e recuperação temporária no navegador.
@@ -506,7 +506,7 @@ Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados
 - **Testes:** `TEST-PUB-001-01` rascunho; `-02` saída; `-03` recuperação/conflito.
 - **Evidência:** `EVID-PUB-001-01` E2E do fluxo.
 
-Estado atual: implementação técnica concluída no PR #23, com migration, autorização server-side, salvamento manual, recuperação local, aviso de saída e conflito otimista validados. Aguarda somente aceite autenticado e responsivo no Preview antes de `done`.
+Estado atual: fundação funcional aceita pelo proprietário como Preview em 21/09/2026, com migration, autorização server-side, salvamento manual, recuperação local, aviso de saída e conflito otimista validados. A evolução visual para lista editorial privada das publicações do proprietário, menu de três pontos e composição modal foi incorporada a UX-002 e transferida explicitamente para `PUB-007`; o feed público permanece separado nos slices WEB.
 
 ### PUB-002 — Editor e prévia Markdown segura
 
@@ -585,8 +585,8 @@ Estado atual: implementação técnica concluída no PR #23, com migration, auto
 - **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
 - **Origem:** D02 §9; D04 §21; D05 §11.
 - **Objetivo:** encontrar rascunhos, publicados e retirados para continuar o trabalho.
-- **Descrição:** página única com caixa de composição e lista de publicações resumidas, expansíveis para consulta ou edição, além de busca, status, área e atualização.
-- **Critérios:** sem rolagem infinita; filtros preservados quando útil; somente uma edição expandida; estados vazios; ações secundárias não competem com editar; curtidas visíveis sem identidade.
+- **Descrição:** página única com lista editorial vertical e privada somente das publicações do proprietário, busca, status, área e atualização; ação `Nova publicação` abre composição em diálogo modal e cada item oferece menu de três pontos para comandos disponíveis. Não é o feed público do visitante.
+- **Critérios:** sem rolagem infinita; filtros preservados quando útil; diálogo responsivo e acessível; estados vazios; `Editar` é a ação principal do menu; ações futuras só aparecem quando implementadas e autorizadas; fechamento preserva rascunho e respeita alterações não salvas.
 - **Dependências:** ADM-001, PUB-001.
 - **Riscos:** ação destrutiva acidental em lista densa.
 - **Testes:** `TEST-PUB-007-01` filtros/status; `-02` responsividade e teclado.

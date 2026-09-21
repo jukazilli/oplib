@@ -642,13 +642,15 @@ Excluir deverá permanecer em posição secundária e exigir confirmação refor
 
 ### Superfície editorial integrada
 
-A criação e a gestão das publicações compartilharão a página `Publicações`. Não haverá item separado “Nova publicação” na navegação nem chamada duplicada na visão geral.
+A criação e a gestão das publicações compartilharão a página `Publicações`. A tela terá uma lista editorial privada somente das publicações do proprietário e uma ação primária `Nova publicação`; não haverá item separado de criação na navegação nem chamada duplicada na visão geral. Essa superfície é administrativa e não será confundida com o feed público de descoberta.
+
+Cada item da lista usará leitura vertical, separação clara e menu `Mais ações` de três pontos no topo direito. O menu não exibirá comandos futuros ou indisponíveis e respeitará as guardas do estado editorial.
 
 A composição terá dois modos aprovados: `Criar`, para escrever, classificar e salvar um rascunho incompleto, e `Revisar`, obrigatório antes de publicar. O primeiro campo será `Título`, seguido pelo conteúdo Markdown como maior superfície editorial.
 
 A referência de redes sociais será absorvida somente no que reduz atrito para o autor:
 
-- caixa de composição no início da lista;
+- diálogo modal de composição aberto por `Nova publicação`;
 - entrada de texto imediata;
 - ferramentas compactas `Capa`, `Classificação`, `Referências e links` e `Mais metadados`;
 - salvamento como rascunho sem exigir preenchimento completo;
@@ -658,7 +660,7 @@ A referência de redes sociais será absorvida somente no que reduz atrito para 
 
 O OPALIB não adotará feed infinito, métricas competitivas, perfis sociais, urgência, recomendação algorítmica ou mecanismos de retenção. A lista continuará sendo uma ferramenta privada de autoria e gestão editorial.
 
-Informações secundárias serão reveladas progressivamente na própria composição ou edição, sem wizard obrigatório. Publicação continuará exigindo revisão e confirmação consciente. Áreas aceitarão múltiplos valores; categoria será única; tags aceitarão múltiplos valores. Nenhum desses vocabulários permitirá criação inline no editor.
+Informações secundárias serão reveladas progressivamente no diálogo de composição ou edição, sem wizard obrigatório. Em telas compactas, o diálogo ocupará a área disponível como painel de uma coluna. Publicação continuará exigindo revisão e confirmação consciente. Áreas aceitarão múltiplos valores; categoria será única; tags aceitarão múltiplos valores. Nenhum desses vocabulários permitirá criação inline no editor.
 
 Referência visual: `assets/reference-threads.png`, imagem fornecida pelo proprietário em 20/09/2026. A referência governa composição leve e ferramentas contextuais, não aparência, marca ou comportamento social literal.
 
