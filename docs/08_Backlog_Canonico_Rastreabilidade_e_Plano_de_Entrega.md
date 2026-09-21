@@ -468,7 +468,7 @@ Estado atual: schema relacional existente preservado; seed determinístico execu
 
 ### TAX-002 — Administrar categorias e tags
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D02 §9; D05 §20; D07 §9.2.
 - **Objetivo:** criar, renomear, pesquisar, consultar uso e excluir taxonomia com integridade.
 - **Descrição:** nomes normalizados e slugs únicos; exclusão em uso exige substituição ou remoção de associações.
@@ -477,6 +477,8 @@ Estado atual: schema relacional existente preservado; seed determinístico execu
 - **Riscos:** quebrar filtros ou URLs por renomeação.
 - **Testes:** `TEST-TAX-002-01` CRUD; `-02` duplicidade; `-03` exclusão associada.
 - **Evidência:** `EVID-TAX-002-01` E2E e constraints.
+
+Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados e slugs únicos protegidos; exclusão associada exige substituição ou remoção explícita em transação; suíte local, verificação no Preview, inspeção responsiva e checks da PR #21 aprovados.
 
 ### PUB-001 — Criar e salvar rascunho manualmente
 
