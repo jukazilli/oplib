@@ -14,6 +14,6 @@
 ## Pendências de aceite
 
 - Verificação em banco `preview` de publicação, atualização, concorrência e rollback, com auditoria saneada.
-- Verificação responsiva/autenticada do fluxo e confirmação de duplo envio.
+- Verificação responsiva/autenticada do fluxo; a automação desta sessão não encontrou Chrome nem navegador interno disponível. O bloqueio local contra duplo envio foi coberto no componente e os testes do fluxo passaram.
 - A rota pública `/publicacoes/[slug]` é parte de WEB-004 e ainda não existe. A ação devolve o endereço reservado, mas não se deve apresentá-lo como página já acessível.
 - Migration AUD-001 ainda não aplicada em produção.
