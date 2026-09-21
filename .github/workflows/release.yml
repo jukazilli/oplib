@@ -58,7 +58,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT"
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 9.11.0
 
@@ -121,7 +121,7 @@ jobs:
           git merge-base --is-ancestor HEAD origin/main
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: 9.11.0
 
