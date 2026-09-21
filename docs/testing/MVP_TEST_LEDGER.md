@@ -144,3 +144,11 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: provocar ambas as falhas; artigo continua legível, mensagens permitem recarga e logs não contêm erros brutos ou conteúdo.
 - [ ] `Final`: repetir em celular e desktop, conferir anúncio das mensagens, foco e recuperação após restabelecer o serviço.
 - [ ] `Final`: completar a matriz UX-001 de carregamento, vazio, sucesso, erro e retry para cada fluxo, incluindo editor com mudanças não salvas.
+
+## UX-001 — Recuperação e saída do editor
+
+- [ ] `Automatizado`: confirmar que cópia local da mesma versão é recuperada sem perder título e conteúdo; uma cópia de versão anterior exige escolha explícita e mantém a versão mais nova do servidor até a escolha.
+- [ ] `Automatizado`: escolher `Manter versão salva` e conferir remoção da cópia local; escolher `Recuperar minha cópia` e conferir campos recuperados sem publicação automática.
+- [ ] `Preview`: editar título e conteúdo, tentar fechar, navegar por link e atualizar a página; cancelar a saída deve preservar todos os campos, e confirmar descarte deve remover a cópia temporária.
+- [ ] `Preview`: interromper rede durante edição/salvamento, voltar e confirmar recuperação do texto; após salvamento confirmado, recarregar sem reapresentar alterações antigas.
+- [ ] `Final`: repetir saída e recuperação por teclado, leitor de tela, celular e zoom 200%; conferir foco no diálogo e retorno ao campo de edição após cancelar.
