@@ -165,6 +165,10 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: enviar comentário com `text/plain`, formulário e tipo ausente; confirmar `415`, `no-store` e nenhuma persistência ou consumo de rate limit.
 - [ ] `Automatizado/Preview`: enviar JSON truncado, array, valores com tipos incorretos e corpo acima de 10 KB por header e por bytes reais; confirmar erro `400` genérico, sem eco, cookie novo, persistência ou log de indisponibilidade.
 - [ ] `Final`: confirmar que o formulário legítimo continua enviando JSON compatível e que erros de payload não apagam nome ou comentário digitado.
+- [ ] `Automatizado/Preview`: chamar preparação, upload e remoção de capa sem sessão e com conta fora da allowlist; confirmar `401`/`404` genéricos, `no-store` e nenhum token, objeto ou exclusão.
+- [ ] `Automatizado/Preview`: tentar SVG/GIF, MIME divergente dos bytes, arquivo vazio, acima de 5 MB, pathname com travessia e fora do prefixo; confirmar recusa e remoção de qualquer blob divergente já enviado.
+- [ ] `Automatizado/Preview`: inspecionar token de upload e confirmar tipos aprovados, limite de 5 MB, overwrite desativado, UUID/chave do ambiente e cache anual.
+- [ ] `Final`: enviar cada formato aprovado, conferir visualização e alt; simular falha e confirmar que o editor e sua composição permanecem intactos, sem objeto órfão ou acesso ao prefixo de Production.
 
 ## QUAL-001 — Acessibilidade e responsividade
 

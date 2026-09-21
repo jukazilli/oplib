@@ -32,3 +32,14 @@ Estado: `in_progress`.
 - `tests/unit/comments-route.test.ts`: 7 testes aprovados, incluindo tipo incompatível, JSON truncado, limite declarado, limite efetivo e ausência de efeitos colaterais.
 - Validação completa do corte: 46 arquivos, 194 testes, format check, lint, typecheck e build aprovados.
 - Ainda faltam prova em Preview e os demais grupos do corpus SEC-001; esta seção não encerra a regressão de segurança.
+
+## Regressão das rotas de capa
+
+- `tests/unit/cover-routes.test.ts` exercita diretamente preparação de pathname, callbacks do protocolo de upload e remoção administrativa.
+- Sessão ausente retorna `401`; identidade fora da allowlist retorna `404`; ambas são genéricas e `no-store`.
+- O token só é emitido após autorização e restringe o namespace a UUID gerado, JPEG/PNG/WebP/AVIF, 5 MB e `allowOverwrite: false`.
+- Caminho com travessia é recusado. Após o upload, bytes incompatíveis com o MIME declarado fazem o blob ser removido e o comando falhar sem sucesso falso.
+- Corpo do protocolo acima de 64 KB retorna `413` antes de chamar o Blob. Remoção fora do prefixo do ambiente não alcança a rotina destrutiva.
+- Todas as respostas dessas rotas passaram a declarar `Cache-Control: no-store`, inclusive sucesso e erros não autorizativos.
+- Validação do corte: 3 arquivos e 21 testes direcionados; suíte completa com 47 arquivos e 202 testes; format check, lint, typecheck e build aprovados.
+- A prova local não substitui o teste autenticado do Blob real, segregação Preview/Production nem inspeção de objeto no Preview.
