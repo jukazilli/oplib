@@ -20,7 +20,7 @@ const navigation = [
   { label: "Publicações", icon: BookOpenText, href: "/admin/publicacoes" },
   { label: "Categorias e tags", icon: FolderTree, href: "/admin/taxonomia" },
   { label: "Meu perfil", icon: UserRound, href: "/admin/perfil" },
-  { label: "Comentários", icon: MessageSquareText, href: null },
+  { label: "Comentários", icon: MessageSquareText, href: "/admin/comentarios" },
   { label: "Configurações", icon: Settings2, href: null },
 ] as const;
 

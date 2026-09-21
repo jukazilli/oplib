@@ -118,3 +118,11 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Final`: conferir aviso de privacidade antes do envio, estado `Publicando…`, sucesso somente depois do servidor, novo item destacado e formulário limpo só no sucesso.
 - [ ] `Final`: simular rede indisponível, confirmar texto/nome preservados e repetir sem redigitar; testar celular, teclado, zoom 200%, foco e leitor de tela.
 - [ ] `Final`: conferir lista vazia, acentos, quebras de linha e ausência de e-mail/login/controles sociais.
+
+## MOD-001 — Consulta administrativa de comentários
+
+- [ ] `Automatizado/Preview`: visitante anônimo e conta fora da allowlist não consultam a lista; administrador autorizado acessa.
+- [ ] `Automatizado/Preview`: filtrar todos, visíveis e ocultos, conferir autor, data, estado, texto e vínculo correto à publicação.
+- [ ] `Automatizado/Preview`: navegar mais de 50 itens, inclusive datas iguais, sem repetição ou perda; URL de filtro e cursor resiste a atualização.
+- [ ] `Automatizado/Preview`: HTML, Markdown e URL maliciosos aparecem como texto inerte também na administração.
+- [ ] `Final`: conferir vazio por filtro, falha de leitura e recuperação, navegação por teclado, foco, leitor de tela, celular e zoom 200%.

@@ -788,7 +788,7 @@ Estado atual: leitura e publicação imediata implementadas com validação, pro
 
 ### MOD-001 — Consultar comentários na administração
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
 - **Origem:** D02 §8.7; D04 §23; D05 §21.
 - **Objetivo:** localizar comentários visíveis e ocultos com a publicação de origem.
 - **Descrição:** lista moderável com estado, data, nome/Anônimo, trecho e vínculo ao post.
@@ -797,6 +797,8 @@ Estado atual: leitura e publicação imediata implementadas com validação, pro
 - **Riscos:** renderizar conteúdo não confiável na administração.
 - **Testes:** `TEST-MOD-001-01` listagem/filtros; `-02` XSS na admin.
 - **Evidência:** `EVID-MOD-001-01` E2E.
+
+Estado atual: lista autorizada, filtros, paginação e estados implementados com testes locais; banco real, axe e aceite de navegador pendentes.
 
 ### MOD-002 — Ocultar e restaurar comentário
 
