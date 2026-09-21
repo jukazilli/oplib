@@ -101,20 +101,40 @@ describe("draft composer", () => {
       screen.getByRole("button", { name: "Adicionar taxonomia" }),
     );
     expect(
-      screen.getByRole("region", { name: "Taxonomia" }),
+      screen.getByRole("dialog", { name: "Taxonomia" }),
     ).toBeInTheDocument();
     await user.selectOptions(
       screen.getByLabelText("Categoria"),
       "10000000-0000-4000-8000-000000000002",
     );
     await user.click(screen.getByRole("button", { name: "Pesquisa" }));
-    await user.click(screen.getByRole("heading", { name: "Nova publicação" }));
+    const taxonomyDialog = screen.getByRole("dialog", { name: "Taxonomia" });
+    expect(taxonomyDialog).toHaveAttribute("aria-modal", "true");
+    await user.click(taxonomyDialog.parentElement!);
     expect(
-      screen.queryByRole("region", { name: "Taxonomia" }),
+      screen.queryByRole("dialog", { name: "Taxonomia" }),
     ).not.toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "2 classificações" }),
     ).toBeInTheDocument();
+  });
+
+  it("opens details centrally and closes with Escape without discarding the draft", async () => {
+    const user = userEvent.setup();
+    render(<DraftComposer initialDraft={null} />);
+    await user.click(
+      screen.getByRole("button", { name: "Detalhes da publicação" }),
+    );
+    const dialog = screen.getByRole("dialog", {
+      name: "Detalhes da publicação",
+    });
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog.parentElement).toHaveClass("items-center", "justify-center");
+    await user.keyboard("{Escape}");
+    expect(
+      screen.queryByRole("dialog", { name: "Detalhes da publicação" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Título" })).toBeInTheDocument();
   });
 
   it("saves explicitly and replaces the URL with the persisted draft", async () => {

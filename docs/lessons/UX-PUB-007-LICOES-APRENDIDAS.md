@@ -8,7 +8,7 @@ Memória de produto para a composição administrativa de publicações. Estas r
 
 1. **Composição não é formulário administrativo.** Título, conteúdo e ferramentas devem formar um fluxo editorial contínuo, com baixa densidade e sem caixas ao redor de cada entrada.
 2. **A referência do Threads governa ritmo e interação.** Ela não autoriza semântica social nem mistura o acervo privado com o feed público.
-3. **Escolhas curtas são sobrepostas.** Taxonomia abre em popover ancorado; não desloca o texto para baixo. Categoria e tags permanecem selecionadas ao clicar fora.
+3. **Escolhas editoriais abrem no centro da viewport.** Taxonomia e detalhes usam modal centralizado com fundo de contraste; não ficam presos ao botão nem deslocam o texto. As escolhas permanecem selecionadas ao clicar fora.
 4. **Ferramentas visíveis precisam funcionar.** O ícone de imagem envia e vincula uma capa real; ícones sem ação não entram no composer.
 5. **Entradas editoriais não recebem moldura de foco.** Título e conteúdo usam caret e mudança discreta de superfície; botões e demais controles continuam com foco visível.
 6. **Confirmações pertencem ao produto.** Cancelar, fechar ou navegar com alterações não salvas usa diálogo do OPALIB. O aviso nativo do navegador fica restrito ao fechamento ou recarregamento da aba, caso que não aceita personalização.

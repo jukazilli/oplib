@@ -473,7 +473,7 @@ Uma publicação poderá possuir zero ou várias áreas durante o rascunho e dev
 ### Comportamento da composição integrada
 
 - a entrada inicial começa pelo título e apresenta o conteúdo Markdown logo depois;
-- identidade visual, título e acesso à taxonomia formam uma linha contínua; a seleção abre em popover, e clicar fora fecha o controle sem descartar categoria ou tags;
+- identidade visual, título e acesso à taxonomia formam uma linha contínua; a seleção abre em modal centralizado, e clicar fora fecha o controle sem descartar categoria ou tags;
 - o ícone de imagem abre a seleção da capa e mantém prévia e texto alternativo no próprio fluxo da composição;
 - ferramentas usam ícones com nome acessível e tooltip curto quando o símbolo não for inequívoco;
 - capa, referências e metadados abrem controles contextuais dentro da composição sem criar diálogos empilhados;
