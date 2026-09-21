@@ -1,6 +1,6 @@
 # EVID-PUB-002-01 — Editor e prévia Markdown segura
 
-- **Estado:** técnico concluído; aceite visual do Preview pendente
+- **Estado:** concluído e aprovado pelo proprietário em 21/09/2026
 - **Rota:** `/admin/publicacoes`
 
 ## Entrega comprovada
@@ -28,9 +28,11 @@
 
 `pnpm audit --prod` continua reportando duas vulnerabilidades moderadas transitivas sob `@clerk/ui` (`uuid` e `stream-json`). Elas não pertencem ao pipeline Markdown e não possuem correção direta neste corte; permanecem como risco herdado para atualização da dependência proprietária.
 
-## Aceite visual pendente
+## Aceite visual
 
-- [ ] colunas mantêm leitura confortável no desktop;
-- [ ] avanço e retorno entre as duas etapas são claros no celular;
-- [ ] prévia vazia e avisos não tornam o composer denso;
-- [ ] salvamento permanece acessível nos dois modos.
+- [x] colunas mantêm leitura confortável no desktop;
+- [x] avanço e retorno entre as duas etapas são claros no celular;
+- [x] prévia vazia e avisos não tornam o composer denso;
+- [x] salvamento permanece acessível nos dois modos.
+
+O proprietário aprovou o Preview após o refinamento para viewport completa, duas etapas em telas compactas e ações persistentes durante a rolagem.
