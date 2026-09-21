@@ -41,3 +41,14 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Final`: conferir capa presente e ausente, sem espaço vazio indevido.
 - [ ] `Final`: testar links externos, tabela larga e bloco de código em tela pequena.
 - [ ] `Automatizado`: executar axe e confirmar hierarquia de títulos e regiões.
+
+## WEB-003 — Acervo, pesquisa, filtros e paginação
+
+- [ ] `Automatizado/Preview`: pesquisa vazia lista somente publicações públicas em ordem estável.
+- [ ] `Automatizado/Preview`: combinar termo, área, tipo, categoria, tag e ano; conferir total e resultados.
+- [ ] `Final`: compartilhar a URL filtrada, atualizar e usar voltar/avançar sem perder estado.
+- [ ] `Final`: alternar Feed/Grade e navegar entre páginas sem perder filtros.
+- [ ] `Final`: conferir estados sem publicações e sem resultados, incluindo `Limpar filtros`.
+- [ ] `Preview`: retirar uma publicação e confirmar ausência imediata do acervo e da pesquisa.
+- [ ] `Preview`: medir consulta representativa e registrar plano se houver degradação.
+- [ ] `Automatizado`: executar axe e responsividade dos filtros em celular, tablet e desktop.

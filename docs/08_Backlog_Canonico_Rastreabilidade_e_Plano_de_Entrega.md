@@ -660,7 +660,7 @@ Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, loc
 
 ### WEB-003 — Acervo, pesquisa, filtros e paginação
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §§8.1–8.2; D05 §5; D07 §13; TL §15.
 - **Objetivo:** localizar publicações por texto e taxonomia sem serviço externo.
 - **Descrição:** busca PostgreSQL, filtros por área, tipo, categoria, tag e período, ordenação e paginação estável.
@@ -669,6 +669,8 @@ Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, loc
 - **Riscos:** consultas lentas ou paginação instável.
 - **Testes:** `TEST-WEB-003-01` combinações; `-02` URL/back-forward; `-03` sem resultado; `-04` desempenho.
 - **Evidência:** `EVID-WEB-003-01` E2E e plano de consulta quando aplicável.
+
+Estado atual: consulta PostgreSQL por texto e taxonomia, filtros persistentes na URL, Feed/Grade, total, ordem, paginação estável e estados de carregamento/vazio/erro implementados. Taxonomia é agregada sem N+1; validação e plano de consulta reais aguardam Preview.
 
 ### WEB-004 — Página de leitura da publicação
 
