@@ -198,6 +198,20 @@ Um item só recebe `done` quando:
 
 Estado atual: proposta consolidada em `docs/decisions/UX-002.md`, cobrindo descoberta e leitura públicas, feed/grade, composição em duas etapas, contratos de campos, estados, acessibilidade e responsividade. O aceite do proprietário permanece pendente; `PUB-001` continua bloqueado até a reconciliação final em D04 e D05.
 
+### UX-003 — Grafo do acervo e evolução para perfis isolados
+
+- **Tipo:** `decision`; **Prioridade:** `P1`; **Status:** `review`.
+- **Origem:** feedback do proprietário; referência Obsidian; protótipo privado `jukazilli/graph`; D04 §§20–22; D05 §§3, 11 e 18; D07 §§10, 16 e 30.
+- **Objetivo:** decidir o grafo como navegação operacional complementar e preparar a linguagem de rotas para futuros acervos pessoais.
+- **Descrição:** definir visualizações Lista/Grafo, semântica de nós e arestas, cartão contextual, ações seguras, acessibilidade, desempenho e direção `/@identificador` + `/studio` sem alterar `/admin` no MVP.
+- **Critérios:** relações não inventadas; lista equivalente; hover não obrigatório; ações por estado; exclusão protegida; teclado/toque/leitor de tela; isolamento futuro no banco e servidor; migração de URL explícita.
+- **Dependências:** ADM-001, PUB-007 e UX-002; implementação depende ainda de relações persistentes entre publicações e decisão arquitetural multiusuário.
+- **Riscos:** grafo decorativo ou ilegível, ação destrutiva acidental, relação semântica falsa, autorização baseada em URL ou migração prematura do MVP.
+- **Testes:** `TEST-UX-003-01` contratos do grafo; `-02` modalidades de interação; `-03` rotas e isolamento.
+- **Evidência:** `EVID-UX-003-01` proposta, referências e aceite do proprietário.
+
+Estado atual: proposta consolidada em `docs/decisions/UX-003.md`; nenhuma mudança de código ou rota autorizada até aceite e decomposição das dependências técnicas.
+
 ## 7. Fundação — FND
 
 ### FND-001 — Proteger e preparar o repositório
