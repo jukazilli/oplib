@@ -465,13 +465,16 @@ Uma publicação poderá possuir zero ou várias áreas durante o rascunho e dev
 5. Metadados obrigatórios para publicar são revelados conforme necessário, sem impedir um rascunho incompleto.
 6. O rascunho pode ser salvo e o diálogo pode ser fechado.
 7. Cada publicação na lista oferece `Mais ações`; `Editar` reabre a composição, enquanto outros comandos aparecem somente quando implementados e permitidos pelo estado.
-8. A prévia e as validações ficam disponíveis antes da mudança de estado.
-9. Publicar exige confirmação explícita.
-10. O sistema apresenta o endereço público e mantém o item na lista com estado atualizado.
+8. No composer, a ação `Rascunhos` abre a biblioteca de composições não publicadas; selecionar uma retoma o conteúdo e aplica recuperação ou conflito quando necessário.
+9. A prévia e as validações ficam disponíveis antes da mudança de estado.
+10. Publicar exige confirmação explícita.
+11. O sistema apresenta o endereço público e mantém o item na lista com estado atualizado.
 
 ### Comportamento da composição integrada
 
 - a entrada inicial começa pelo título e apresenta o conteúdo Markdown logo depois;
+- identidade visual, título e acesso à taxonomia formam uma linha contínua; a seleção abre em popover, e clicar fora fecha o controle sem descartar categoria ou tags;
+- o ícone de imagem abre a seleção da capa e mantém prévia e texto alternativo no próprio fluxo da composição;
 - ferramentas usam ícones com nome acessível e tooltip curto quando o símbolo não for inequívoco;
 - capa, referências e metadados abrem controles contextuais dentro da composição sem criar diálogos empilhados;
 - a lista é paginada ou carregada por ação explícita; não haverá rolagem infinita;
@@ -479,6 +482,7 @@ Uma publicação poderá possuir zero ou várias áreas durante o rascunho e dev
 - a lista administrativa não mistura autores nem reutiliza a semântica do feed público do visitante;
 - somente um diálogo de composição ou edição permanece aberto por vez;
 - fechar, editar outro item ou sair preserva o rascunho e respeita o aviso de alterações não salvas;
+- ações internas de fechamento ou navegação apresentam confirmação visual do OPALIB; somente fechar ou recarregar a aba pode usar o aviso nativo obrigatório do navegador;
 - filtros e busca pertencem à mesma página, mas não competem com a composição;
 - no celular, composição e item expandido ocupam a largura disponível, com ferramentas roláveis ou agrupadas sem esconder ações essenciais.
 

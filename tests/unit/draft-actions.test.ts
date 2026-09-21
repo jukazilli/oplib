@@ -48,6 +48,9 @@ describe("draft actions", () => {
     expect(mocks.create).toHaveBeenCalledWith({
       title: "",
       markdown: "Primeira ideia",
+      categoryId: "",
+      tagIds: [],
+      cover: null,
     });
     expect(result).toMatchObject({ status: "success" });
     expect(mocks.revalidate).toHaveBeenCalledWith("/admin/publicacoes");

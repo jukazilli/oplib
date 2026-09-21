@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
 
-import { DraftComposer } from "@/components/editor/draft-composer";
+import { PublicationsWorkspace } from "@/components/editor/publications-workspace";
 import { draftIdSchema } from "@/modules/publishing/draft-domain";
-import { getDraftById } from "@/modules/publishing/draft-repository";
+import {
+  getDraftById,
+  listAdminPublications,
+} from "@/modules/publishing/draft-repository";
+import { listTaxonomy } from "@/modules/taxonomy/repository";
 
 export default async function PublicationsPage({
   searchParams,
@@ -13,14 +17,23 @@ export default async function PublicationsPage({
   const parsedId = draftId ? draftIdSchema.safeParse(draftId) : null;
   if (draftId && !parsedId?.success) notFound();
 
-  const draft = parsedId?.success ? await getDraftById(parsedId.data) : null;
+  const [draft, publications, taxonomy] = await Promise.all([
+    parsedId?.success ? getDraftById(parsedId.data) : null,
+    listAdminPublications(),
+    listTaxonomy(),
+  ]);
   if (parsedId?.success && !draft) notFound();
 
   return (
-    <DraftComposer
+    <PublicationsWorkspace
       initialDraft={
         draft ? { ...draft, updatedAt: draft.updatedAt.toISOString() } : null
       }
+      publications={publications.map((publication) => ({
+        ...publication,
+        updatedAt: publication.updatedAt.toISOString(),
+      }))}
+      taxonomy={taxonomy}
     />
   );
 }

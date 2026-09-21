@@ -42,6 +42,9 @@ describe("administrative overview", () => {
     expect(
       within(navigation).getByRole("link", { name: "Categorias e tags" }),
     ).toHaveAttribute("href", "/admin/taxonomia");
+    expect(
+      within(navigation).getByRole("link", { name: "Meu perfil" }),
+    ).toHaveAttribute("href", "/admin/perfil");
     expect(screen.getAllByRole("button", { name: "Sair" })).toHaveLength(2);
   });
 

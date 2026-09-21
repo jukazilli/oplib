@@ -582,7 +582,7 @@ Estado atual: fundação funcional aceita pelo proprietário como Preview em 21/
 
 ### PUB-007 — Listar e localizar publicações na administração
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `done`.
 - **Origem:** D02 §9; D04 §21; D05 §11.
 - **Objetivo:** encontrar rascunhos, publicados e retirados para continuar o trabalho.
 - **Descrição:** página única com lista editorial vertical e privada somente das publicações do proprietário, busca, status, área e atualização; ação `Nova publicação` abre composição em diálogo modal e cada item oferece menu de três pontos para comandos disponíveis. Não é o feed público do visitante.
@@ -591,6 +591,8 @@ Estado atual: fundação funcional aceita pelo proprietário como Preview em 21/
 - **Riscos:** ação destrutiva acidental em lista densa.
 - **Testes:** `TEST-PUB-007-01` filtros/status; `-02` responsividade e teclado.
 - **Evidência:** `EVID-PUB-007-01` E2E.
+
+Estado atual: lista privada, box `Publique algo em seu acervo`, composição modal fluida, taxonomia em popover, capa contextual, menu por item, biblioteca de rascunhos e acesso a `Meu perfil` implementados. Suíte local e checks do PR #24 aprovados; Preview autenticado aceito pelo proprietário em 21/09/2026.
 
 ### PUB-008 — Excluir publicação permanentemente
 

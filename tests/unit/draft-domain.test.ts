@@ -34,4 +34,25 @@ describe("draft domain", () => {
     );
     expect(result.success).toBe(false);
   });
+
+  it("requires accessible text when a cover is attached", () => {
+    const result = parseDraftInput(
+      form({
+        id: "",
+        version: "",
+        title: "Título",
+        markdown: "Conteúdo",
+        cover: JSON.stringify({
+          pathname: "covers/example.webp",
+          url: "https://example.com/example.webp",
+          altText: "",
+          contentType: "image/webp",
+          sizeBytes: 1024,
+          width: null,
+          height: null,
+        }),
+      }),
+    );
+    expect(result.success).toBe(false);
+  });
 });
