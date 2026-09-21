@@ -98,4 +98,15 @@ describe("like route", () => {
     expect(response.status).toBe(403);
     expect(mocks.register).not.toHaveBeenCalled();
   });
+
+  it("refuses browser cross-site requests even without Origin", async () => {
+    const crossSite = request();
+    crossSite.headers.set("sec-fetch-site", "cross-site");
+    const response = await POST(crossSite, {
+      params: Promise.resolve({ slug: "publicacao" }),
+    } as never);
+
+    expect(response.status).toBe(403);
+    expect(mocks.register).not.toHaveBeenCalled();
+  });
 });

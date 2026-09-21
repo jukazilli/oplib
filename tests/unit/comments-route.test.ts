@@ -82,6 +82,15 @@ describe("comments route", () => {
     ).toBe(403);
     expect(mocks.create).not.toHaveBeenCalled();
   });
+  it("refuses browser cross-site requests even without Origin", async () => {
+    const response = await POST(
+      request({}, { "sec-fetch-site": "cross-site" }),
+      context,
+    );
+
+    expect(response.status).toBe(403);
+    expect(mocks.create).not.toHaveBeenCalled();
+  });
   it("limits repeated attempts and hides unavailable editorial state", async () => {
     mocks.limit.mockReturnValueOnce(false);
     expect((await POST(request({}), context)).status).toBe(429);

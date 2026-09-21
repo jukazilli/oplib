@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { logEvent } from "@/lib/observability/logger";
+import { isSameOriginMutation } from "@/lib/security/request";
 import {
   COMMENT_MIN_FILL_MS,
   commentInputSchema,
@@ -26,8 +27,7 @@ export async function POST(
   const correlationId = randomUUID();
   const requestStartedAt = Date.now();
   try {
-    const origin = request.headers.get("origin");
-    if (origin && origin !== new URL(request.url).origin)
+    if (!isSameOriginMutation(request))
       return Response.json(
         { message: "Requisição recusada." },
         { status: 403, headers: noStore },

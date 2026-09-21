@@ -152,3 +152,18 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Preview`: editar título e conteúdo, tentar fechar, navegar por link e atualizar a página; cancelar a saída deve preservar todos os campos, e confirmar descarte deve remover a cópia temporária.
 - [ ] `Preview`: interromper rede durante edição/salvamento, voltar e confirmar recuperação do texto; após salvamento confirmado, recarregar sem reapresentar alterações antigas.
 - [ ] `Final`: repetir saída e recuperação por teclado, leitor de tela, celular e zoom 200%; conferir foco no diálogo e retorno ao campo de edição após cancelar.
+
+## SEC-001 — Proveniência das mutações públicas
+
+- [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.
+- [ ] `Automatizado`: repetir sem `Origin` mas com `Sec-Fetch-Site: cross-site` e `same-site`; ambos devem ser recusados antes de persistir.
+- [ ] `Automatizado`: sem `Origin` e sem Fetch Metadata, confirmar que `Referer` divergente ou inválido é recusado; `Referer` da própria origem é aceito.
+- [ ] `Preview`: em navegador legítimo, curtir e comentar normalmente; inspecionar headers e confirmar que o endurecimento não bloqueou o fluxo real.
+- [ ] `Final`: repetir tentativa cross-site controlada e conferir resposta genérica, ausência de efeito e logs sem dados privados; concluir a matriz SEC-001 de autorização, XSS, upload, payload, rate limit, dependências e WAF.
+
+## QUAL-001 — Acessibilidade e responsividade
+
+- [ ] `Preview`: executar axe em home, acervo, leitura e fluxos administrativos autenticados, sem violação crítica.
+- [ ] `Final`: percorrer as jornadas críticas por teclado e leitor de tela; conferir foco, nomes acessíveis e anúncios de estados.
+- [ ] `Final`: verificar celular, tablet, desktop, zoom 200% e preferência por movimento reduzido.
+- [ ] `Ambiente`: disponibilizar chave pública Clerk no ambiente local ou acesso autorizado ao Preview para a auditoria de navegador; tentativa local retornou 500 por chave ausente e o Preview protegido redirecionou ao login Vercel.

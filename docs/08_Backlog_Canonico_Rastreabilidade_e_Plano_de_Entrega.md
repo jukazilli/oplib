@@ -870,7 +870,7 @@ Estado atual: falhas de leitura das interações não derrubam mais o artigo; ca
 
 ### SEC-001 — Regressão de segurança do MVP
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §11; D06 §§14–15 e 18.4; D07 §24; TL §16; INF §19.
 - **Objetivo:** provar os controles críticos antes de produção.
 - **Descrição:** suíte de autorização negativa, XSS, SQL injection, CSRF, upload, rate limit, payload e exposição de segredo.
@@ -879,6 +879,8 @@ Estado atual: falhas de leitura das interações não derrubam mais o artigo; ca
 - **Riscos:** teste superficial ou regra de proteção quebrar fluxo legítimo.
 - **Testes:** `TEST-SEC-001-01` matriz OWASP aplicável; `-02` auth; `-03` Markdown/comentário; `-04` upload; `-05` scanning.
 - **Evidência:** `EVID-SEC-001-01` relatório saneado e exceções aprovadas.
+
+Estado atual: checagem compartilhada de proveniência nas mutações públicas de curtida e comentário implementada e coberta por testes locais; a matriz de segurança, Preview, WAF e scanning continuam pendentes.
 
 ### CNT-001 — Preparar conteúdo inaugural
 
