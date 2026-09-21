@@ -1,0 +1,34 @@
+# Registro cumulativo de testes do MVP
+
+Este documento preserva tudo o que deverá ser validado na rodada final do MVP. Cada slice acrescenta seus testes sem apagar os anteriores. Evidências automatizadas podem ser executadas durante a implementação; itens marcados como `final` serão repetidos pelo proprietário no aceite consolidado.
+
+## Protocolo
+
+- Registrar por ID do backlog: objetivo, pré-condições, passos, resultado esperado e ambiente.
+- Separar `automatizado`, `Preview` e `final/humano`.
+- Não remover um teste porque passou numa entrega intermediária.
+- Todo defeito encontrado no aceite final volta ao item de origem, sem ampliar o escopo silenciosamente.
+
+## PUB-004 — Publicar e atualizar
+
+- [ ] `Preview/final`: publicar um rascunho completo após confirmação.
+- [ ] `Preview/final`: repetir o envio idêntico e confirmar sucesso idempotente.
+- [ ] `Preview/final`: alterar a mesma publicação em duas sessões e confirmar conflito somente para conteúdos diferentes.
+- [ ] `Preview/final`: atualizar conteúdo público e confirmar que a versão anterior permanece até o commit.
+- [ ] `Preview`: comprovar auditoria, rollback transacional e invalidação de cache.
+- [ ] `Final`: repetir o fluxo em desktop e celular, incluindo duplo clique e falha recuperável.
+
+## PUB-005 — Retirar e republicar
+
+- [ ] `Preview/final`: cancelar e depois confirmar `Retirar do ar`.
+- [ ] `Preview/final`: confirmar estado `Retirada do ar` e disponibilidade da ação `Republicar`.
+- [ ] `Preview/final`: republicar e confirmar retorno ao estado `Publicada`.
+- [ ] `Preview`: comprovar datas, auditoria, conflito e rollback no banco.
+- [ ] `Final`: confirmar ausência em página, listagens, pesquisa e sitemap enquanto retirada.
+
+## WEB-001 — Shell público responsivo
+
+- [ ] `Final`: percorrer cabeçalho e rodapé somente com teclado, com foco visível.
+- [ ] `Final`: conferir localização atual e ausência de entrada administrativa na navegação pública.
+- [ ] `Final`: verificar compacto, médio, amplo e zoom de 200%, sem corte ou sobreposição.
+- [ ] `Automatizado`: executar axe sem violações críticas.

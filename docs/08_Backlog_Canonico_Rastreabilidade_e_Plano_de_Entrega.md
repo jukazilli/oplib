@@ -634,7 +634,7 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 
 ### WEB-001 — Shell público responsivo
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D04 §13; D05 §3; PUX P-UX-001 a P-UX-005.
 - **Objetivo:** oferecer navegação simples entre Início, Publicações, Áreas, Pesquisa e Sobre.
 - **Descrição:** cabeçalho e rodapé editoriais; administração ausente; conteúdo domina a hierarquia.
@@ -643,6 +643,8 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Riscos:** menu profundo ou excesso de elementos.
 - **Testes:** `TEST-WEB-001-01` teclado; `-02` breakpoints; `-03` 200% zoom.
 - **Evidência:** `EVID-WEB-001-01` screenshots e axe.
+
+Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, localização e navegação responsiva implementados; suíte local aprovada. Axe, screenshots, breakpoints e zoom de 200% permanecem pendentes no Preview.
 
 ### WEB-002 — Página inicial editorial
 
