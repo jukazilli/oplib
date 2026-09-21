@@ -760,7 +760,7 @@ Estado atual: sitemap exclusivo de conteúdo publicado, robots por ambiente, inv
 
 ### LIKE-001 — Curtir uma vez por navegador
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §8.5; D05 §8; D07 §14; TL §12.
 - **Objetivo:** registrar curtida anônima, irreversível e consistente.
 - **Descrição:** identificador opaco em cookie seguro, hash com pepper, constraint única e resposta autoritativa.
@@ -769,6 +769,8 @@ Estado atual: sitemap exclusivo de conteúdo publicado, robots por ambiente, inv
 - **Riscos:** abuso, fingerprinting ou contador inconsistente.
 - **Testes:** `TEST-LIKE-001-01` primeira curtida; `-02` repetição; `-03` concorrência; `-04` erro; `-05` ausência de remoção.
 - **Evidência:** `EVID-LIKE-001-01` E2E e constraint.
+
+Estado atual: cookie opaco protegido, HMAC com pepper, persistência idempotente, contador autoritativo, recusa de origem cruzada e UI irreversível implementados. Suíte local aprovada; concorrência real, WAF e acessibilidade permanecem pendentes no Preview/final.
 
 ### COM-001 — Publicar e listar comentários
 

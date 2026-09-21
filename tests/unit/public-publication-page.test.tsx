@@ -1,7 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ getBySlug: vi.fn(), notFound: vi.fn() }));
+const mocks = vi.hoisted(() => ({
+  getBySlug: vi.fn(),
+  getLikeState: vi.fn(),
+  notFound: vi.fn(),
+}));
 
 vi.mock("next/navigation", () => ({
   notFound: () => {
@@ -11,6 +15,19 @@ vi.mock("next/navigation", () => ({
 }));
 vi.mock("@/modules/publishing/draft-repository", () => ({
   getPublicPublicationBySlug: mocks.getBySlug,
+}));
+vi.mock("next/headers", () => ({
+  cookies: vi
+    .fn()
+    .mockResolvedValue({ get: vi.fn().mockReturnValue(undefined) }),
+}));
+vi.mock("@/modules/interactions/likes/identity", () => ({
+  VISITOR_COOKIE_NAME: "oplib_visitor",
+  validVisitorId: vi.fn().mockReturnValue(null),
+  hashVisitorId: vi.fn(),
+}));
+vi.mock("@/modules/interactions/likes/repository", () => ({
+  getLikeState: mocks.getLikeState,
 }));
 
 import PublicationPage, {
@@ -50,6 +67,7 @@ const publication = {
 describe("public publication page", () => {
   it("renders the published reading hierarchy without inactive interactions", async () => {
     mocks.getBySlug.mockResolvedValue(publication);
+    mocks.getLikeState.mockResolvedValue({ count: 3, liked: false });
     render(
       await PublicationPage({
         params: Promise.resolve({ slug: publication.slug }),
@@ -70,8 +88,9 @@ describe("public publication page", () => {
     expect(
       screen.getByRole("button", { name: "Compartilhar" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Curtir/ })).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /curtir|comentar/i }),
+      screen.queryByRole("button", { name: /comentar/i }),
     ).not.toBeInTheDocument();
   });
 

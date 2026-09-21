@@ -1,9 +1,11 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
 import { MarkdownContent } from "@/components/editor/markdown-content";
+import { LikeAction } from "@/components/editorial/like-action";
 import { ShareAction } from "@/components/editorial/share-action";
 import { getSiteUrl } from "@/lib/seo/metadata";
 import {
@@ -12,6 +14,12 @@ import {
 } from "@/lib/seo/structured-data";
 import { getPublicPublicationBySlug } from "@/modules/publishing/draft-repository";
 import { estimateReadingMinutes } from "@/modules/publishing/metadata";
+import {
+  hashVisitorId,
+  validVisitorId,
+  VISITOR_COOKIE_NAME,
+} from "@/modules/interactions/likes/identity";
+import { getLikeState } from "@/modules/interactions/likes/repository";
 
 const getPublication = cache(getPublicPublicationBySlug);
 
@@ -91,6 +99,13 @@ export default async function PublicationPage({
   if (!publication) notFound();
   const canonicalUrl = new URL(`/publicacoes/${publication.slug}`, getSiteUrl())
     .href;
+  const visitorId = validVisitorId(
+    (await cookies()).get(VISITOR_COOKIE_NAME)?.value,
+  );
+  const likeState = await getLikeState(
+    publication.id,
+    visitorId ? hashVisitorId(visitorId) : null,
+  );
 
   return (
     <article className="mx-auto w-full max-w-5xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
@@ -209,6 +224,11 @@ export default async function PublicationPage({
           title={publication.title}
           text={publication.summary}
           url={canonicalUrl}
+        />
+        <LikeAction
+          slug={publication.slug}
+          initialCount={likeState.count}
+          initiallyLiked={likeState.liked}
         />
       </div>
     </article>

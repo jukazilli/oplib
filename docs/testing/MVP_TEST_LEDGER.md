@@ -97,3 +97,13 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Production`: confirmar permissão pública e bloqueio de `/admin/`, `/api/` e `/sign-in/` no robots.
 - [ ] `Automatizado/Preview`: validar Article JSON-LD, datas, canonical, autor, capa opcional e escape contra fechamento de script.
 - [ ] `Final`: submeter sitemap a um validador e verificar uma publicação com teste de resultados avançados.
+
+## LIKE-001 — Curtida anônima irreversível
+
+- [ ] `Automatizado/Preview`: primeira curtida cria cookie protegido, persiste somente hash e incrementa após confirmação.
+- [ ] `Automatizado/Preview`: repetição e duas requisições concorrentes mantêm uma linha e uma única contagem adicional.
+- [ ] `Automatizado/Preview`: recarregar com o mesmo cookie mantém `Curtido` desabilitado e contador sincronizado.
+- [ ] `Automatizado`: rascunho, retirada e origem cruzada são recusados sem revelar estado interno.
+- [ ] `Automatizado/Preview`: falha do banco mantém contador e leitura, permitindo nova tentativa segura.
+- [ ] `Final`: confirmar teclado, leitor de tela, celular e feedback `Curtida registrada. Obrigado!`.
+- [ ] `Final`: confirmar ausência de ação, rota ou método para desfazer a curtida.
