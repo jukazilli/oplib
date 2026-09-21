@@ -173,6 +173,9 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: inserir imagem Markdown inline e por referência apontando para servidor monitorado; confirmar que nenhuma requisição é feita, apenas o alt aparece e o editor orienta usar a capa.
 - [ ] `Automatizado/Preview`: publicar comentário com HTML/script no nome e corpo, Markdown e URL; conferir texto literal sem elemento ativo no público e na administração.
 - [ ] `Final`: abrir links HTTP(S) internos/externos legítimos, confirmar destino e proteção de aba externa; repetir conteúdo malicioso com CSP ativa e inspecionar console/rede.
+- [ ] `Automatizado/Preview`: pesquisar e filtrar com aspas, `%`, `_`, tautologia, comentário, `UNION`, múltiplas instruções e Unicode; confirmar consulta válida, nenhum erro bruto, nenhuma ampliação indevida de resultados e nenhuma alteração no banco.
+- [ ] `Automatizado`: compilar filtros públicos e confirmar que todos os valores não confiáveis permanecem em `params`, nunca no texto SQL; varrer por `sql.raw` e concatenação antes do gate final.
+- [ ] `Final`: repetir o corpus nos campos administrativos de taxonomia, título, slug e comentários; conferir validação segura, dados preservados e logs sem query ou connection string.
 
 ## QUAL-001 — Acessibilidade e responsividade
 

@@ -52,3 +52,11 @@ Estado: `in_progress`.
 - Autor e corpo maliciosos de comentários permanecem texto literal tanto na leitura pública quanto na moderação administrativa; scripts, imagens, Markdown e URLs não viram elementos ativos.
 - Validação do corte: 4 arquivos e 20 testes direcionados; suíte completa com 47 arquivos e 209 testes; format check, lint, typecheck e build aprovados.
 - Restam validação em navegador/Preview e os demais grupos de SEC-001; testes de DOM não equivalem a uma auditoria dinâmica completa de XSS.
+
+## Consultas parametrizadas
+
+- A composição de filtros da pesquisa pública foi isolada em `buildPublicSearchWhere`, mantendo exatamente a mesma consulta usada por `searchPublications`.
+- `tests/unit/search-query-security.test.ts` compila o objeto SQL com o dialeto PostgreSQL e injeta aspas, wildcard, tautologia, múltiplas instruções e comentário SQL em busca, área, categoria e tag.
+- O SQL compilado contém placeholders e nenhum trecho do ataque; busca, filtros, tipo e ano aparecem somente em `params`. O contrato de URL continua rejeitando slugs fora de `[a-z0-9-]` e limita a busca a 120 caracteres.
+- A varredura dos repositórios encontrou uso dos operadores parametrizados do Drizzle e templates `sql`; não encontrou `sql.raw`. Essa prova cobre composição e compilação, mas o corpus ainda deve ser repetido contra PostgreSQL isolado no Preview.
+- Validação do corte: 2 arquivos e 3 testes direcionados; suíte completa com 48 arquivos e 210 testes; format check, lint, typecheck e build aprovados.

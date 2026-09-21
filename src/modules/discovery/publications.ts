@@ -171,12 +171,7 @@ export async function listPublishedSitemapEntries(database?: Database) {
     .orderBy(asc(posts.slug));
 }
 
-export async function searchPublications(
-  search: PublicSearch,
-  database?: Database,
-): Promise<PublicSearchResult> {
-  await connection();
-  const db = database ?? getDatabase();
+export function buildPublicSearchWhere(search: PublicSearch) {
   const term = `%${search.busca}%`;
   const conditions = [eq(posts.status, "published")];
   if (search.busca)
@@ -211,7 +206,16 @@ export async function searchPublications(
       where ${postTags.postId} = ${posts.id} and ${tags.slug} = ${search.tag}
     )`);
 
-  const where = and(...conditions);
+  return and(...conditions)!;
+}
+
+export async function searchPublications(
+  search: PublicSearch,
+  database?: Database,
+): Promise<PublicSearchResult> {
+  await connection();
+  const db = database ?? getDatabase();
+  const where = buildPublicSearchWhere(search);
   const totalRows = await db
     .select({ value: count() })
     .from(posts)
