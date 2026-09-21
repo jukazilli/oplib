@@ -14,6 +14,10 @@ const draftMigration = readFileSync(
   resolve(process.cwd(), "drizzle/0001_broken_frank_castle.sql"),
   "utf8",
 );
+const auditMigration = readFileSync(
+  resolve(process.cwd(), "drizzle/0002_gigantic_retro_girl.sql"),
+  "utf8",
+);
 
 describe("schema inicial", () => {
   it("materializa as tabelas e enums do modelo aprovado", () => {
@@ -49,6 +53,12 @@ describe("schema inicial", () => {
     );
     expect(draftMigration).toContain("posts_publishable_content");
     expect(draftMigration).toContain('"posts"."status" = \'draft\' OR');
+  });
+
+  it("preserva eventos anteriores e exige resultado explícito nos novos", () => {
+    expect(auditMigration).toContain("DEFAULT 'success' NOT NULL");
+    expect(auditMigration).toContain('ALTER COLUMN "result" DROP DEFAULT');
+    expect(auditMigration).toContain("audit_events_result_valid");
   });
 
   it("não depende de roles customizadas do provedor", () => {

@@ -15,6 +15,13 @@
       "when": 1789953682154,
       "tag": "0001_broken_frank_castle",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789996083875,
+      "tag": "0002_gigantic_retro_girl",
+      "breakpoints": true
     }
   ]
 }

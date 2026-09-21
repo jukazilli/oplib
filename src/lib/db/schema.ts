@@ -318,6 +318,7 @@ export const auditEvents = pgTable(
     action: varchar("action", { length: 100 }).notNull(),
     entityType: varchar("entity_type", { length: 80 }).notNull(),
     entityId: uuid("entity_id"),
+    result: varchar("result", { length: 16 }).notNull(),
     metadata: jsonb("metadata").$type<Record<string, unknown>>(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
@@ -326,5 +327,9 @@ export const auditEvents = pgTable(
   (table) => [
     index("audit_events_entity_idx").on(table.entityType, table.entityId),
     index("audit_events_created_idx").on(table.createdAt),
+    check(
+      "audit_events_result_valid",
+      sql`${table.result} IN ('success', 'failure')`,
+    ),
   ],
 );
