@@ -32,6 +32,12 @@ export async function POST(
         { message: "Requisição recusada." },
         { status: 403, headers: noStore },
       );
+    const contentType = request.headers.get("content-type")?.toLowerCase();
+    if (!contentType?.startsWith("application/json"))
+      return Response.json(
+        { message: "Envie o comentário em formato JSON." },
+        { status: 415, headers: noStore },
+      );
     if (Number(request.headers.get("content-length") ?? 0) > 10_000)
       return Response.json(
         { message: unsafeMessage },
@@ -43,7 +49,16 @@ export async function POST(
         { message: unsafeMessage },
         { status: 400, headers: noStore },
       );
-    const parsed = commentInputSchema.safeParse(JSON.parse(rawBody));
+    let rawInput: unknown;
+    try {
+      rawInput = JSON.parse(rawBody);
+    } catch {
+      return Response.json(
+        { message: "Revise os campos antes de publicar." },
+        { status: 400, headers: noStore },
+      );
+    }
+    const parsed = commentInputSchema.safeParse(rawInput);
     if (!parsed.success) {
       const tooLong = parsed.error.issues.some(
         (issue) => issue.path[0] === "body" && issue.code === "too_big",

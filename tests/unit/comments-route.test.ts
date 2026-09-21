@@ -36,7 +36,7 @@ function request(payload: Record<string, unknown>, headers?: HeadersInit) {
     "https://oplib.example/api/publications/publicacao/comments",
     {
       method: "POST",
-      headers,
+      headers: { "content-type": "application/json", ...headers },
       body: JSON.stringify({
         authorName: "",
         body: "Olá",
@@ -90,6 +90,67 @@ describe("comments route", () => {
 
     expect(response.status).toBe(403);
     expect(mocks.create).not.toHaveBeenCalled();
+  });
+  it("rejects unsupported and malformed payloads as client errors", async () => {
+    const unsupported = new Request(
+      "https://oplib.example/api/publications/publicacao/comments",
+      { method: "POST", body: "body=Olá" },
+    );
+    const malformed = new Request(
+      "https://oplib.example/api/publications/publicacao/comments",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json; charset=utf-8" },
+        body: '{"body":',
+      },
+    );
+
+    const unsupportedResponse = await POST(unsupported, context);
+    const malformedResponse = await POST(malformed, context);
+
+    expect(unsupportedResponse.status).toBe(415);
+    expect(unsupportedResponse.headers.get("cache-control")).toBe("no-store");
+    expect(await unsupportedResponse.json()).toEqual({
+      message: "Envie o comentário em formato JSON.",
+    });
+    expect(malformedResponse.status).toBe(400);
+    expect(malformedResponse.headers.get("cache-control")).toBe("no-store");
+    expect(await malformedResponse.json()).toEqual({
+      message: "Revise os campos antes de publicar.",
+    });
+    expect(mocks.limit).not.toHaveBeenCalled();
+    expect(mocks.create).not.toHaveBeenCalled();
+    expect(mocks.log).not.toHaveBeenCalled();
+  });
+  it("rejects declared and streamed bodies above the endpoint limit", async () => {
+    const declared = new Request(
+      "https://oplib.example/api/publications/publicacao/comments",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "content-length": "10001",
+        },
+        body: "{}",
+      },
+    );
+    const streamed = new Request(
+      "https://oplib.example/api/publications/publicacao/comments",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ body: "x".repeat(10_001) }),
+      },
+    );
+
+    for (const oversized of [declared, streamed]) {
+      const response = await POST(oversized, context);
+      expect(response.status).toBe(400);
+      expect(response.headers.get("cache-control")).toBe("no-store");
+    }
+    expect(mocks.limit).not.toHaveBeenCalled();
+    expect(mocks.create).not.toHaveBeenCalled();
+    expect(mocks.log).not.toHaveBeenCalled();
   });
   it("limits repeated attempts and hides unavailable editorial state", async () => {
     mocks.limit.mockReturnValueOnce(false);

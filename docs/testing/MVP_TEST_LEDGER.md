@@ -162,6 +162,9 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Final`: repetir tentativa cross-site controlada e conferir resposta genérica, ausência de efeito e logs sem dados privados; concluir a matriz SEC-001 de autorização, XSS, upload, payload, rate limit, dependências e WAF.
 - [ ] `CI`: confirmar que `pnpm audit --prod --audit-level high` executa com instalação congelada e impede merge quando houver alerta alto ou crítico; falha de acesso ao registro não deve ser tratada como sucesso.
 - [ ] `Final`: repetir auditoria de todas as dependências de produção, revisar os alertas moderados transitivos de `@clerk/ui` e registrar resolução ou aceite formal fundamentado; confirmar ausência de alertas altos/críticos antes da promoção.
+- [ ] `Automatizado/Preview`: enviar comentário com `text/plain`, formulário e tipo ausente; confirmar `415`, `no-store` e nenhuma persistência ou consumo de rate limit.
+- [ ] `Automatizado/Preview`: enviar JSON truncado, array, valores com tipos incorretos e corpo acima de 10 KB por header e por bytes reais; confirmar erro `400` genérico, sem eco, cookie novo, persistência ou log de indisponibilidade.
+- [ ] `Final`: confirmar que o formulário legítimo continua enviando JSON compatível e que erros de payload não apagam nome ou comentário digitado.
 
 ## QUAL-001 — Acessibilidade e responsividade
 

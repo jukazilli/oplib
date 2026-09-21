@@ -23,3 +23,12 @@ Estado: `in_progress`.
 - Validação final local do corte: 46 arquivos, 192 testes, lint, typecheck e build aprovados. O teste de metadados do editor manteve as mesmas asserções e recebeu limite próprio de 15 segundos após exceder de forma intermitente o padrão de 5 segundos na suíte completa; isolado e na repetição completa, passou.
 - A aplicação importa `@clerk/ui/themes` e CSS do tema, não os adaptadores Solana diretamente. Isso **não prova** ausência de exposição transitiva. Não foi aplicada atualização major forçada a `uuid` ou `stream-json` sob `jayson` sem teste de compatibilidade.
 - Os dois alertas moderados exigem revisão de alcance e resolução ou aceite formal antes de encerrar SEC-001. A auditoria deve ser repetida no gate final, pois a base de avisos muda com o tempo.
+
+## Contrato de payload dos comentários
+
+- A rota pública exige `application/json`, aceitando parâmetros como `charset=utf-8`; outros tipos retornam `415` com orientação curta.
+- JSON malformado retorna `400`, separado de falhas reais de infraestrutura. Corpo declarado ou efetivamente acima de 10 KB é recusado antes do parse.
+- Esses erros não identificam visitante, não consomem rate limit, não persistem comentário e não geram evento de falha operacional. Todas as respostas são `no-store` e não ecoam o payload.
+- `tests/unit/comments-route.test.ts`: 7 testes aprovados, incluindo tipo incompatível, JSON truncado, limite declarado, limite efetivo e ausência de efeitos colaterais.
+- Validação completa do corte: 46 arquivos, 194 testes, format check, lint, typecheck e build aprovados.
+- Ainda faltam prova em Preview e os demais grupos do corpus SEC-001; esta seção não encerra a regressão de segurança.
