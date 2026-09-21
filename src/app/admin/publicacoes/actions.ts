@@ -41,12 +41,12 @@ export async function saveDraftAction(
   }
 
   try {
-    const { id, version, title, markdown } = parsed.data;
+    const { id, version, ...values } = parsed.data;
     const saved = id
       ? version
-        ? await updateDraft(id, new Date(version), { title, markdown })
+        ? await updateDraft(id, new Date(version), values)
         : null
-      : await createDraft({ title, markdown });
+      : await createDraft(values);
 
     if (!saved) {
       const current = id ? await getDraftById(id) : null;

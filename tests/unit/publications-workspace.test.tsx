@@ -23,6 +23,9 @@ const publication = {
   title: "Conhecimento em movimento",
   summary: "Uma síntese do conteúdo.",
   markdown: "Conteúdo completo",
+  categoryId: "",
+  tagIds: [],
+  cover: null,
   status: "draft" as const,
   updatedAt: "2026-09-20T22:30:00.000Z",
 };

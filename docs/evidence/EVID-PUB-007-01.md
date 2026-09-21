@@ -13,6 +13,9 @@
 - ícone de folha `Rascunhos` com nome acessível e tooltip;
 - biblioteca de rascunhos no mesmo modal, com título, trecho e última atualização;
 - retomada de composição preservando recuperação local e tratamento de conflito de `PUB-001`;
+- composer reorganizado como fluxo único inspirado no Threads, sem agrupamentos densos de formulário;
+- taxonomia contextual e vínculo da capa persistidos junto ao rascunho;
+- upload de capa com prévia e descrição acessível no próprio composer;
 - ausência de `Para você`, comunidade, seguir, reação ou mistura de autores na administração.
 
 ## Validações automatizadas

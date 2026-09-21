@@ -2,22 +2,32 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { FileText } from "lucide-react";
+import Image from "next/image";
+import { upload } from "@vercel/blob/client";
+import { FileText, ImageIcon, Tags, X } from "lucide-react";
 
 import {
   saveDraftAction,
   type SerializedDraft,
 } from "@/app/admin/publicacoes/actions";
 import { Button } from "@/components/ui/button";
+import { adminSignInUrl } from "@/modules/identity/redirect";
+import { validateCoverFile } from "@/modules/media/cover-policy";
+import type { DraftCover } from "@/modules/publishing/draft-repository";
+import type { TaxonomyCollection } from "@/modules/taxonomy/repository";
 
 type LocalDraft = {
   title: string;
   markdown: string;
+  categoryId: string;
+  tagIds: string[];
+  cover: DraftCover | null;
   baseUpdatedAt: string;
   savedLocallyAt: string;
 };
 
 const newDraftKey = "oplib:draft:new";
+const emptyTaxonomy: TaxonomyCollection = { categories: [], tags: [] };
 
 function storageKey(id: string) {
   return id ? `oplib:draft:${id}` : newDraftKey;
@@ -27,10 +37,12 @@ export function DraftComposer({
   initialDraft,
   onClose,
   onOpenDrafts,
+  taxonomy = emptyTaxonomy,
 }: {
   initialDraft: SerializedDraft | null;
   onClose?: () => void;
   onOpenDrafts?: () => void;
+  taxonomy?: TaxonomyCollection;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -38,6 +50,11 @@ export function DraftComposer({
   const [version, setVersion] = useState(initialDraft?.updatedAt ?? "");
   const [title, setTitle] = useState(initialDraft?.title ?? "");
   const [markdown, setMarkdown] = useState(initialDraft?.markdown ?? "");
+  const [categoryId, setCategoryId] = useState(initialDraft?.categoryId ?? "");
+  const [tagIds, setTagIds] = useState(initialDraft?.tagIds ?? []);
+  const [cover, setCover] = useState(initialDraft?.cover ?? null);
+  const [classificationOpen, setClassificationOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [message, setMessage] = useState("");
   const [fieldError, setFieldError] = useState<"title" | "markdown" | null>(
@@ -45,6 +62,7 @@ export function DraftComposer({
   );
   const [recovery, setRecovery] = useState<LocalDraft | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const key = useMemo(() => storageKey(id), [id]);
 
@@ -79,12 +97,22 @@ export function DraftComposer({
       window.localStorage.removeItem(key);
       return;
     }
-    if (local.title === title && local.markdown === markdown) return;
+    if (
+      local.title === title &&
+      local.markdown === markdown &&
+      local.categoryId === categoryId &&
+      JSON.stringify(local.tagIds) === JSON.stringify(tagIds) &&
+      JSON.stringify(local.cover) === JSON.stringify(cover)
+    )
+      return;
 
     const recoveryTimer = window.setTimeout(() => {
       if (local.baseUpdatedAt === version) {
         setTitle(local.title);
         setMarkdown(local.markdown);
+        setCategoryId(local.categoryId ?? "");
+        setTagIds(local.tagIds ?? []);
+        setCover(local.cover ?? null);
         setDirty(true);
         setMessage("Cópia local recuperada.");
       } else {
@@ -102,11 +130,14 @@ export function DraftComposer({
     const local: LocalDraft = {
       title,
       markdown,
+      categoryId,
+      tagIds,
+      cover,
       baseUpdatedAt: version,
       savedLocallyAt: new Date().toISOString(),
     };
     window.localStorage.setItem(key, JSON.stringify(local));
-  }, [dirty, key, markdown, title, version]);
+  }, [categoryId, cover, dirty, key, markdown, tagIds, title, version]);
 
   useEffect(() => {
     if (!dirty) return;
@@ -148,6 +179,9 @@ export function DraftComposer({
   function restoreLocalCopy(local: LocalDraft) {
     setTitle(local.title);
     setMarkdown(local.markdown);
+    setCategoryId(local.categoryId ?? "");
+    setTagIds(local.tagIds ?? []);
+    setCover(local.cover ?? null);
     setDirty(true);
     setRecovery(null);
     setMessage("Cópia local recuperada.");
@@ -166,6 +200,9 @@ export function DraftComposer({
     formData.set("version", version);
     formData.set("title", title);
     formData.set("markdown", markdown);
+    formData.set("categoryId", categoryId);
+    for (const tagId of tagIds) formData.append("tagIds", tagId);
+    if (cover) formData.set("cover", JSON.stringify(cover));
     setMessage("Salvando…");
     setFieldError(null);
 
@@ -194,11 +231,17 @@ export function DraftComposer({
           setRecovery({
             title,
             markdown,
+            categoryId,
+            tagIds,
+            cover,
             baseUpdatedAt: result.draft.updatedAt,
             savedLocallyAt: new Date().toISOString(),
           });
           setTitle(result.draft.title);
           setMarkdown(result.draft.markdown);
+          setCategoryId(result.draft.categoryId);
+          setTagIds(result.draft.tagIds);
+          setCover(result.draft.cover);
           setVersion(result.draft.updatedAt);
         }
         return;
@@ -206,6 +249,68 @@ export function DraftComposer({
       setMessage(result.message);
       setFieldError(result.field ?? null);
     });
+  }
+
+  function markChanged(nextMessage = "Alterações não salvas") {
+    setDirty(true);
+    setMessage(nextMessage);
+    setFieldError(null);
+  }
+
+  function toggleTag(tagId: string) {
+    setTagIds((current) =>
+      current.includes(tagId)
+        ? current.filter((id) => id !== tagId)
+        : [...current, tagId],
+    );
+    markChanged();
+  }
+
+  async function attachCover(file: File) {
+    setIsUploading(true);
+    setMessage("Enviando capa…");
+    try {
+      await validateCoverFile(file);
+      const pathnameResponse = await fetch("/api/admin/covers/pathname", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: file.type }),
+      });
+      const prepared = (await pathnameResponse.json()) as {
+        pathname?: string;
+        error?: string;
+      };
+      if (pathnameResponse.status === 401) {
+        window.location.assign(adminSignInUrl(window.location.pathname, true));
+        return;
+      }
+      if (!pathnameResponse.ok || !prepared.pathname)
+        throw new Error(prepared.error ?? "Não foi possível preparar o envio.");
+      const blob = await upload(prepared.pathname, file, {
+        access: "public",
+        contentType: file.type,
+        handleUploadUrl: "/api/admin/covers",
+      });
+      setCover({
+        pathname: blob.pathname,
+        url: blob.url,
+        altText: "",
+        contentType: file.type,
+        sizeBytes: file.size,
+        width: null,
+        height: null,
+      });
+      markChanged("Capa anexada. Descreva a imagem antes de salvar.");
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Não foi possível enviar a capa.",
+      );
+    } finally {
+      setIsUploading(false);
+      if (coverInputRef.current) coverInputRef.current.value = "";
+    }
   }
 
   function closeComposer() {
@@ -266,45 +371,172 @@ export function DraftComposer({
         </div>
       ) : null}
 
-      <div>
-        <div className="grid gap-5 p-5 sm:p-7">
-          <label
-            className="grid gap-2 font-interface text-sm font-semibold"
-            htmlFor="draft-post-title"
-          >
-            Título
-            <input
-              ref={titleInputRef}
-              id="draft-post-title"
-              value={title}
-              maxLength={240}
-              aria-invalid={fieldError === "title"}
-              onChange={(event) => changeTitle(event.target.value)}
-              className="min-h-12 rounded-control border bg-background px-4 font-editorial text-lg font-normal outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-          </label>
+      <div className="p-5 sm:p-7">
+        <div className="flex items-start gap-3 sm:gap-4">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-foreground font-interface text-xs font-bold text-background">
+            OP
+          </span>
+          <div className="min-w-0 flex-1 border-l pl-4">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <input
+                ref={titleInputRef}
+                id="draft-post-title"
+                aria-label="Título"
+                placeholder="Título da publicação"
+                value={title}
+                maxLength={240}
+                aria-invalid={fieldError === "title"}
+                onChange={(event) => changeTitle(event.target.value)}
+                className="min-w-48 flex-1 border-0 bg-transparent font-interface text-base font-bold outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:ring-0"
+              />
+              <span aria-hidden="true" className="text-muted-foreground">
+                ›
+              </span>
+              <button
+                type="button"
+                onClick={() => setClassificationOpen((open) => !open)}
+                aria-expanded={classificationOpen}
+                className="min-h-10 rounded-full px-2 font-interface text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+              >
+                {categoryId || tagIds.length
+                  ? `${(categoryId ? 1 : 0) + tagIds.length} classificações`
+                  : "Adicionar taxonomia"}
+              </button>
+            </div>
 
-          <label
-            className="grid gap-2 font-interface text-sm font-semibold"
-            htmlFor="draft-markdown"
-          >
-            Conteúdo
             <textarea
               id="draft-markdown"
+              aria-label="Conteúdo"
+              placeholder="Comece a escrever…"
               value={markdown}
-              rows={12}
+              rows={10}
               aria-invalid={fieldError === "markdown"}
               onChange={(event) => changeMarkdown(event.target.value)}
               onKeyDown={(event) => {
                 if ((event.ctrlKey || event.metaKey) && event.key === "Enter")
                   save();
               }}
-              className="min-h-64 resize-y rounded-control border bg-background p-4 font-mono text-sm leading-7 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="mt-2 min-h-56 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:ring-0"
             />
-          </label>
+
+            {classificationOpen ? (
+              <section
+                aria-label="Taxonomia"
+                className="mt-3 rounded-card border bg-muted/40 p-4"
+              >
+                <label className="grid gap-2 font-interface text-sm font-semibold">
+                  Categoria
+                  <select
+                    value={categoryId}
+                    onChange={(event) => {
+                      setCategoryId(event.target.value);
+                      markChanged();
+                    }}
+                    className="min-h-11 rounded-control border bg-background px-3 font-normal"
+                  >
+                    <option value="">Sem categoria</option>
+                    {taxonomy.categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {taxonomy.tags.length ? (
+                  <fieldset className="mt-4">
+                    <legend className="font-interface text-sm font-semibold">
+                      Tags
+                    </legend>
+                    <div className="mt-2 flex max-h-28 flex-wrap gap-2 overflow-y-auto">
+                      {taxonomy.tags.map((tag) => (
+                        <button
+                          key={tag.id}
+                          type="button"
+                          aria-pressed={tagIds.includes(tag.id)}
+                          onClick={() => toggleTag(tag.id)}
+                          className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+                        >
+                          {tag.name}
+                        </button>
+                      ))}
+                    </div>
+                  </fieldset>
+                ) : null}
+              </section>
+            ) : null}
+
+            {cover ? (
+              <div className="relative mt-4 overflow-hidden rounded-card border">
+                <Image
+                  src={cover.url}
+                  alt=""
+                  width={960}
+                  height={540}
+                  className="h-auto max-h-72 w-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCover(null);
+                    markChanged("Capa removida.");
+                  }}
+                  aria-label="Remover capa"
+                  className="absolute top-2 right-2 flex size-10 items-center justify-center rounded-full bg-background/90 shadow"
+                >
+                  <X aria-hidden="true" className="size-5" />
+                </button>
+                <label className="block border-t bg-background p-3 font-interface text-sm font-semibold">
+                  Texto alternativo
+                  <input
+                    value={cover.altText}
+                    onChange={(event) => {
+                      setCover({ ...cover, altText: event.target.value });
+                      markChanged();
+                    }}
+                    placeholder="Descreva o conteúdo da imagem"
+                    maxLength={300}
+                    className="mt-1 min-h-10 w-full border-0 bg-transparent font-normal outline-none"
+                  />
+                </label>
+              </div>
+            ) : null}
+
+            <div className="mt-3 flex items-center gap-1 text-muted-foreground">
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/avif"
+                className="sr-only"
+                aria-label="Selecionar imagem de capa"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) void attachCover(file);
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => coverInputRef.current?.click()}
+                disabled={isUploading}
+                aria-label={cover ? "Substituir capa" : "Adicionar capa"}
+                title={cover ? "Substituir capa" : "Adicionar capa"}
+                className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground disabled:opacity-50"
+              >
+                <ImageIcon aria-hidden="true" className="size-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setClassificationOpen((open) => !open)}
+                aria-label="Classificação"
+                title="Classificação"
+                className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
+              >
+                <Tags aria-hidden="true" className="size-5" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        <footer className="flex flex-wrap items-center justify-between gap-4 border-t px-5 py-4 sm:px-7">
+        <footer className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t pt-4">
           <p
             aria-live="polite"
             className="font-interface text-sm text-muted-foreground"

@@ -41,8 +41,53 @@ describe("draft composer", () => {
       screen.getByRole("button", { name: "Salvar rascunho" }),
     ).toBeDisabled();
     expect(
+      screen.getByRole("button", { name: "Adicionar capa" }),
+    ).toBeInTheDocument();
+    expect(
       screen.queryByText(/pipeline|schema|canônico/i),
     ).not.toBeInTheDocument();
+  });
+
+  it("reveals taxonomy in context without partitioning the composer", async () => {
+    const user = userEvent.setup();
+    render(
+      <DraftComposer
+        initialDraft={null}
+        taxonomy={{
+          categories: [
+            {
+              id: "10000000-0000-4000-8000-000000000002",
+              name: "Ciência",
+              slug: "ciencia",
+              usageCount: 0,
+            },
+          ],
+          tags: [
+            {
+              id: "10000000-0000-4000-8000-000000000003",
+              name: "Pesquisa",
+              slug: "pesquisa",
+              usageCount: 0,
+            },
+          ],
+        }}
+      />,
+    );
+
+    await user.click(
+      screen.getByRole("button", { name: "Adicionar taxonomia" }),
+    );
+    expect(
+      screen.getByRole("region", { name: "Taxonomia" }),
+    ).toBeInTheDocument();
+    await user.selectOptions(
+      screen.getByLabelText("Categoria"),
+      "10000000-0000-4000-8000-000000000002",
+    );
+    await user.click(screen.getByRole("button", { name: "Pesquisa" }));
+    expect(
+      screen.getByRole("button", { name: "2 classificações" }),
+    ).toBeInTheDocument();
   });
 
   it("saves explicitly and replaces the URL with the persisted draft", async () => {
@@ -53,6 +98,9 @@ describe("draft composer", () => {
         id: "10000000-0000-4000-8000-000000000001",
         title: "Meu rascunho",
         markdown: "Primeira ideia",
+        categoryId: "",
+        tagIds: [],
+        cover: null,
         updatedAt: "2026-09-20T22:30:00.000Z",
       },
     });
@@ -91,6 +139,9 @@ describe("draft composer", () => {
           id: "10000000-0000-4000-8000-000000000001",
           title: "Título salvo",
           markdown: "Texto salvo",
+          categoryId: "",
+          tagIds: [],
+          cover: null,
           updatedAt: "2026-09-20T20:00:00.000Z",
         }}
       />,

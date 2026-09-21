@@ -6,6 +6,7 @@ import {
   getDraftById,
   listAdminPublications,
 } from "@/modules/publishing/draft-repository";
+import { listTaxonomy } from "@/modules/taxonomy/repository";
 
 export default async function PublicationsPage({
   searchParams,
@@ -16,9 +17,10 @@ export default async function PublicationsPage({
   const parsedId = draftId ? draftIdSchema.safeParse(draftId) : null;
   if (draftId && !parsedId?.success) notFound();
 
-  const [draft, publications] = await Promise.all([
+  const [draft, publications, taxonomy] = await Promise.all([
     parsedId?.success ? getDraftById(parsedId.data) : null,
     listAdminPublications(),
+    listTaxonomy(),
   ]);
   if (parsedId?.success && !draft) notFound();
 
@@ -31,6 +33,7 @@ export default async function PublicationsPage({
         ...publication,
         updatedAt: publication.updatedAt.toISOString(),
       }))}
+      taxonomy={taxonomy}
     />
   );
 }

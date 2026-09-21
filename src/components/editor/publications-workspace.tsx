@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import type { SerializedDraft } from "@/app/admin/publicacoes/actions";
 import { DraftComposer } from "@/components/editor/draft-composer";
+import type { TaxonomyCollection } from "@/modules/taxonomy/repository";
 
 export type SerializedAdminPublication = SerializedDraft & {
   summary: string;
@@ -21,9 +22,11 @@ const statusLabels = {
 export function PublicationsWorkspace({
   initialDraft,
   publications,
+  taxonomy = { categories: [], tags: [] },
 }: {
   initialDraft: SerializedDraft | null;
   publications: SerializedAdminPublication[];
+  taxonomy?: TaxonomyCollection;
 }) {
   const router = useRouter();
   const [composerDraft, setComposerDraft] = useState(initialDraft);
@@ -219,6 +222,7 @@ export function PublicationsWorkspace({
                 initialDraft={composerDraft}
                 onClose={closeComposer}
                 onOpenDrafts={() => setModalView("drafts")}
+                taxonomy={taxonomy}
               />
             ) : (
               <section
