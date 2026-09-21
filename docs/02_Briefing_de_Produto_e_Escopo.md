@@ -31,20 +31,22 @@ A referência representa a natureza do acervo:
 - valioso, por preservar o conhecimento adquirido;
 - interdisciplinar, conectando Engenharia de Software e Educação Física.
 
-O nome também remete a uma biblioteca pessoal viva e em constante crescimento.
+O nome também remete a uma biblioteca viva e em constante crescimento.
 
 A identidade visual, o logotipo, as cores e a tipografia serão definidos posteriormente no documento de Direção de UI e Design System.
 
 ## 2. Visão do produto
 
-O OPALIB será um acervo digital pessoal para reunir, organizar, preservar e compartilhar trabalhos acadêmicos, artigos científicos, pesquisas, estudos e aprendizados desenvolvidos por Juliano Zilli durante sua formação em Engenharia de Software e Educação Física.
+O OPALIB será uma plataforma de acervos vivos de conhecimento: um espaço para reunir, organizar, preservar e compartilhar artigos científicos, trabalhos, pesquisas, materiais de estudo, experiências e aprendizados construídos ao longo da vida, dentro ou fora da universidade.
+
+O MVP validará essa visão com um único autor, Juliano Zilli, e conteúdo inicial de Engenharia de Software e Educação Física. Essa limitação operacional não deverá posicionar a marca como uma biblioteca exclusiva de seu primeiro autor.
 
 O produto combinará características de:
 
-- blog pessoal;
+- publicação editorial;
 - portfólio acadêmico;
 - biblioteca de conhecimento;
-- registro da evolução intelectual e profissional do autor.
+- registro da evolução intelectual e profissional ao longo da vida.
 
 O site será simples de navegar e terá o conteúdo como elemento principal da experiência.
 
@@ -66,7 +68,7 @@ Sem um acervo organizado, parte desse conhecimento pode ser esquecida, perdida o
 
 ## 4. Proposta de valor
 
-Oferecer um espaço pessoal e confiável onde o autor possa transformar sua jornada acadêmica em um acervo vivo de conhecimento.
+Oferecer um espaço confiável onde conhecimento construído ao longo da vida possa ser transformado em um acervo vivo, consultável e compartilhável.
 
 Para o autor, o OPALIB permitirá preservar, organizar e consultar sua produção.
 
@@ -96,7 +98,7 @@ O MVP não será uma plataforma aberta para publicação de artigos por terceiro
 
 ### Objetivo principal
 
-Construir um acervo digital pessoal, seguro e de fácil consulta para preservar e compartilhar o conhecimento adquirido durante a formação acadêmica e profissional do autor.
+Construir uma plataforma segura e de fácil consulta para preservar e compartilhar conhecimento adquirido em jornadas acadêmicas, profissionais e pessoais de aprendizagem contínua, validando o primeiro lançamento com um único autor.
 
 ### Objetivos secundários
 
@@ -113,6 +115,7 @@ Construir um acervo digital pessoal, seguro e de fácil consulta para preservar 
 
 - A leitura é mais importante que a quantidade de recursos.
 - O conteúdo deve ocupar o centro da experiência.
+- A marca representa uma plataforma de conhecimento, não a biblioteca pessoal de seu primeiro autor.
 - A navegação deve ser compreensível sem treinamento.
 - Nenhum cadastro deve ser exigido para ler, curtir ou comentar.
 - A interação pública deve ser simples e protegida contra abuso.
@@ -145,6 +148,7 @@ O visitante deverá conseguir:
 - visualizar imediatamente o comentário enviado;
 - ler comentários de outros visitantes;
 - navegar por computador, tablet e celular.
+- manifestar interesse em criar um acervo futuro por uma lista de espera claramente separada da criação de conta.
 
 ### 8.2. Organização do conteúdo
 
@@ -406,6 +410,7 @@ Não haverá aplicativo móvel nativo no MVP.
 - O administrador poderá ocultar ou excluir comentários.
 - O projeto deve evitar complexidade arquitetural desnecessária.
 - O MVP terá somente um autor.
+- A lista de espera não criará conta nem concederá acesso de autoria.
 - A experiência pública será semelhante à de um blog.
 - A segurança administrativa e a proteção contra abuso terão prioridade.
 

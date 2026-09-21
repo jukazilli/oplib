@@ -674,6 +674,18 @@ Estado atual: CRUD, pesquisa e contagem de uso implementados; nomes normalizados
 - **Testes:** `TEST-WEB-006-01` links/conteúdo; `-02` revisão de correspondência técnica.
 - **Evidência:** `EVID-WEB-006-01` páginas em Preview e aprovação humana.
 
+### WEB-007 — Lista de espera para futuros autores
+
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Origem:** D02 §§2, 8.1 e 16; UX-002 “Lista de espera para futuros autores”; INF §19 “LGPD e minimização”.
+- **Objetivo:** medir interesse na evolução multiusuário sem prometer conta ou autoria disponível.
+- **Descrição:** CTA secundário `Quero criar meu acervo`, explicação de indisponibilidade, coleta mínima de e-mail com consentimento específico e confirmação de interesse.
+- **Critérios:** não cria conta; não promete prazo; duplicidade é idempotente; estados de envio, sucesso e erro; proteção contra abuso; remoção acessível; uso restrito ao aviso sobre abertura da plataforma.
+- **Dependências:** UX-002, WEB-001, WEB-006, DEC-003 e decisão técnica sobre armazenamento e envio.
+- **Riscos:** confundir espera com cadastro, coletar dado sem finalidade clara ou transformar a lista em newsletter genérica.
+- **Testes:** `TEST-WEB-007-01` fluxo e estados; `-02` duplicidade; `-03` consentimento e remoção; `-04` abuso e privacidade.
+- **Evidência:** `EVID-WEB-007-01` E2E, correspondência com Política de Privacidade e aceite humano da copy.
+
 ### SEO-001 — Metadados, canonical e prévia social
 
 - **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.

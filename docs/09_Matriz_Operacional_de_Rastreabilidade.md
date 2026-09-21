@@ -101,7 +101,7 @@ Um item só pode mudar para `done` se os campos “Implementação atual”, “
 | `done`          |          4 | FND-001 a FND-004 concluídos e comprovados |
 | `cancelled`     |          0 | nenhum item removido                       |
 
-Total: 55 itens permanentes.
+Total: 56 itens permanentes.
 
 ## 5. Decisões humanas
 
@@ -170,6 +170,7 @@ Total: 55 itens permanentes.
 | WEB-004 | D02 §8.3; D04 §16; D05 §6              | criar página de leitura da publicação          | `src/app/(public)/publicacoes/[slug]/`                     | —                   | `TEST-WEB-004-*` | `EVID-WEB-004-01`  | `planned` |
 | WEB-005 | D02 §12; D05 §7                        | compartilhar por recurso nativo ou copiar link | `src/components/editorial/share-action.tsx`                | —                   | `TEST-WEB-005-*` | `EVID-WEB-005-01`  | `planned` |
 | WEB-006 | D02 §§2,5,12; D04 §19; D05 §3; INF §19 | publicar Sobre e Privacidade                   | `src/app/(public)/sobre/`, `src/app/(public)/privacidade/` | —                   | `TEST-WEB-006-*` | `EVID-WEB-006-01`  | `planned` |
+| WEB-007 | D02 §§2,8.1,16; UX-002; INF §19        | criar lista de espera transparente             | rota pública e módulo de interesse a definir               | —                   | `TEST-WEB-007-*` | `EVID-WEB-007-01`  | `planned` |
 | SEO-001 | D02 §12; TL §17                        | gerar metadata, canonical e prévia social      | Metadata API nas rotas públicas                            | —                   | `TEST-SEO-001-*` | `EVID-SEO-001-01`  | `planned` |
 | SEO-002 | D02 §12; D07 §17; TL §17               | gerar sitemap, robots e dados estruturados     | `src/app/sitemap.ts`, `robots.ts`, JSON-LD                 | —                   | `TEST-SEO-002-*` | `EVID-SEO-002-01`  | `planned` |
 
