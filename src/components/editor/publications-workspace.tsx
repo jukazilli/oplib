@@ -24,7 +24,7 @@ export function PublicationsWorkspace({
   publications,
   taxonomy = { areas: [], categories: [], tags: [] },
 }: {
-  initialDraft: SerializedDraft | null;
+  initialDraft: SerializedAdminPublication | null;
   publications: SerializedAdminPublication[];
   taxonomy?: TaxonomyCollection;
 }) {
@@ -63,7 +63,7 @@ export function PublicationsWorkspace({
     };
   }, [composerOpen, modalView]);
 
-  function openComposer(draft: SerializedDraft | null) {
+  function openComposer(draft: SerializedAdminPublication | null) {
     setComposerDraft(draft);
     setComposerOpen(true);
     setModalView("composer");
@@ -165,7 +165,8 @@ export function PublicationsWorkspace({
                   <MoreHorizontal aria-hidden="true" className="size-5" />
                 </summary>
                 <div className="absolute top-12 right-0 z-10 min-w-36 rounded-control border bg-surface p-1 shadow-lg">
-                  {publication.status === "draft" ? (
+                  {publication.status === "draft" ||
+                  publication.status === "published" ? (
                     <button
                       type="button"
                       onClick={() => openComposer(publication)}

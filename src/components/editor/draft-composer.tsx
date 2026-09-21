@@ -17,9 +17,11 @@ import {
 } from "lucide-react";
 
 import {
+  publishPublicationAction,
   saveDraftAction,
   type SerializedDraft,
 } from "@/app/admin/publicacoes/actions";
+import { parsePublishInput } from "@/modules/publishing/draft-domain";
 import { Button } from "@/components/ui/button";
 import { MarkdownContent } from "@/components/editor/markdown-content";
 import { adminSignInUrl } from "@/modules/identity/redirect";
@@ -81,7 +83,8 @@ export function DraftComposer({
   onOpenDrafts,
   taxonomy = emptyTaxonomy,
 }: {
-  initialDraft: SerializedDraft | null;
+  initialDraft:
+    (SerializedDraft & { status?: "draft" | "published" | "withdrawn" }) | null;
   onClose?: () => void;
   onOpenDrafts?: () => void;
   taxonomy?: TaxonomyCollection;
@@ -89,6 +92,7 @@ export function DraftComposer({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [id, setId] = useState(initialDraft?.id ?? "");
+  const [status, setStatus] = useState(initialDraft?.status ?? "draft");
   const [version, setVersion] = useState(initialDraft?.updatedAt ?? "");
   const [title, setTitle] = useState(initialDraft?.title ?? "");
   const [slug, setSlug] = useState(initialDraft?.slug ?? "");
@@ -116,6 +120,8 @@ export function DraftComposer({
   >(null);
   const [dirty, setDirty] = useState(false);
   const [message, setMessage] = useState("");
+  const [publicUrl, setPublicUrl] = useState("");
+  const [publishConfirmation, setPublishConfirmation] = useState(false);
   const [fieldError, setFieldError] = useState<"title" | "markdown" | null>(
     null,
   );
@@ -129,6 +135,8 @@ export function DraftComposer({
   const classificationToolbarRef = useRef<HTMLButtonElement>(null);
   const classificationDialogRef = useRef<HTMLElement>(null);
   const metadataDialogRef = useRef<HTMLElement>(null);
+  const publishDialogRef = useRef<HTMLElement>(null);
+  const publishInFlightRef = useRef(false);
 
   const key = useMemo(() => storageKey(id), [id]);
   const previewWarnings = useMemo(() => markdownWarnings(markdown), [markdown]);
@@ -138,11 +146,13 @@ export function DraftComposer({
   }, []);
 
   useEffect(() => {
-    const dialog = classificationOpen
-      ? classificationDialogRef.current
-      : metadataOpen
-        ? metadataDialogRef.current
-        : null;
+    const dialog = publishConfirmation
+      ? publishDialogRef.current
+      : classificationOpen
+        ? classificationDialogRef.current
+        : metadataOpen
+          ? metadataDialogRef.current
+          : null;
     if (!dialog) return;
     const previousFocus = document.activeElement as HTMLElement | null;
     dialog
@@ -171,7 +181,7 @@ export function DraftComposer({
       document.removeEventListener("keydown", keepFocus);
       previousFocus?.focus();
     };
-  }, [classificationOpen, metadataOpen]);
+  }, [classificationOpen, metadataOpen, publishConfirmation]);
 
   useEffect(() => {
     if (!classificationOpen) return;
@@ -203,6 +213,10 @@ export function DraftComposer({
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       event.preventDefault();
+      if (publishConfirmation) {
+        setPublishConfirmation(false);
+        return;
+      }
       if (metadataOpen) {
         setMetadataOpen(false);
         return;
@@ -216,7 +230,7 @@ export function DraftComposer({
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [dirty, discardIntent, metadataOpen, onClose]);
+  }, [dirty, discardIntent, metadataOpen, onClose, publishConfirmation]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(key);
@@ -371,7 +385,7 @@ export function DraftComposer({
     setMessage("Versão salva mantida.");
   }
 
-  function save() {
+  function publicationFormData() {
     const formData = new FormData();
     formData.set("id", id);
     formData.set("version", version);
@@ -388,6 +402,12 @@ export function DraftComposer({
     formData.set("originalDate", originalDate);
     formData.set("references", JSON.stringify(references));
     if (cover) formData.set("cover", JSON.stringify(cover));
+    return formData;
+  }
+
+  function save() {
+    if (status !== "draft") return;
+    const formData = publicationFormData();
     setMessage("Salvando…");
     setFieldError(null);
 
@@ -452,6 +472,62 @@ export function DraftComposer({
       }
       setMessage(result.message);
       setFieldError(result.field ?? null);
+    });
+  }
+
+  function requestPublish() {
+    const checked = parsePublishInput(publicationFormData());
+    if (!checked.success) {
+      const issue = checked.error.issues[0];
+      const field = String(issue?.path[0] ?? "");
+      setMessage(issue?.message ?? "Revise a publicação antes de continuar.");
+      setFieldError(field === "title" || field === "markdown" ? field : null);
+      if (field === "areaIds") setClassificationOpen(true);
+      if (field === "summary" || field === "contentType") setMetadataOpen(true);
+      if (field === "id") setMessage("Salve o rascunho antes de publicar.");
+      setMobilePane("write");
+      return;
+    }
+    setPublishConfirmation(true);
+  }
+
+  function confirmPublish() {
+    if (isPending || publishInFlightRef.current) return;
+    publishInFlightRef.current = true;
+    setPublishConfirmation(false);
+    setMessage(
+      status === "published" ? "Atualizando publicação…" : "Publicando…",
+    );
+    const formData = publicationFormData();
+    const expectedStatus = status === "published" ? "published" : "draft";
+    startTransition(async () => {
+      try {
+        const result = await publishPublicationAction(formData, expectedStatus);
+        if (result.status === "success") {
+          window.localStorage.removeItem(key);
+          setVersion(result.publication.updatedAt);
+          setSlug(result.publication.slug);
+          setStatus("published");
+          setDirty(false);
+          setPublicUrl(result.publicUrl);
+          setMessage(
+            result.warning ??
+              (expectedStatus === "draft"
+                ? "Publicação confirmada."
+                : "Publicação atualizada com sucesso."),
+          );
+          router.refresh();
+        } else {
+          setMessage(result.message);
+          if (result.status === "conflict") setDirty(true);
+        }
+      } catch {
+        setMessage(
+          "Não foi possível concluir. Seu texto continua aqui para tentar novamente.",
+        );
+      } finally {
+        publishInFlightRef.current = false;
+      }
     });
   }
 
@@ -582,6 +658,11 @@ export function DraftComposer({
         >
           {id ? "Editar publicação" : "Nova publicação"}
         </h2>
+        {status === "published" ? (
+          <span className="ml-3 hidden rounded-full bg-muted px-3 py-1 font-interface text-xs font-semibold text-foreground md:inline-flex">
+            Publicada
+          </span>
+        ) : null}
         <div className="ml-auto flex items-center text-muted-foreground">
           <input
             ref={coverInputRef}
@@ -813,8 +894,10 @@ export function DraftComposer({
                       if (
                         (event.ctrlKey || event.metaKey) &&
                         event.key === "Enter"
-                      )
-                        save();
+                      ) {
+                        if (status === "draft") save();
+                        else requestPublish();
+                      }
                     }}
                     className="composer-field min-h-72 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:bg-muted/20 focus-visible:ring-0"
                   />
@@ -1233,9 +1316,10 @@ export function DraftComposer({
       <footer className="z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 border-t bg-surface px-5 py-4 sm:px-7">
         <p
           aria-live="polite"
-          className="min-w-0 flex-1 truncate font-interface text-sm text-muted-foreground"
+          className="min-w-0 flex-1 font-interface text-sm break-words text-muted-foreground"
         >
           {message}
+          {publicUrl ? ` Endereço: ${publicUrl}` : ""}
         </p>
         <div className="flex shrink-0 items-center gap-2">
           {mobilePane === "preview" ? (
@@ -1248,9 +1332,25 @@ export function DraftComposer({
               Voltar
             </Button>
           ) : null}
-          <Button type="button" disabled={isPending || !dirty} onClick={save}>
-            {isPending ? "Salvando…" : "Salvar rascunho"}
-          </Button>
+          {status === "draft" ? (
+            <Button type="button" disabled={isPending || !dirty} onClick={save}>
+              {isPending ? "Salvando…" : "Salvar rascunho"}
+            </Button>
+          ) : null}
+          {status !== "withdrawn" ? (
+            <Button
+              type="button"
+              disabled={
+                isPending ||
+                isUploading ||
+                Boolean(recovery) ||
+                (status === "published" && !dirty)
+              }
+              onClick={requestPublish}
+            >
+              {status === "published" ? "Atualizar publicação" : "Publicar"}
+            </Button>
+          ) : null}
           {mobilePane === "write" ? (
             <Button
               type="button"
@@ -1263,6 +1363,56 @@ export function DraftComposer({
           ) : null}
         </div>
       </footer>
+
+      {publishConfirmation ? (
+        <div
+          className="fixed inset-0 z-[70] grid place-items-center bg-foreground/55 p-5"
+          onPointerDown={(event) => {
+            if (event.target === event.currentTarget)
+              setPublishConfirmation(false);
+          }}
+        >
+          <section
+            ref={publishDialogRef}
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="publish-title"
+            aria-describedby="publish-description"
+            className="w-full max-w-md rounded-card border bg-surface p-6 shadow-2xl"
+          >
+            <h3
+              id="publish-title"
+              className="font-editorial text-2xl font-semibold"
+            >
+              {status === "published"
+                ? "Atualizar publicação?"
+                : "Publicar agora?"}
+            </h3>
+            <p
+              id="publish-description"
+              className="mt-2 text-sm leading-6 text-muted-foreground"
+            >
+              {status === "published"
+                ? `A versão revisada de “${title.trim()}” substituirá a que está publicada.`
+                : `“${title.trim()}” ficará disponível no acervo após a publicação.`}
+            </p>
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setPublishConfirmation(false)}
+              >
+                Cancelar
+              </Button>
+              <Button type="button" onClick={confirmPublish} autoFocus>
+                {status === "published"
+                  ? "Atualizar publicação"
+                  : "Publicar agora"}
+              </Button>
+            </div>
+          </section>
+        </div>
+      ) : null}
 
       {discardIntent ? (
         <div className="fixed inset-0 z-[70] grid place-items-center bg-foreground/55 p-5">

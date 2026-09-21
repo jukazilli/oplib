@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
   refresh: vi.fn(),
   save: vi.fn(),
+  publish: vi.fn(),
   upload: vi.fn(),
 }));
 
@@ -15,6 +16,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/app/admin/publicacoes/actions", () => ({
   saveDraftAction: mocks.save,
+  publishPublicationAction: mocks.publish,
 }));
 vi.mock("@vercel/blob/client", () => ({ upload: mocks.upload }));
 
@@ -25,6 +27,7 @@ beforeEach(() => {
   mocks.replace.mockReset();
   mocks.refresh.mockReset();
   mocks.save.mockReset();
+  mocks.publish.mockReset();
   mocks.upload.mockReset();
   vi.stubGlobal("fetch", vi.fn());
 });
@@ -35,6 +38,48 @@ afterEach(() => {
 });
 
 describe("draft composer", () => {
+  it("confirms before updating a published composition", async () => {
+    const user = userEvent.setup();
+    render(
+      <DraftComposer
+        initialDraft={{
+          id: "10000000-0000-4000-8000-000000000001",
+          title: "Artigo",
+          slug: "artigo",
+          summary: "Resumo",
+          markdown: "# Conteúdo",
+          contentType: "article",
+          areaIds: ["10000000-0000-4000-8000-000000000002"],
+          categoryId: "",
+          tagIds: [],
+          course: "",
+          discipline: "",
+          originalDate: "",
+          references: [],
+          cover: null,
+          updatedAt: "2026-09-21T12:00:00.000Z",
+          status: "published",
+        }}
+      />,
+    );
+    expect(
+      screen.queryByRole("button", { name: "Salvar rascunho" }),
+    ).not.toBeInTheDocument();
+    await user.type(screen.getByRole("textbox", { name: "Título" }), " revisado");
+    await user.click(
+      screen.getByRole("button", { name: "Atualizar publicação" }),
+    );
+    expect(screen.getByRole("alertdialog")).toHaveTextContent(
+      "substituirá a que está publicada",
+    );
+    expect(mocks.publish).not.toHaveBeenCalled();
+    await user.click(
+      within(screen.getByRole("alertdialog")).getByRole("button", {
+        name: "Cancelar",
+      }),
+    );
+    expect(mocks.publish).not.toHaveBeenCalled();
+  });
   it("starts with the two approved creation fields", () => {
     render(<DraftComposer initialDraft={null} />);
     expect(
