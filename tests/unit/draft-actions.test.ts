@@ -96,6 +96,44 @@ describe("draft actions", () => {
     expect(mocks.revalidate).not.toHaveBeenCalled();
   });
 
+  it("recovers as success when the same composition was already published", async () => {
+    const input = draftForm({
+      id: "10000000-0000-4000-8000-000000000001",
+      version: "2026-09-21T12:00:00.000Z",
+      title: "Publicação",
+      slug: "publicacao",
+      summary: "Resumo",
+      markdown: "# Conteúdo",
+      contentType: "article",
+    });
+    input.append("areaIds", "10000000-0000-4000-8000-000000000002");
+    mocks.publish.mockResolvedValue(null);
+    mocks.getAdmin.mockResolvedValue({
+      id: "10000000-0000-4000-8000-000000000001",
+      title: "Publicação",
+      slug: "publicacao",
+      summary: "Resumo",
+      markdown: "# Conteúdo",
+      contentType: "article",
+      areaIds: ["10000000-0000-4000-8000-000000000002"],
+      categoryId: "",
+      tagIds: [],
+      course: "",
+      discipline: "",
+      originalDate: "",
+      references: [],
+      cover: null,
+      status: "published",
+      updatedAt: new Date("2026-09-21T12:01:00.000Z"),
+    });
+
+    expect(await publishPublicationAction(input, "draft")).toMatchObject({
+      status: "success",
+      publicUrl: "/publicacoes/publicacao",
+    });
+    expect(mocks.revalidate).toHaveBeenCalledWith("/publicacoes/publicacao");
+  });
+
   it("does not invalidate public cache when the transaction fails", async () => {
     const input = draftForm({
       id: "10000000-0000-4000-8000-000000000001",

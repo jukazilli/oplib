@@ -16,6 +16,7 @@ import {
   publishPublication,
   updateDraft,
   type DraftRecord,
+  type DraftValues,
 } from "@/modules/publishing/draft-repository";
 
 export type DraftActionResult =
@@ -29,6 +30,48 @@ export type SerializedDraft = Omit<DraftRecord, "updatedAt"> & {
 
 function serializeDraft(draft: DraftRecord): SerializedDraft {
   return { ...draft, updatedAt: draft.updatedAt.toISOString() };
+}
+
+function sameStringSet(left: string[], right: string[]) {
+  const sortedRight = [...right].sort();
+  return (
+    left.length === right.length &&
+    [...left].sort().every((value, index) => value === sortedRight[index])
+  );
+}
+
+function publicationMatchesSubmission(
+  publication: DraftRecord,
+  values: DraftValues,
+) {
+  const sameReferences =
+    publication.references.length === values.references.length &&
+    publication.references.every((reference, index) => {
+      const submitted = values.references[index];
+      return (
+        submitted &&
+        reference.kind === submitted.kind &&
+        reference.title === submitted.title.trim() &&
+        reference.citation === submitted.citation.trim() &&
+        reference.url === submitted.url.trim()
+      );
+    });
+  return (
+    publication.title === values.title.trim() &&
+    publication.slug === values.slug.trim() &&
+    publication.summary === values.summary.trim() &&
+    publication.markdown === values.markdown.trim() &&
+    publication.contentType === values.contentType &&
+    sameStringSet(publication.areaIds, values.areaIds) &&
+    publication.categoryId === values.categoryId &&
+    sameStringSet(publication.tagIds, values.tagIds) &&
+    publication.course === values.course.trim() &&
+    publication.discipline === values.discipline.trim() &&
+    publication.originalDate === values.originalDate &&
+    publication.cover?.pathname === values.cover?.pathname &&
+    publication.cover?.altText === values.cover?.altText &&
+    sameReferences
+  );
 }
 
 export type PublishActionResult =
@@ -61,19 +104,28 @@ export async function publishPublicationAction(
   try {
     const { id, version, ...values } = parsed.data;
     const previous = await getAdminPublicationById(id);
-    const publication = await publishPublication(
+    let publication = await publishPublication(
       id,
       new Date(version),
       values,
       administratorId,
       expectedStatus,
     );
-    if (!publication)
-      return {
-        status: "conflict",
-        message:
-          "Esta publicação mudou em outra sessão. Reabra para revisar a versão atual.",
-      };
+    if (!publication) {
+      const current = await getAdminPublicationById(id);
+      if (
+        current?.status === "published" &&
+        publicationMatchesSubmission(current, values)
+      ) {
+        publication = current;
+      } else {
+        return {
+          status: "conflict",
+          message:
+            "Esta publicação recebeu alterações diferentes. Reabra para comparar com a versão atual.",
+        };
+      }
+    }
     let warning: string | undefined;
     try {
       revalidatePath("/admin");

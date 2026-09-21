@@ -6,6 +6,7 @@
 
 - `publishInputSchema` exige título, resumo, Markdown, tipo, área e versão salva; rascunhos continuam incompletos.
 - `publishPublication` usa status e `updatedAt` esperados; conteúdo, relações, data e auditoria de sucesso são confirmados na mesma transação.
+- Uma tentativa repetida com composição idêntica já publicada é reconhecida como sucesso; conteúdo diferente continua produzindo conflito real.
 - O composer diferencia salvar rascunho, publicar e atualizar; confirmação nomeia o título e a consequência.
 - `revalidatePath` roda somente após sucesso e cobre administração, lista pública e slug novo/anterior.
 - `npm test`: 24 arquivos, 100 testes aprovados, inclusive falha de cache após commit.

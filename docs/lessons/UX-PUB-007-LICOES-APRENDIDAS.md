@@ -17,10 +17,12 @@ Memória de produto para a composição administrativa de publicações. Estas r
 9. **Navegação refinada não remove capacidades existentes.** Antes de simplificar o shell, conferir acesso a perfil, saída e demais utilidades pessoais. `Meu perfil` é gestão da conta administrativa; não equivale ao perfil público futuro.
 10. **Editores longos usam a viewport e preservam ações.** Composição extensa não deve ficar dentro de um cartão parcialmente rolável. Cabeçalho e barra de ações permanecem fixos; no compacto, composição e prévia formam duas etapas reversíveis.
 11. **Ferramentas recorrentes acompanham o cabeçalho.** Capa, classificação, detalhes e rascunhos permanecem juntos no topo do composer; a área editorial fica reservada para escrever e revisar o conteúdo.
+12. **Mudanças de estado precisam ser idempotentes na recuperação.** Se publicar, atualizar, retirar ou destacar confirmar no servidor e a resposta se perder, repetir a mesma composição deve sincronizar a interface como sucesso. A mensagem de conflito fica reservada a conteúdo realmente diferente, não a uma resposta perdida.
 
 ## Evidências que originaram as regras
 
 - feedback visual do proprietário durante a revisão do Preview do PR #24;
+- falso conflito observado pelo proprietário ao publicar no Preview da PR #34;
 - `src/components/editor/draft-composer.tsx`;
 - `tests/unit/draft-composer.test.tsx`;
 - `docs/evidence/EVID-PUB-007-01.md`.
