@@ -473,7 +473,7 @@ Uma publicação poderá possuir zero ou várias áreas durante o rascunho e dev
 ### Comportamento da composição integrada
 
 - a entrada inicial começa pelo título e apresenta o conteúdo Markdown logo depois;
-- identidade visual, título e acesso à taxonomia formam uma linha contínua; não serão apresentados como cartões ou campos administrativos separados;
+- identidade visual, título e acesso à taxonomia formam uma linha contínua; a seleção abre em popover, e clicar fora fecha o controle sem descartar categoria ou tags;
 - o ícone de imagem abre a seleção da capa e mantém prévia e texto alternativo no próprio fluxo da composição;
 - ferramentas usam ícones com nome acessível e tooltip curto quando o símbolo não for inequívoco;
 - capa, referências e metadados abrem controles contextuais dentro da composição sem criar diálogos empilhados;
@@ -482,6 +482,7 @@ Uma publicação poderá possuir zero ou várias áreas durante o rascunho e dev
 - a lista administrativa não mistura autores nem reutiliza a semântica do feed público do visitante;
 - somente um diálogo de composição ou edição permanece aberto por vez;
 - fechar, editar outro item ou sair preserva o rascunho e respeita o aviso de alterações não salvas;
+- ações internas de fechamento ou navegação apresentam confirmação visual do OPALIB; somente fechar ou recarregar a aba pode usar o aviso nativo obrigatório do navegador;
 - filtros e busca pertencem à mesma página, mas não competem com a composição;
 - no celular, composição e item expandido ocupam a largura disponível, com ferramentas roláveis ou agrupadas sem esconder ações essenciais.
 

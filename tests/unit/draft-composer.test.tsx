@@ -48,7 +48,7 @@ describe("draft composer", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("reveals taxonomy in context without partitioning the composer", async () => {
+  it("keeps taxonomy selected when its popover closes from an outside click", async () => {
     const user = userEvent.setup();
     render(
       <DraftComposer
@@ -85,6 +85,10 @@ describe("draft composer", () => {
       "10000000-0000-4000-8000-000000000002",
     );
     await user.click(screen.getByRole("button", { name: "Pesquisa" }));
+    await user.click(screen.getByRole("heading", { name: "Nova publicação" }));
+    expect(
+      screen.queryByRole("region", { name: "Taxonomia" }),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "2 classificações" }),
     ).toBeInTheDocument();
@@ -121,6 +125,31 @@ describe("draft composer", () => {
       "/admin/publicacoes?draft=10000000-0000-4000-8000-000000000001",
     );
     expect(await screen.findByText(/Salvo às/)).toBeInTheDocument();
+  });
+
+  it("uses the product dialog before discarding unsaved changes", async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    const confirmSpy = vi.spyOn(window, "confirm");
+    render(<DraftComposer initialDraft={null} onClose={onClose} />);
+
+    await user.type(screen.getByRole("textbox", { name: "Título" }), "Ideia");
+    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    expect(confirmSpy).not.toHaveBeenCalled();
+    await user.click(
+      screen.getByRole("button", { name: "Continuar editando" }),
+    );
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+    await user.click(
+      screen.getByRole("button", { name: "Descartar alterações" }),
+    );
+    expect(onClose).toHaveBeenCalledOnce();
+    confirmSpy.mockRestore();
   });
 
   it("recovers a local copy based on the same server version", async () => {

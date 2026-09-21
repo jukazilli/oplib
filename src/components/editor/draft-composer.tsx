@@ -55,6 +55,9 @@ export function DraftComposer({
   const [cover, setCover] = useState(initialDraft?.cover ?? null);
   const [classificationOpen, setClassificationOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [discardIntent, setDiscardIntent] = useState<
+    { kind: "close" } | { kind: "navigate"; href: string } | null
+  >(null);
   const [dirty, setDirty] = useState(false);
   const [message, setMessage] = useState("");
   const [fieldError, setFieldError] = useState<"title" | "markdown" | null>(
@@ -63,6 +66,8 @@ export function DraftComposer({
   const [recovery, setRecovery] = useState<LocalDraft | null>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
+  const classificationRef = useRef<HTMLDivElement>(null);
+  const classificationToolbarRef = useRef<HTMLButtonElement>(null);
 
   const key = useMemo(() => storageKey(id), [id]);
 
@@ -71,21 +76,45 @@ export function DraftComposer({
   }, []);
 
   useEffect(() => {
+    if (!classificationOpen) return;
+    const closeClassification = (event: PointerEvent | KeyboardEvent) => {
+      if (event instanceof KeyboardEvent) {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          setClassificationOpen(false);
+        }
+        return;
+      }
+      if (
+        event.target instanceof Node &&
+        !classificationRef.current?.contains(event.target) &&
+        !classificationToolbarRef.current?.contains(event.target)
+      )
+        setClassificationOpen(false);
+    };
+    document.addEventListener("pointerdown", closeClassification);
+    document.addEventListener("keydown", closeClassification);
+    return () => {
+      document.removeEventListener("pointerdown", closeClassification);
+      document.removeEventListener("keydown", closeClassification);
+    };
+  }, [classificationOpen]);
+
+  useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       event.preventDefault();
-      if (
-        dirty &&
-        !window.confirm(
-          "Existem alterações não salvas. Deseja fechar mesmo assim?",
-        )
-      )
+      if (discardIntent) {
+        setDiscardIntent(null);
         return;
-      onClose?.();
+      }
+      if (dirty) setDiscardIntent({ kind: "close" });
+      else onClose?.();
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, [dirty, onClose]);
+  }, [dirty, discardIntent, onClose]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(key);
@@ -144,15 +173,12 @@ export function DraftComposer({
     const beforeUnload = (event: BeforeUnloadEvent) => event.preventDefault();
     const guardLinks = (event: MouseEvent) => {
       const target = event.target;
-      if (!(target instanceof Element) || !target.closest("a[href]")) return;
-      if (
-        !window.confirm(
-          "Existem alterações não salvas. Deseja sair mesmo assim?",
-        )
-      ) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+      if (!(target instanceof Element)) return;
+      const anchor = target.closest<HTMLAnchorElement>("a[href]");
+      if (!anchor) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setDiscardIntent({ kind: "navigate", href: anchor.href });
     };
     window.addEventListener("beforeunload", beforeUnload);
     document.addEventListener("click", guardLinks, true);
@@ -314,14 +340,19 @@ export function DraftComposer({
   }
 
   function closeComposer() {
-    if (
-      dirty &&
-      !window.confirm(
-        "Existem alterações não salvas. Deseja fechar mesmo assim?",
-      )
-    )
-      return;
-    onClose?.();
+    if (dirty) setDiscardIntent({ kind: "close" });
+    else onClose?.();
+  }
+
+  function discardChanges() {
+    if (!discardIntent) return;
+    window.localStorage.removeItem(key);
+    window.localStorage.removeItem(newDraftKey);
+    const intent = discardIntent;
+    setDiscardIntent(null);
+    setDirty(false);
+    if (intent.kind === "navigate") window.location.assign(intent.href);
+    else onClose?.();
   }
 
   return (
@@ -377,7 +408,10 @@ export function DraftComposer({
             OP
           </span>
           <div className="min-w-0 flex-1 border-l pl-4">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <div
+              ref={classificationRef}
+              className="relative flex flex-wrap items-center gap-x-2 gap-y-1"
+            >
               <input
                 ref={titleInputRef}
                 id="draft-post-title"
@@ -387,7 +421,7 @@ export function DraftComposer({
                 maxLength={240}
                 aria-invalid={fieldError === "title"}
                 onChange={(event) => changeTitle(event.target.value)}
-                className="min-w-48 flex-1 border-0 bg-transparent font-interface text-base font-bold outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:ring-0"
+                className="composer-field min-w-48 flex-1 border-0 bg-transparent font-interface text-base font-bold outline-none placeholder:font-normal placeholder:text-muted-foreground focus-visible:bg-muted/30 focus-visible:ring-0"
               />
               <span aria-hidden="true" className="text-muted-foreground">
                 ›
@@ -402,6 +436,51 @@ export function DraftComposer({
                   ? `${(categoryId ? 1 : 0) + tagIds.length} classificações`
                   : "Adicionar taxonomia"}
               </button>
+              {classificationOpen ? (
+                <section
+                  aria-label="Taxonomia"
+                  className="absolute top-full right-0 z-20 mt-2 w-[min(24rem,calc(100vw-4rem))] rounded-card border bg-surface p-4 shadow-xl"
+                >
+                  <label className="grid gap-2 font-interface text-sm font-semibold">
+                    Categoria
+                    <select
+                      value={categoryId}
+                      onChange={(event) => {
+                        setCategoryId(event.target.value);
+                        markChanged();
+                      }}
+                      className="min-h-11 rounded-control border bg-background px-3 font-normal"
+                    >
+                      <option value="">Sem categoria</option>
+                      {taxonomy.categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  {taxonomy.tags.length ? (
+                    <fieldset className="mt-4">
+                      <legend className="font-interface text-sm font-semibold">
+                        Tags
+                      </legend>
+                      <div className="mt-2 flex max-h-40 flex-wrap gap-2 overflow-y-auto">
+                        {taxonomy.tags.map((tag) => (
+                          <button
+                            key={tag.id}
+                            type="button"
+                            aria-pressed={tagIds.includes(tag.id)}
+                            onClick={() => toggleTag(tag.id)}
+                            className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+                          >
+                            {tag.name}
+                          </button>
+                        ))}
+                      </div>
+                    </fieldset>
+                  ) : null}
+                </section>
+              ) : null}
             </div>
 
             <textarea
@@ -416,54 +495,8 @@ export function DraftComposer({
                 if ((event.ctrlKey || event.metaKey) && event.key === "Enter")
                   save();
               }}
-              className="mt-2 min-h-56 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:ring-0"
+              className="composer-field mt-2 min-h-56 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:bg-muted/20 focus-visible:ring-0"
             />
-
-            {classificationOpen ? (
-              <section
-                aria-label="Taxonomia"
-                className="mt-3 rounded-card border bg-muted/40 p-4"
-              >
-                <label className="grid gap-2 font-interface text-sm font-semibold">
-                  Categoria
-                  <select
-                    value={categoryId}
-                    onChange={(event) => {
-                      setCategoryId(event.target.value);
-                      markChanged();
-                    }}
-                    className="min-h-11 rounded-control border bg-background px-3 font-normal"
-                  >
-                    <option value="">Sem categoria</option>
-                    {taxonomy.categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                {taxonomy.tags.length ? (
-                  <fieldset className="mt-4">
-                    <legend className="font-interface text-sm font-semibold">
-                      Tags
-                    </legend>
-                    <div className="mt-2 flex max-h-28 flex-wrap gap-2 overflow-y-auto">
-                      {taxonomy.tags.map((tag) => (
-                        <button
-                          key={tag.id}
-                          type="button"
-                          aria-pressed={tagIds.includes(tag.id)}
-                          onClick={() => toggleTag(tag.id)}
-                          className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
-                        >
-                          {tag.name}
-                        </button>
-                      ))}
-                    </div>
-                  </fieldset>
-                ) : null}
-              </section>
-            ) : null}
 
             {cover ? (
               <div className="relative mt-4 overflow-hidden rounded-card border">
@@ -495,7 +528,7 @@ export function DraftComposer({
                     }}
                     placeholder="Descreva o conteúdo da imagem"
                     maxLength={300}
-                    className="mt-1 min-h-10 w-full border-0 bg-transparent font-normal outline-none"
+                    className="composer-field mt-1 min-h-10 w-full border-0 bg-transparent font-normal outline-none focus-visible:bg-muted/30"
                   />
                 </label>
               </div>
@@ -524,6 +557,7 @@ export function DraftComposer({
                 <ImageIcon aria-hidden="true" className="size-5" />
               </button>
               <button
+                ref={classificationToolbarRef}
                 type="button"
                 onClick={() => setClassificationOpen((open) => !open)}
                 aria-label="Classificação"
@@ -548,6 +582,48 @@ export function DraftComposer({
           </Button>
         </footer>
       </div>
+
+      {discardIntent ? (
+        <div className="fixed inset-0 z-[70] grid place-items-center bg-foreground/55 p-5">
+          <section
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="discard-title"
+            aria-describedby="discard-description"
+            className="w-full max-w-md rounded-card border bg-surface p-6 shadow-2xl"
+          >
+            <h3
+              id="discard-title"
+              className="font-editorial text-2xl font-semibold"
+            >
+              Alterações não salvas
+            </h3>
+            <p
+              id="discard-description"
+              className="mt-2 text-sm leading-6 text-muted-foreground"
+            >
+              Se você fechar agora, as alterações desta composição serão
+              descartadas.
+            </p>
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={discardChanges}
+              >
+                Descartar alterações
+              </Button>
+              <Button
+                type="button"
+                autoFocus
+                onClick={() => setDiscardIntent(null)}
+              >
+                Continuar editando
+              </Button>
+            </div>
+          </section>
+        </div>
+      ) : null}
     </section>
   );
 }

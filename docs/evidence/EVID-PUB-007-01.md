@@ -15,6 +15,9 @@
 - retomada de composição preservando recuperação local e tratamento de conflito de `PUB-001`;
 - composer reorganizado como fluxo único inspirado no Threads, sem agrupamentos densos de formulário;
 - taxonomia contextual e vínculo da capa persistidos junto ao rascunho;
+- taxonomia apresentada em popover sobreposto, com fechamento externo sem perda da seleção;
+- campos editoriais sem moldura de foco e confirmação de descarte renderizada pelo Design System do OPALIB;
+- acesso `Meu perfil` restaurado no shell e ligado à gestão da conta administrativa do Clerk;
 - upload de capa com prévia e descrição acessível no próprio composer;
 - ausência de `Para você`, comunidade, seguir, reação ou mistura de autores na administração.
 

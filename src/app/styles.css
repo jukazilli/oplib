@@ -71,6 +71,11 @@ body {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
+
+.composer-field:focus-visible {
+  outline: none;
+  outline-offset: 0;
+}
 .bg-opal-gradient {
   background: linear-gradient(90deg, #87cae5, #aaa1d6, #dfc29c);
 }
