@@ -156,6 +156,21 @@ export async function listPublicAreas(database?: Database) {
     .orderBy(asc(knowledgeAreas.name));
 }
 
+export async function listPublishedSitemapEntries(database?: Database) {
+  await connection();
+  const db = database ?? getDatabase();
+  return db
+    .select({
+      slug: posts.slug,
+      updatedAt: posts.updatedAt,
+      coverUrl: coverAssets.url,
+    })
+    .from(posts)
+    .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
+    .where(eq(posts.status, "published"))
+    .orderBy(asc(posts.slug));
+}
+
 export async function searchPublications(
   search: PublicSearch,
   database?: Database,

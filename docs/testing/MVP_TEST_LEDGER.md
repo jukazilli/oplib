@@ -88,3 +88,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: bloquear clipboard e confirmar orientação para cópia pela barra do navegador.
 - [ ] `Final`: testar compartilhamento em celular compatível e desktop sem suporte nativo.
 - [ ] `Final`: confirmar que o link recebido abre a mesma publicação pública e não uma URL de Preview.
+
+## SEO-002 — Sitemap, robots e dados estruturados
+
+- [ ] `Automatizado/Preview`: confirmar que sitemap contém home, acervo e somente publicações `published`, com `lastModified` correto.
+- [ ] `Automatizado/Preview`: retirar e republicar conteúdo, confirmando remoção e retorno no sitemap após invalidação.
+- [ ] `Automatizado`: confirmar sitemap vazio e `Disallow: /` em Development/Preview ou sem origem canônica.
+- [ ] `Automatizado/Production`: confirmar permissão pública e bloqueio de `/admin/`, `/api/` e `/sign-in/` no robots.
+- [ ] `Automatizado/Preview`: validar Article JSON-LD, datas, canonical, autor, capa opcional e escape contra fechamento de script.
+- [ ] `Final`: submeter sitemap a um validador e verificar uma publicação com teste de resultados avançados.

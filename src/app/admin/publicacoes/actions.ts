@@ -146,6 +146,7 @@ export async function publishPublicationAction(
       revalidatePath("/admin/publicacoes");
       revalidatePath("/");
       revalidatePath("/publicacoes");
+      revalidatePath("/sitemap.xml");
       if (previous?.slug && previous.slug !== publication.slug)
         revalidatePath(`/publicacoes/${previous.slug}`);
       revalidatePath(`/publicacoes/${publication.slug}`);
@@ -202,6 +203,7 @@ export async function changePublicationStatusAction(
       revalidatePath("/admin/publicacoes");
       revalidatePath("/");
       revalidatePath("/publicacoes");
+      revalidatePath("/sitemap.xml");
       revalidatePath(`/publicacoes/${publication.slug}`);
     } catch {
       logEvent({

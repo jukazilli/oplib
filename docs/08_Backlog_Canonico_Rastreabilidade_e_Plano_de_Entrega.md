@@ -744,7 +744,7 @@ Estado atual: metadata global e por publicação, canonical, Open Graph, Twitter
 
 ### SEO-002 — Sitemap, robots e dados estruturados
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §12; D07 §17; TL §17.
 - **Objetivo:** expor descoberta técnica fiel ao conteúdo público.
 - **Descrição:** `sitemap.ts`, `robots.ts` e schema estruturado somente quando aplicável.
@@ -753,6 +753,8 @@ Estado atual: metadata global e por publicação, canonical, Open Graph, Twitter
 - **Riscos:** cache manter URL retirada.
 - **Testes:** `TEST-SEO-002-01` sitemap por status; `-02` robots por ambiente; `-03` schema.
 - **Evidência:** `EVID-SEO-002-01` arquivos/validação.
+
+Estado atual: sitemap exclusivo de conteúdo publicado, robots por ambiente, invalidação editorial e Article JSON-LD fiel/seguro implementados. Suíte local aprovada; arquivos em Preview/Production e validadores externos permanecem pendentes.
 
 ## 11. Interações públicas e moderação
 

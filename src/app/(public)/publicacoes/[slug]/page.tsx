@@ -6,6 +6,10 @@ import { cache } from "react";
 import { MarkdownContent } from "@/components/editor/markdown-content";
 import { ShareAction } from "@/components/editorial/share-action";
 import { getSiteUrl } from "@/lib/seo/metadata";
+import {
+  publicationStructuredData,
+  serializeStructuredData,
+} from "@/lib/seo/structured-data";
 import { getPublicPublicationBySlug } from "@/modules/publishing/draft-repository";
 import { estimateReadingMinutes } from "@/modules/publishing/metadata";
 
@@ -85,9 +89,19 @@ export default async function PublicationPage({
   const { slug } = await params;
   const publication = await getPublication(slug);
   if (!publication) notFound();
+  const canonicalUrl = new URL(`/publicacoes/${publication.slug}`, getSiteUrl())
+    .href;
 
   return (
     <article className="mx-auto w-full max-w-5xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeStructuredData(
+            publicationStructuredData(publication, canonicalUrl),
+          ),
+        }}
+      />
       <header className="mx-auto max-w-3xl">
         <p className="font-interface text-sm font-semibold text-primary">
           {[
@@ -194,10 +208,7 @@ export default async function PublicationPage({
         <ShareAction
           title={publication.title}
           text={publication.summary}
-          url={new URL(
-            `/publicacoes/${publication.slug}`,
-            getSiteUrl(),
-          ).toString()}
+          url={canonicalUrl}
         />
       </div>
     </article>
