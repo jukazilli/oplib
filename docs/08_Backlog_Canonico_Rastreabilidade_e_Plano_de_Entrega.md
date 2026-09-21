@@ -524,7 +524,7 @@ Estado atual: pipeline compartilhado com CommonMark/GFM e sanitização implemen
 
 ### PUB-003 — Metadados, referências e endereço permanente
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `review`.
 - **Origem:** D02 §§8.2–8.3; D05 §12; D07 §10 “Post” e “Reference”.
 - **Objetivo:** registrar metadados completos e um slug estável.
 - **Descrição:** título, resumo, tipo, áreas, categoria, tags, curso, disciplina, data original, referências, links e slug único.
@@ -533,6 +533,8 @@ Estado atual: pipeline compartilhado com CommonMark/GFM e sanitização implemen
 - **Riscos:** quebra de URL ou metadado inconsistente.
 - **Testes:** `TEST-PUB-003-01` validações; `-02` slug concorrente; `-03` referências.
 - **Evidência:** `EVID-PUB-003-01` integração e E2E.
+
+Estado atual: metadados, áreas e referências foram integrados ao rascunho e à prévia por revelação progressiva; o slug é normalizado, único e serializado por bloqueio transacional. Aguarda inspeção autenticada no Preview.
 
 ### MED-001 — Enviar, substituir e remover capa
 

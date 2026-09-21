@@ -4,7 +4,17 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { upload } from "@vercel/blob/client";
-import { FileText, ImageIcon, Tags, X } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  FileText,
+  ImageIcon,
+  Plus,
+  Settings2,
+  Tags,
+  Trash2,
+  X,
+} from "lucide-react";
 
 import {
   saveDraftAction,
@@ -14,22 +24,49 @@ import { Button } from "@/components/ui/button";
 import { MarkdownContent } from "@/components/editor/markdown-content";
 import { adminSignInUrl } from "@/modules/identity/redirect";
 import { validateCoverFile } from "@/modules/media/cover-policy";
-import type { DraftCover } from "@/modules/publishing/draft-repository";
+import type {
+  DraftCover,
+  DraftReference,
+  DraftValues,
+} from "@/modules/publishing/draft-repository";
 import { markdownWarnings } from "@/modules/publishing/markdown";
 import type { TaxonomyCollection } from "@/modules/taxonomy/repository";
 
 type LocalDraft = {
   title: string;
+  slug: string;
+  summary: string;
   markdown: string;
+  contentType: DraftValues["contentType"];
+  areaIds: string[];
   categoryId: string;
   tagIds: string[];
+  course: string;
+  discipline: string;
+  originalDate: string;
+  references: DraftReference[];
   cover: DraftCover | null;
   baseUpdatedAt: string;
   savedLocallyAt: string;
 };
 
 const newDraftKey = "oplib:draft:new";
-const emptyTaxonomy: TaxonomyCollection = { categories: [], tags: [] };
+const emptyTaxonomy: TaxonomyCollection = {
+  areas: [],
+  categories: [],
+  tags: [],
+};
+const contentTypeLabels: Record<
+  Exclude<DraftValues["contentType"], "">,
+  string
+> = {
+  academic_work: "Trabalho acadêmico",
+  article: "Artigo",
+  research: "Pesquisa",
+  study: "Estudo",
+  reflection: "Reflexão",
+  project: "Projeto",
+};
 
 function storageKey(id: string) {
   return id ? `oplib:draft:${id}` : newDraftKey;
@@ -51,11 +88,24 @@ export function DraftComposer({
   const [id, setId] = useState(initialDraft?.id ?? "");
   const [version, setVersion] = useState(initialDraft?.updatedAt ?? "");
   const [title, setTitle] = useState(initialDraft?.title ?? "");
+  const [slug, setSlug] = useState(initialDraft?.slug ?? "");
+  const [summary, setSummary] = useState(initialDraft?.summary ?? "");
   const [markdown, setMarkdown] = useState(initialDraft?.markdown ?? "");
+  const [contentType, setContentType] = useState<DraftValues["contentType"]>(
+    initialDraft?.contentType ?? "",
+  );
+  const [areaIds, setAreaIds] = useState(initialDraft?.areaIds ?? []);
   const [categoryId, setCategoryId] = useState(initialDraft?.categoryId ?? "");
   const [tagIds, setTagIds] = useState(initialDraft?.tagIds ?? []);
+  const [course, setCourse] = useState(initialDraft?.course ?? "");
+  const [discipline, setDiscipline] = useState(initialDraft?.discipline ?? "");
+  const [originalDate, setOriginalDate] = useState(
+    initialDraft?.originalDate ?? "",
+  );
+  const [references, setReferences] = useState(initialDraft?.references ?? []);
   const [cover, setCover] = useState(initialDraft?.cover ?? null);
   const [classificationOpen, setClassificationOpen] = useState(false);
+  const [metadataOpen, setMetadataOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [mobilePane, setMobilePane] = useState<"write" | "preview">("write");
   const [discardIntent, setDiscardIntent] = useState<
@@ -132,9 +182,17 @@ export function DraftComposer({
     }
     if (
       local.title === title &&
+      local.slug === slug &&
+      local.summary === summary &&
       local.markdown === markdown &&
+      local.contentType === contentType &&
+      JSON.stringify(local.areaIds) === JSON.stringify(areaIds) &&
       local.categoryId === categoryId &&
       JSON.stringify(local.tagIds) === JSON.stringify(tagIds) &&
+      local.course === course &&
+      local.discipline === discipline &&
+      local.originalDate === originalDate &&
+      JSON.stringify(local.references) === JSON.stringify(references) &&
       JSON.stringify(local.cover) === JSON.stringify(cover)
     )
       return;
@@ -142,10 +200,18 @@ export function DraftComposer({
     const recoveryTimer = window.setTimeout(() => {
       if (local.baseUpdatedAt === version) {
         setTitle(local.title);
+        setSlug(local.slug ?? "");
+        setSummary(local.summary ?? "");
         setMarkdown(local.markdown);
+        setContentType(local.contentType ?? "");
+        setAreaIds(local.areaIds ?? []);
         setCategoryId(local.categoryId ?? "");
         setTagIds(local.tagIds ?? []);
         setCover(local.cover ?? null);
+        setCourse(local.course ?? "");
+        setDiscipline(local.discipline ?? "");
+        setOriginalDate(local.originalDate ?? "");
+        setReferences(local.references ?? []);
         setDirty(true);
         setMessage("Cópia local recuperada.");
       } else {
@@ -162,15 +228,40 @@ export function DraftComposer({
     if (!dirty) return;
     const local: LocalDraft = {
       title,
+      slug,
+      summary,
       markdown,
+      contentType,
+      areaIds,
       categoryId,
       tagIds,
       cover,
+      course,
+      discipline,
+      originalDate,
+      references,
       baseUpdatedAt: version,
       savedLocallyAt: new Date().toISOString(),
     };
     window.localStorage.setItem(key, JSON.stringify(local));
-  }, [categoryId, cover, dirty, key, markdown, tagIds, title, version]);
+  }, [
+    areaIds,
+    categoryId,
+    contentType,
+    course,
+    cover,
+    dirty,
+    discipline,
+    key,
+    markdown,
+    originalDate,
+    references,
+    slug,
+    summary,
+    tagIds,
+    title,
+    version,
+  ]);
 
   useEffect(() => {
     if (!dirty) return;
@@ -208,10 +299,18 @@ export function DraftComposer({
 
   function restoreLocalCopy(local: LocalDraft) {
     setTitle(local.title);
+    setSlug(local.slug ?? "");
+    setSummary(local.summary ?? "");
     setMarkdown(local.markdown);
+    setContentType(local.contentType ?? "");
+    setAreaIds(local.areaIds ?? []);
     setCategoryId(local.categoryId ?? "");
     setTagIds(local.tagIds ?? []);
     setCover(local.cover ?? null);
+    setCourse(local.course ?? "");
+    setDiscipline(local.discipline ?? "");
+    setOriginalDate(local.originalDate ?? "");
+    setReferences(local.references ?? []);
     setDirty(true);
     setRecovery(null);
     setMessage("Cópia local recuperada.");
@@ -229,9 +328,17 @@ export function DraftComposer({
     formData.set("id", id);
     formData.set("version", version);
     formData.set("title", title);
+    formData.set("slug", slug);
+    formData.set("summary", summary);
     formData.set("markdown", markdown);
+    formData.set("contentType", contentType);
+    for (const areaId of areaIds) formData.append("areaIds", areaId);
     formData.set("categoryId", categoryId);
     for (const tagId of tagIds) formData.append("tagIds", tagId);
+    formData.set("course", course);
+    formData.set("discipline", discipline);
+    formData.set("originalDate", originalDate);
+    formData.set("references", JSON.stringify(references));
     if (cover) formData.set("cover", JSON.stringify(cover));
     setMessage("Salvando…");
     setFieldError(null);
@@ -243,6 +350,7 @@ export function DraftComposer({
         window.localStorage.removeItem(newDraftKey);
         setId(result.draft.id);
         setVersion(result.draft.updatedAt);
+        setSlug(result.draft.slug);
         setDirty(false);
         setRecovery(null);
         setMessage(
@@ -260,18 +368,34 @@ export function DraftComposer({
         if (result.draft) {
           setRecovery({
             title,
+            slug,
+            summary,
             markdown,
+            contentType,
+            areaIds,
             categoryId,
             tagIds,
             cover,
+            course,
+            discipline,
+            originalDate,
+            references,
             baseUpdatedAt: result.draft.updatedAt,
             savedLocallyAt: new Date().toISOString(),
           });
           setTitle(result.draft.title);
+          setSlug(result.draft.slug);
+          setSummary(result.draft.summary);
           setMarkdown(result.draft.markdown);
+          setContentType(result.draft.contentType);
+          setAreaIds(result.draft.areaIds);
           setCategoryId(result.draft.categoryId);
           setTagIds(result.draft.tagIds);
           setCover(result.draft.cover);
+          setCourse(result.draft.course);
+          setDiscipline(result.draft.discipline);
+          setOriginalDate(result.draft.originalDate);
+          setReferences(result.draft.references);
           setVersion(result.draft.updatedAt);
         }
         return;
@@ -444,8 +568,8 @@ export function DraftComposer({
                   aria-expanded={classificationOpen}
                   className="min-h-10 rounded-full px-2 font-interface text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
-                  {categoryId || tagIds.length
-                    ? `${(categoryId ? 1 : 0) + tagIds.length} classificações`
+                  {areaIds.length || categoryId || tagIds.length
+                    ? `${areaIds.length + (categoryId ? 1 : 0) + tagIds.length} classificações`
                     : "Adicionar taxonomia"}
                 </button>
                 {classificationOpen ? (
@@ -453,6 +577,33 @@ export function DraftComposer({
                     aria-label="Taxonomia"
                     className="absolute top-full right-0 z-20 mt-2 w-[min(24rem,calc(100vw-4rem))] rounded-card border bg-surface p-4 shadow-xl"
                   >
+                    {taxonomy.areas.length ? (
+                      <fieldset className="mb-4">
+                        <legend className="font-interface text-sm font-semibold">
+                          Áreas
+                        </legend>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {taxonomy.areas.map((area) => (
+                            <button
+                              key={area.id}
+                              type="button"
+                              aria-pressed={areaIds.includes(area.id)}
+                              onClick={() => {
+                                setAreaIds((current) =>
+                                  current.includes(area.id)
+                                    ? current.filter((id) => id !== area.id)
+                                    : [...current, area.id],
+                                );
+                                markChanged();
+                              }}
+                              className="rounded-full border bg-background px-3 py-1.5 font-interface text-sm aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+                            >
+                              {area.name}
+                            </button>
+                          ))}
+                        </div>
+                      </fieldset>
+                    ) : null}
                     <label className="grid gap-2 font-interface text-sm font-semibold">
                       Categoria
                       <select
@@ -567,7 +718,7 @@ export function DraftComposer({
                     </div>
                   ) : null}
 
-                  <div className="mt-3 flex items-center gap-1 text-muted-foreground">
+                  <div className="relative mt-3 flex items-center gap-1 text-muted-foreground">
                     <input
                       ref={coverInputRef}
                       type="file"
@@ -599,6 +750,275 @@ export function DraftComposer({
                     >
                       <Tags aria-hidden="true" className="size-5" />
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setMetadataOpen((open) => !open)}
+                      aria-expanded={metadataOpen}
+                      aria-label="Detalhes da publicação"
+                      title="Detalhes da publicação"
+                      className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
+                    >
+                      <Settings2 aria-hidden="true" className="size-5" />
+                    </button>
+                    {metadataOpen ? (
+                      <section
+                        aria-label="Detalhes da publicação"
+                        className="absolute top-full left-0 z-30 mt-2 max-h-[60svh] w-[min(38rem,calc(100vw-5rem))] overflow-y-auto rounded-card border bg-surface p-5 text-foreground shadow-xl"
+                      >
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <label className="grid gap-1 font-interface text-sm font-semibold sm:col-span-2">
+                            Resumo
+                            <textarea
+                              value={summary}
+                              maxLength={600}
+                              rows={3}
+                              onChange={(event) => {
+                                setSummary(event.target.value);
+                                markChanged();
+                              }}
+                              placeholder="Apresente a ideia central"
+                              className="composer-field resize-none border-0 border-b bg-transparent py-2 font-normal outline-none"
+                            />
+                          </label>
+                          <label className="grid gap-1 font-interface text-sm font-semibold">
+                            Tipo
+                            <select
+                              value={contentType}
+                              onChange={(event) => {
+                                setContentType(
+                                  event.target
+                                    .value as DraftValues["contentType"],
+                                );
+                                markChanged();
+                              }}
+                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
+                            >
+                              <option value="">Não definido</option>
+                              <option value="academic_work">
+                                Trabalho acadêmico
+                              </option>
+                              <option value="article">Artigo</option>
+                              <option value="research">Pesquisa</option>
+                              <option value="study">Estudo</option>
+                              <option value="reflection">Reflexão</option>
+                              <option value="project">Projeto</option>
+                            </select>
+                          </label>
+                          <label className="grid gap-1 font-interface text-sm font-semibold">
+                            Data original
+                            <input
+                              type="date"
+                              value={originalDate}
+                              onChange={(event) => {
+                                setOriginalDate(event.target.value);
+                                markChanged();
+                              }}
+                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
+                            />
+                          </label>
+                          <label className="grid gap-1 font-interface text-sm font-semibold">
+                            Curso
+                            <input
+                              value={course}
+                              maxLength={180}
+                              onChange={(event) => {
+                                setCourse(event.target.value);
+                                markChanged();
+                              }}
+                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
+                            />
+                          </label>
+                          <label className="grid gap-1 font-interface text-sm font-semibold">
+                            Disciplina
+                            <input
+                              value={discipline}
+                              maxLength={180}
+                              onChange={(event) => {
+                                setDiscipline(event.target.value);
+                                markChanged();
+                              }}
+                              className="min-h-11 border-0 border-b bg-transparent font-normal outline-none"
+                            />
+                          </label>
+                          <label className="grid gap-1 font-interface text-sm font-semibold sm:col-span-2">
+                            Endereço permanente
+                            <span className="flex items-center border-b font-normal">
+                              <span className="text-muted-foreground">
+                                /publicacoes/
+                              </span>
+                              <input
+                                value={slug}
+                                maxLength={260}
+                                onChange={(event) => {
+                                  setSlug(event.target.value);
+                                  markChanged();
+                                }}
+                                placeholder="gerado pelo título ao salvar"
+                                className="min-h-11 min-w-0 flex-1 border-0 bg-transparent outline-none"
+                              />
+                            </span>
+                          </label>
+                        </div>
+
+                        <div className="mt-6 border-t pt-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <h3 className="font-interface text-sm font-bold">
+                              Referências e links
+                            </h3>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setReferences((current) => [
+                                  ...current,
+                                  {
+                                    id: "",
+                                    kind: "bibliography",
+                                    title: "",
+                                    citation: "",
+                                    url: "",
+                                  },
+                                ]);
+                                markChanged();
+                              }}
+                              className="flex min-h-10 items-center gap-1 rounded-full px-3 font-interface text-sm font-semibold hover:bg-muted"
+                            >
+                              <Plus aria-hidden="true" className="size-4" />
+                              Adicionar
+                            </button>
+                          </div>
+                          <div className="mt-3 grid gap-4">
+                            {references.map((reference, index) => (
+                              <fieldset
+                                key={`${reference.id}-${index}`}
+                                className="grid gap-3 border-t pt-3 first:border-t-0 first:pt-0"
+                              >
+                                <legend className="sr-only">
+                                  Referência {index + 1}
+                                </legend>
+                                <div className="flex items-center gap-2">
+                                  <select
+                                    aria-label={`Tipo da referência ${index + 1}`}
+                                    value={reference.kind}
+                                    onChange={(event) => {
+                                      setReferences((current) =>
+                                        current.map((item, itemIndex) =>
+                                          itemIndex === index
+                                            ? {
+                                                ...item,
+                                                kind: event.target
+                                                  .value as DraftReference["kind"],
+                                              }
+                                            : item,
+                                        ),
+                                      );
+                                      markChanged();
+                                    }}
+                                    className="min-h-10 flex-1 border-0 border-b bg-transparent font-interface text-sm"
+                                  >
+                                    <option value="bibliography">
+                                      Bibliografia
+                                    </option>
+                                    <option value="related_link">
+                                      Link relacionado
+                                    </option>
+                                  </select>
+                                  <button
+                                    type="button"
+                                    disabled={index === 0}
+                                    aria-label={`Mover referência ${index + 1} para cima`}
+                                    onClick={() => {
+                                      setReferences((current) => {
+                                        const next = [...current];
+                                        const [moving] = next.splice(index, 1);
+                                        if (moving)
+                                          next.splice(index - 1, 0, moving);
+                                        return next;
+                                      });
+                                      markChanged();
+                                    }}
+                                    className="flex size-10 items-center justify-center rounded-full hover:bg-muted disabled:opacity-30"
+                                  >
+                                    <ArrowUp
+                                      aria-hidden="true"
+                                      className="size-4"
+                                    />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={index === references.length - 1}
+                                    aria-label={`Mover referência ${index + 1} para baixo`}
+                                    onClick={() => {
+                                      setReferences((current) => {
+                                        const next = [...current];
+                                        const [moving] = next.splice(index, 1);
+                                        if (moving)
+                                          next.splice(index + 1, 0, moving);
+                                        return next;
+                                      });
+                                      markChanged();
+                                    }}
+                                    className="flex size-10 items-center justify-center rounded-full hover:bg-muted disabled:opacity-30"
+                                  >
+                                    <ArrowDown
+                                      aria-hidden="true"
+                                      className="size-4"
+                                    />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    aria-label={`Remover referência ${index + 1}`}
+                                    onClick={() => {
+                                      setReferences((current) =>
+                                        current.filter(
+                                          (_, itemIndex) => itemIndex !== index,
+                                        ),
+                                      );
+                                      markChanged();
+                                    }}
+                                    className="flex size-10 items-center justify-center rounded-full hover:bg-muted"
+                                  >
+                                    <Trash2
+                                      aria-hidden="true"
+                                      className="size-4"
+                                    />
+                                  </button>
+                                </div>
+                                {(["title", "citation", "url"] as const).map(
+                                  (field) => (
+                                    <input
+                                      key={field}
+                                      aria-label={`${field === "title" ? "Título" : field === "citation" ? "Citação" : "Endereço"} da referência ${index + 1}`}
+                                      value={reference[field]}
+                                      placeholder={
+                                        field === "title"
+                                          ? "Título"
+                                          : field === "citation"
+                                            ? "Citação"
+                                            : "https://"
+                                      }
+                                      onChange={(event) => {
+                                        setReferences((current) =>
+                                          current.map((item, itemIndex) =>
+                                            itemIndex === index
+                                              ? {
+                                                  ...item,
+                                                  [field]: event.target.value,
+                                                }
+                                              : item,
+                                          ),
+                                        );
+                                        markChanged();
+                                      }}
+                                      className="min-h-10 border-0 border-b bg-transparent font-interface text-sm outline-none"
+                                    />
+                                  ),
+                                )}
+                              </fieldset>
+                            ))}
+                          </div>
+                        </div>
+                      </section>
+                    ) : null}
                   </div>
                 </div>
 
@@ -629,6 +1049,32 @@ export function DraftComposer({
                       ))}
                     </div>
                   ) : null}
+                  {summary ||
+                  contentType ||
+                  course ||
+                  discipline ||
+                  originalDate ? (
+                    <div className="mb-6 border-b pb-5">
+                      {contentType ? (
+                        <p className="font-interface text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase">
+                          {contentTypeLabels[contentType]}
+                        </p>
+                      ) : null}
+                      {summary ? (
+                        <p className="mt-2 font-editorial text-xl leading-8">
+                          {summary}
+                        </p>
+                      ) : null}
+                      {[course, discipline, originalDate].filter(Boolean)
+                        .length ? (
+                        <p className="mt-3 font-interface text-sm text-muted-foreground">
+                          {[course, discipline, originalDate]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
                   {markdown.trim() ? (
                     <MarkdownContent markdown={markdown} linksEnabled={false} />
                   ) : (
@@ -636,6 +1082,32 @@ export function DraftComposer({
                       A prévia aparecerá aqui.
                     </p>
                   )}
+                  {references.length ? (
+                    <section
+                      className="mt-8 border-t pt-5"
+                      aria-label="Referências"
+                    >
+                      <h3 className="font-editorial text-2xl font-semibold">
+                        Referências
+                      </h3>
+                      <ol className="mt-3 grid gap-3 pl-5 font-interface text-sm text-muted-foreground">
+                        {references.map((reference, index) => (
+                          <li
+                            key={`${reference.id}-${index}`}
+                            className="list-decimal"
+                          >
+                            <span className="font-semibold text-foreground">
+                              {reference.title || "Referência sem título"}
+                            </span>
+                            {reference.citation
+                              ? ` — ${reference.citation}`
+                              : ""}
+                            {reference.url ? ` — ${reference.url}` : ""}
+                          </li>
+                        ))}
+                      </ol>
+                    </section>
+                  ) : null}
                 </section>
               </div>
             </div>
