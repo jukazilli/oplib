@@ -1,0 +1,134 @@
+import Image from "next/image";
+import { notFound } from "next/navigation";
+
+import { MarkdownContent } from "@/components/editor/markdown-content";
+import { getPublicPublicationBySlug } from "@/modules/publishing/draft-repository";
+import { estimateReadingMinutes } from "@/modules/publishing/metadata";
+
+const contentTypeLabels = {
+  academic_work: "Trabalho acadêmico",
+  article: "Artigo",
+  research: "Pesquisa",
+  study: "Estudo",
+  reflection: "Reflexão",
+  project: "Projeto",
+  "": "Publicação",
+} as const;
+
+const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" });
+
+export default async function PublicationPage({
+  params,
+}: PageProps<"/publicacoes/[slug]">) {
+  const { slug } = await params;
+  const publication = await getPublicPublicationBySlug(slug);
+  if (!publication) notFound();
+
+  return (
+    <article className="mx-auto w-full max-w-5xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+      <header className="mx-auto max-w-3xl">
+        <p className="font-interface text-sm font-semibold text-primary">
+          {[
+            ...publication.areaNames,
+            contentTypeLabels[publication.contentType],
+          ].join(" · ")}
+        </p>
+        <h1 className="mt-4 font-editorial text-4xl leading-tight font-semibold tracking-[-0.025em] text-balance sm:text-5xl lg:text-6xl">
+          {publication.title}
+        </h1>
+        <p className="mt-5 font-editorial text-xl leading-8 text-muted-foreground sm:text-2xl">
+          {publication.summary}
+        </p>
+        <div className="mt-6 flex flex-wrap gap-x-2 gap-y-1 font-interface text-sm text-muted-foreground">
+          <span className="font-semibold text-foreground">Juliano Zilli</span>
+          <span aria-hidden="true">·</span>
+          <time dateTime={publication.publishedAt.toISOString()}>
+            {dateFormatter.format(publication.publishedAt)}
+          </time>
+          <span aria-hidden="true">·</span>
+          <span>
+            {estimateReadingMinutes(publication.markdown)} min de leitura
+          </span>
+        </div>
+        {publication.originalDate ? (
+          <p className="mt-2 font-interface text-sm text-muted-foreground">
+            Trabalho original de{" "}
+            {dateFormatter.format(
+              new Date(`${publication.originalDate}T12:00:00.000Z`),
+            )}
+          </p>
+        ) : null}
+      </header>
+
+      {publication.cover ? (
+        <figure className="relative mt-10 aspect-[16/9] overflow-hidden rounded-card bg-muted">
+          <Image
+            src={publication.cover.url}
+            alt={publication.cover.altText}
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 1024px"
+            className="object-cover"
+          />
+        </figure>
+      ) : null}
+
+      <div className="mx-auto mt-12 max-w-[72ch]">
+        <MarkdownContent markdown={publication.markdown} />
+
+        {publication.references.length ? (
+          <section
+            aria-labelledby="references-title"
+            className="mt-14 border-t pt-8"
+          >
+            <h2
+              id="references-title"
+              className="font-editorial text-3xl font-semibold"
+            >
+              Referências
+            </h2>
+            <ol className="mt-5 grid gap-4 pl-5 font-interface text-sm leading-6 text-muted-foreground">
+              {publication.references.map((reference) => (
+                <li key={reference.id} className="list-decimal pl-1">
+                  <span className="font-semibold text-foreground">
+                    {reference.title}
+                  </span>
+                  {reference.citation ? ` — ${reference.citation}` : ""}
+                  {reference.url ? (
+                    <>
+                      {" "}
+                      —{" "}
+                      <a
+                        href={reference.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-primary underline underline-offset-4"
+                      >
+                        Acessar referência
+                      </a>
+                    </>
+                  ) : null}
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
+
+        {publication.categoryName || publication.tagNames.length ? (
+          <footer className="mt-12 flex flex-wrap gap-2 border-t pt-6 font-interface text-sm">
+            {[publication.categoryName, ...publication.tagNames]
+              .filter(Boolean)
+              .map((label) => (
+                <span
+                  key={label}
+                  className="rounded-full border px-3 py-1.5 text-muted-foreground"
+                >
+                  {label}
+                </span>
+              ))}
+          </footer>
+        ) : null}
+      </div>
+    </article>
+  );
+}

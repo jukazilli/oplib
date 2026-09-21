@@ -672,7 +672,7 @@ Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, loc
 
 ### WEB-004 — Página de leitura da publicação
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §8.3; D04 §16; D05 §6.
 - **Objetivo:** oferecer leitura longa confortável em endereço permanente.
 - **Descrição:** área/tipo, título, resumo, autor/datas, capa opcional, Markdown, referências, tags, compartilhamento, interações e relacionados.
@@ -681,6 +681,8 @@ Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, loc
 - **Riscos:** layout competir com o conteúdo ou expor rascunho.
 - **Testes:** `TEST-WEB-004-01` renderização; `-02` acesso por status; `-03` responsive/axe.
 - **Evidência:** `EVID-WEB-004-01` E2E de leitura.
+
+Estado atual: consulta pública protegida por status, rota por slug, hierarquia editorial, Markdown seguro, capa opcional, referências e taxonomia implementados. Suíte local aprovada; dados reais, estados e responsividade aguardam Preview.
 
 ### WEB-005 — Compartilhar publicação
 

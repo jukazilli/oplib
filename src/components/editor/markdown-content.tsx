@@ -81,6 +81,10 @@ export function MarkdownContent({
             linksEnabled ? (
               <a
                 href={href}
+                target={href?.startsWith("http") ? "_blank" : undefined}
+                rel={
+                  href?.startsWith("http") ? "noopener noreferrer" : undefined
+                }
                 className="font-semibold text-primary underline decoration-primary/40 underline-offset-4"
               >
                 {children}

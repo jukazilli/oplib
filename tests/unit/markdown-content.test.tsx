@@ -55,4 +55,12 @@ describe("markdown content", () => {
     ).not.toBeInTheDocument();
     expect(screen.getByText("OPALIB")).toHaveClass("underline");
   });
+
+  it("opens external links without exposing the originating page", () => {
+    render(<MarkdownContent markdown="[Fonte](https://example.com/artigo)" />);
+    expect(screen.getByRole("link", { name: "Fonte" })).toMatchObject({
+      target: "_blank",
+      rel: "noopener noreferrer",
+    });
+  });
 });

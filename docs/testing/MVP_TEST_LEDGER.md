@@ -32,3 +32,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Final`: conferir localização atual e ausência de entrada administrativa na navegação pública.
 - [ ] `Final`: verificar compacto, médio, amplo e zoom de 200%, sem corte ou sobreposição.
 - [ ] `Automatizado`: executar axe sem violações críticas.
+
+## WEB-004 — Página pública de leitura
+
+- [ ] `Automatizado/Preview`: abrir uma publicação por slug e conferir título, resumo, autoria, datas, taxonomia, Markdown e referências.
+- [ ] `Automatizado/Preview`: confirmar que rascunho, retirada e slug inexistente apresentam a mesma indisponibilidade pública.
+- [ ] `Final`: ler uma publicação longa em celular, tablet e desktop, sem barra lateral ou elementos competindo com o texto.
+- [ ] `Final`: conferir capa presente e ausente, sem espaço vazio indevido.
+- [ ] `Final`: testar links externos, tabela larga e bloco de código em tela pequena.
+- [ ] `Automatizado`: executar axe e confirmar hierarquia de títulos e regiões.

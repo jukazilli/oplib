@@ -87,6 +87,13 @@ export type AdminPublication = DraftRecord & {
   status: "draft" | "published" | "withdrawn";
 };
 
+export type PublicPublication = DraftRecord & {
+  publishedAt: Date;
+  areaNames: string[];
+  categoryName: string;
+  tagNames: string[];
+};
+
 const draftSelection = {
   id: posts.id,
   title: posts.title,
@@ -247,6 +254,51 @@ export async function listAdminPublications(database?: Database) {
       status: row.status,
     })),
   );
+}
+
+export async function getPublicPublicationBySlug(
+  slug: string,
+  database?: Database,
+): Promise<PublicPublication | null> {
+  await connection();
+  const db = database ?? getDatabase();
+  const rows = await db
+    .select({ ...draftSelection, publishedAt: posts.publishedAt })
+    .from(posts)
+    .leftJoin(coverAssets, eq(coverAssets.id, posts.coverAssetId))
+    .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
+    .limit(1);
+  const row = rows[0];
+  if (!row?.publishedAt) return null;
+  const [draft, areaRows, categoryRows, tagRows] = await Promise.all([
+    enrichDraft(row, db),
+    db
+      .select({ name: knowledgeAreas.name })
+      .from(postKnowledgeAreas)
+      .innerJoin(
+        knowledgeAreas,
+        eq(knowledgeAreas.id, postKnowledgeAreas.knowledgeAreaId),
+      )
+      .where(eq(postKnowledgeAreas.postId, row.id)),
+    db
+      .select({ name: categories.name })
+      .from(postCategories)
+      .innerJoin(categories, eq(categories.id, postCategories.categoryId))
+      .where(eq(postCategories.postId, row.id))
+      .limit(1),
+    db
+      .select({ name: tags.name })
+      .from(postTags)
+      .innerJoin(tags, eq(tags.id, postTags.tagId))
+      .where(eq(postTags.postId, row.id)),
+  ]);
+  return {
+    ...draft,
+    publishedAt: row.publishedAt,
+    areaNames: areaRows.map(({ name }) => name),
+    categoryName: categoryRows[0]?.name ?? "",
+    tagNames: tagRows.map(({ name }) => name),
+  };
 }
 
 async function availableSlug(
