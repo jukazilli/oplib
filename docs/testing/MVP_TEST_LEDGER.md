@@ -126,3 +126,13 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: navegar mais de 50 itens, inclusive datas iguais, sem repetição ou perda; URL de filtro e cursor resiste a atualização.
 - [ ] `Automatizado/Preview`: HTML, Markdown e URL maliciosos aparecem como texto inerte também na administração.
 - [ ] `Final`: conferir vazio por filtro, falha de leitura e recuperação, navegação por teclado, foco, leitor de tela, celular e zoom 200%.
+
+## MOD-002 — Ocultar e restaurar comentários
+
+- [ ] `Automatizado/Preview`: administrador oculta sem diálogo pesado; estado e auditoria persistem na mesma transação, sem conteúdo integral no evento.
+- [ ] `Automatizado/Preview`: comentário oculto some totalmente da página pública após recarga e continua no filtro administrativo `Ocultos`.
+- [ ] `Automatizado/Preview`: restaurar devolve o mesmo comentário ao público, preservando nome, corpo e data original.
+- [ ] `Automatizado/Preview`: duas sessões tentam ocultar/restaurar simultaneamente; somente a transição válida vence e a outra recebe conflito recuperável.
+- [ ] `Automatizado/Preview`: visitante ou conta fora da allowlist não executa a ação, mesmo chamando-a diretamente.
+- [ ] `Final`: após ocultar, `Desfazer` aparece por oito segundos; falha preserva o estado e permite nova tentativa.
+- [ ] `Final`: testar filtro atual, teclado, foco, anúncio de sucesso/erro, celular, zoom e ausência de controles de exclusão antes de MOD-003.

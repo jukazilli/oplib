@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { AdminComment } from "@/modules/admin/comments";
+import { CommentModerationAction } from "@/components/admin/comment-moderation-action";
 
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
   dateStyle: "medium",
@@ -48,11 +49,6 @@ export function AdminCommentsList({
             <li key={comment.id} className="py-6">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-interface text-sm">
                 <strong>{comment.authorName}</strong>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-semibold ${comment.status === "hidden" ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}
-                >
-                  {comment.status === "hidden" ? "Oculto" : "Visível"}
-                </span>
                 <time
                   dateTime={comment.createdAt.toISOString()}
                   className="text-muted-foreground"
@@ -72,6 +68,10 @@ export function AdminCommentsList({
                   {comment.postTitle}
                 </Link>
               </p>
+              <CommentModerationAction
+                id={comment.id}
+                initialStatus={comment.status}
+              />
             </li>
           ))}
         </ul>

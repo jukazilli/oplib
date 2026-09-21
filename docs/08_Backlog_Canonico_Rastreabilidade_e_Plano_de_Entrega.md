@@ -802,7 +802,7 @@ Estado atual: lista autorizada, filtros, paginação e estados implementados com
 
 ### MOD-002 — Ocultar e restaurar comentário
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
 - **Origem:** D02 §8.7; D05 §21; D07 §§11 e 15.
 - **Objetivo:** retirar rapidamente conteúdo da área pública sem destruí-lo.
 - **Descrição:** ocultar sem confirmação pesada, oferecer desfazer temporário e restaurar mantendo autoria/data.
@@ -811,6 +811,8 @@ Estado atual: lista autorizada, filtros, paginação e estados implementados com
 - **Riscos:** cache exibir comentário oculto ou ação concorrente produzir estado incorreto.
 - **Testes:** `TEST-MOD-002-01` ocultar; `-02` desfazer/restaurar; `-03` cache/concorrência.
 - **Evidência:** `EVID-MOD-002-01` E2E público/admin.
+
+Estado atual: transições condicionais auditadas, ação autorizada e desfazer temporário implementados; concorrência e experiência com banco/navegador reais pendem no Preview/final.
 
 ### MOD-003 — Excluir comentário permanentemente
 

@@ -11,8 +11,12 @@ vi.mock("@/modules/identity/admin", () => ({
   requireAdminCommand: mocks.admin,
 }));
 vi.mock("@/modules/admin/comments", () => ({ listAdminComments: mocks.list }));
+vi.mock("@/app/admin/comentarios/actions", () => ({
+  changeCommentVisibilityAction: vi.fn(),
+}));
 vi.mock("@/lib/observability/logger", () => ({ logEvent: mocks.log }));
 vi.mock("next/navigation", () => ({
+  useRouter: () => ({ refresh: vi.fn() }),
   notFound: () => {
     mocks.notFound();
     throw new Error("NEXT_NOT_FOUND");
