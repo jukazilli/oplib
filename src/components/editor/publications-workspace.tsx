@@ -214,7 +214,7 @@ export function PublicationsWorkspace({
                   ? "Editar publicação"
                   : "Nova publicação"
             }
-            className="max-h-[95svh] w-full overflow-y-auto rounded-t-[1.5rem] bg-surface shadow-2xl sm:max-w-3xl sm:rounded-[1.5rem]"
+            className={`max-h-[95svh] w-full overflow-y-auto rounded-t-[1.5rem] bg-surface shadow-2xl sm:rounded-[1.5rem] ${modalView === "composer" ? "sm:max-w-5xl" : "sm:max-w-3xl"}`}
           >
             {modalView === "composer" ? (
               <DraftComposer

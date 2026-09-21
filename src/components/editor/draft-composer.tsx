@@ -11,9 +11,11 @@ import {
   type SerializedDraft,
 } from "@/app/admin/publicacoes/actions";
 import { Button } from "@/components/ui/button";
+import { MarkdownContent } from "@/components/editor/markdown-content";
 import { adminSignInUrl } from "@/modules/identity/redirect";
 import { validateCoverFile } from "@/modules/media/cover-policy";
 import type { DraftCover } from "@/modules/publishing/draft-repository";
+import { markdownWarnings } from "@/modules/publishing/markdown";
 import type { TaxonomyCollection } from "@/modules/taxonomy/repository";
 
 type LocalDraft = {
@@ -55,6 +57,7 @@ export function DraftComposer({
   const [cover, setCover] = useState(initialDraft?.cover ?? null);
   const [classificationOpen, setClassificationOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [mobilePane, setMobilePane] = useState<"write" | "preview">("write");
   const [discardIntent, setDiscardIntent] = useState<
     { kind: "close" } | { kind: "navigate"; href: string } | null
   >(null);
@@ -70,6 +73,7 @@ export function DraftComposer({
   const classificationToolbarRef = useRef<HTMLButtonElement>(null);
 
   const key = useMemo(() => storageKey(id), [id]);
+  const previewWarnings = useMemo(() => markdownWarnings(markdown), [markdown]);
 
   useEffect(() => {
     titleInputRef.current?.focus();
@@ -483,89 +487,158 @@ export function DraftComposer({
               ) : null}
             </div>
 
-            <textarea
-              id="draft-markdown"
-              aria-label="Conteúdo"
-              placeholder="Comece a escrever…"
-              value={markdown}
-              rows={10}
-              aria-invalid={fieldError === "markdown"}
-              onChange={(event) => changeMarkdown(event.target.value)}
-              onKeyDown={(event) => {
-                if ((event.ctrlKey || event.metaKey) && event.key === "Enter")
-                  save();
-              }}
-              className="composer-field mt-2 min-h-56 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:bg-muted/20 focus-visible:ring-0"
-            />
-
-            {cover ? (
-              <div className="relative mt-4 overflow-hidden rounded-card border">
-                <Image
-                  src={cover.url}
-                  alt=""
-                  width={960}
-                  height={540}
-                  className="h-auto max-h-72 w-full object-cover"
-                />
+            <div
+              role="tablist"
+              aria-label="Modo do editor"
+              className="mt-3 grid grid-cols-2 rounded-full bg-muted p-1 md:hidden"
+            >
+              {(["write", "preview"] as const).map((pane) => (
                 <button
+                  key={pane}
                   type="button"
-                  onClick={() => {
-                    setCover(null);
-                    markChanged("Capa removida.");
-                  }}
-                  aria-label="Remover capa"
-                  className="absolute top-2 right-2 flex size-10 items-center justify-center rounded-full bg-background/90 shadow"
+                  role="tab"
+                  aria-selected={mobilePane === pane}
+                  onClick={() => setMobilePane(pane)}
+                  className="min-h-10 rounded-full px-4 font-interface text-sm font-semibold text-muted-foreground aria-selected:bg-surface aria-selected:text-foreground aria-selected:shadow-sm"
                 >
-                  <X aria-hidden="true" className="size-5" />
+                  {pane === "write" ? "Escrever" : "Prévia"}
                 </button>
-                <label className="block border-t bg-background p-3 font-interface text-sm font-semibold">
-                  Texto alternativo
-                  <input
-                    value={cover.altText}
-                    onChange={(event) => {
-                      setCover({ ...cover, altText: event.target.value });
-                      markChanged();
-                    }}
-                    placeholder="Descreva o conteúdo da imagem"
-                    maxLength={300}
-                    className="composer-field mt-1 min-h-10 w-full border-0 bg-transparent font-normal outline-none focus-visible:bg-muted/30"
-                  />
-                </label>
-              </div>
-            ) : null}
+              ))}
+            </div>
 
-            <div className="mt-3 flex items-center gap-1 text-muted-foreground">
-              <input
-                ref={coverInputRef}
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/avif"
-                className="sr-only"
-                aria-label="Selecionar imagem de capa"
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (file) void attachCover(file);
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => coverInputRef.current?.click()}
-                disabled={isUploading}
-                aria-label={cover ? "Substituir capa" : "Adicionar capa"}
-                title={cover ? "Substituir capa" : "Adicionar capa"}
-                className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground disabled:opacity-50"
+            <div className="mt-3 md:grid md:grid-cols-2 md:gap-6">
+              <div
+                className={
+                  mobilePane === "preview" ? "hidden md:block" : "block"
+                }
               >
-                <ImageIcon aria-hidden="true" className="size-5" />
-              </button>
-              <button
-                ref={classificationToolbarRef}
-                type="button"
-                onClick={() => setClassificationOpen((open) => !open)}
-                aria-label="Classificação"
-                title="Classificação"
-                className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
+                <p className="mb-3 hidden font-interface text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase md:block">
+                  Escrever
+                </p>
+                <textarea
+                  id="draft-markdown"
+                  aria-label="Conteúdo"
+                  placeholder="Comece a escrever…"
+                  value={markdown}
+                  rows={10}
+                  aria-invalid={fieldError === "markdown"}
+                  onChange={(event) => changeMarkdown(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (
+                      (event.ctrlKey || event.metaKey) &&
+                      event.key === "Enter"
+                    )
+                      save();
+                  }}
+                  className="composer-field min-h-72 w-full resize-none border-0 bg-transparent p-0 font-editorial text-lg leading-8 outline-none placeholder:text-muted-foreground focus-visible:bg-muted/20 focus-visible:ring-0"
+                />
+
+                {cover ? (
+                  <div className="relative mt-4 overflow-hidden rounded-card border">
+                    <Image
+                      src={cover.url}
+                      alt=""
+                      width={960}
+                      height={540}
+                      className="h-auto max-h-72 w-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCover(null);
+                        markChanged("Capa removida.");
+                      }}
+                      aria-label="Remover capa"
+                      className="absolute top-2 right-2 flex size-10 items-center justify-center rounded-full bg-background/90 shadow"
+                    >
+                      <X aria-hidden="true" className="size-5" />
+                    </button>
+                    <label className="block border-t bg-background p-3 font-interface text-sm font-semibold">
+                      Texto alternativo
+                      <input
+                        value={cover.altText}
+                        onChange={(event) => {
+                          setCover({ ...cover, altText: event.target.value });
+                          markChanged();
+                        }}
+                        placeholder="Descreva o conteúdo da imagem"
+                        maxLength={300}
+                        className="composer-field mt-1 min-h-10 w-full border-0 bg-transparent font-normal outline-none focus-visible:bg-muted/30"
+                      />
+                    </label>
+                  </div>
+                ) : null}
+
+                <div className="mt-3 flex items-center gap-1 text-muted-foreground">
+                  <input
+                    ref={coverInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/avif"
+                    className="sr-only"
+                    aria-label="Selecionar imagem de capa"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      if (file) void attachCover(file);
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => coverInputRef.current?.click()}
+                    disabled={isUploading}
+                    aria-label={cover ? "Substituir capa" : "Adicionar capa"}
+                    title={cover ? "Substituir capa" : "Adicionar capa"}
+                    className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground disabled:opacity-50"
+                  >
+                    <ImageIcon aria-hidden="true" className="size-5" />
+                  </button>
+                  <button
+                    ref={classificationToolbarRef}
+                    type="button"
+                    onClick={() => setClassificationOpen((open) => !open)}
+                    aria-label="Classificação"
+                    title="Classificação"
+                    className="flex size-11 items-center justify-center rounded-full hover:bg-muted hover:text-foreground"
+                  >
+                    <Tags aria-hidden="true" className="size-5" />
+                  </button>
+                </div>
+              </div>
+
+              <section
+                role="tabpanel"
+                aria-label="Prévia"
+                className={
+                  mobilePane === "write"
+                    ? "hidden md:block md:border-l md:pl-6"
+                    : "block md:border-l md:pl-6"
+                }
               >
-                <Tags aria-hidden="true" className="size-5" />
-              </button>
+                <p className="mb-3 hidden font-interface text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase md:block">
+                  Prévia
+                </p>
+                {previewWarnings.length ? (
+                  <div
+                    className="mb-4 rounded-control bg-muted p-3"
+                    role="status"
+                  >
+                    {previewWarnings.map((warning) => (
+                      <p
+                        key={warning}
+                        className="font-interface text-sm text-muted-foreground"
+                      >
+                        {warning}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
+                {markdown.trim() ? (
+                  <MarkdownContent markdown={markdown} linksEnabled={false} />
+                ) : (
+                  <p className="font-editorial text-lg text-muted-foreground">
+                    A prévia aparecerá aqui.
+                  </p>
+                )}
+              </section>
             </div>
           </div>
         </div>

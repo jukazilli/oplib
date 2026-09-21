@@ -1,0 +1,35 @@
+# EVID-PUB-002-01 — Editor e prévia Markdown segura
+
+- **Estado:** técnico concluído; aceite visual do Preview pendente
+- **Rota:** `/admin/publicacoes`
+
+## Entrega comprovada
+
+- um único componente renderiza Markdown para a prévia e fica disponível à futura leitura pública;
+- CommonMark e GFM cobrem títulos, parágrafos, listas, citações, tabelas, links e código;
+- HTML bruto não é interpretado;
+- sanitização por allowlist é aplicada após a transformação;
+- esquemas perigosos de URL são removidos;
+- links da prévia preservam aparência sem executar navegação;
+- conteúdo não suportado produz aviso curto no contexto da prévia;
+- desktop apresenta escrita e prévia lado a lado;
+- compacto alterna entre `Escrever` e `Prévia` sem ocultar o salvamento.
+
+## Validações automatizadas
+
+- `TEST-PUB-002-01`: estruturas CommonMark/GFM;
+- `TEST-PUB-002-02`: corpus com HTML, script, handler e URL perigosa;
+- `TEST-PUB-002-03`: integração responsiva no composer e pipeline compartilhado;
+- `pnpm test` — 20 arquivos e 76 testes aprovados;
+- `pnpm lint` — aprovado;
+- `pnpm typecheck` — aprovado;
+- `pnpm build` — aprovado.
+
+`pnpm audit --prod` continua reportando duas vulnerabilidades moderadas transitivas sob `@clerk/ui` (`uuid` e `stream-json`). Elas não pertencem ao pipeline Markdown e não possuem correção direta neste corte; permanecem como risco herdado para atualização da dependência proprietária.
+
+## Aceite visual pendente
+
+- [ ] colunas mantêm leitura confortável no desktop;
+- [ ] abas são claras e operáveis no celular;
+- [ ] prévia vazia e avisos não tornam o composer denso;
+- [ ] salvamento permanece acessível nos dois modos.

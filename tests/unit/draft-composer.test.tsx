@@ -152,6 +152,27 @@ describe("draft composer", () => {
     confirmSpy.mockRestore();
   });
 
+  it("switches to a safe Markdown preview on compact screens", async () => {
+    const user = userEvent.setup();
+    render(<DraftComposer initialDraft={null} />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "Conteúdo" }),
+      "# Ideia{enter}{enter}<script>alert(1)</script>",
+    );
+    await user.click(screen.getByRole("tab", { name: "Prévia" }));
+
+    expect(screen.getByRole("tab", { name: "Prévia" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByRole("heading", { name: "Ideia" })).toBeInTheDocument();
+    expect(
+      screen.getByText("HTML não é exibido na prévia."),
+    ).toBeInTheDocument();
+    expect(document.querySelector("script")).not.toBeInTheDocument();
+  });
+
   it("recovers a local copy based on the same server version", async () => {
     window.localStorage.setItem(
       "oplib:draft:10000000-0000-4000-8000-000000000001",

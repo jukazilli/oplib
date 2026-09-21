@@ -510,7 +510,7 @@ Estado atual: fundação funcional aceita pelo proprietário como Preview em 21/
 
 ### PUB-002 — Editor e prévia Markdown segura
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `review`.
 - **Origem:** D02 §10; D05 §§13–14; D07 §12; TL §10.
 - **Objetivo:** escrever Markdown e visualizar o mesmo resultado que será publicado.
 - **Descrição:** editor/preview lado a lado no desktop e por abas no compacto, pipeline compartilhado sem HTML bruto.
@@ -519,6 +519,8 @@ Estado atual: fundação funcional aceita pelo proprietário como Preview em 21/
 - **Riscos:** XSS ou divergência entre preview e público.
 - **Testes:** `TEST-PUB-002-01` elementos suportados; `-02` corpus malicioso; `-03` paridade.
 - **Evidência:** `EVID-PUB-002-01` suíte e snapshots estruturais.
+
+Estado atual: pipeline compartilhado com CommonMark/GFM e sanitização implementado; HTML bruto e URLs perigosas são neutralizados; o composer apresenta escrita/prévia lado a lado no desktop e por abas no compacto. Aguarda inspeção autenticada no Preview.
 
 ### PUB-003 — Metadados, referências e endereço permanente
 
