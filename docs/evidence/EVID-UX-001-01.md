@@ -52,3 +52,4 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - O skeleton utiliza a grade e os cartões já existentes, sem prometer conteúdo ou controles antes da resposta da rota, e respeita a regra global de movimento reduzido.
 - `tests/unit/admin-loading.test.tsx` prova o anúncio e a ocultação dos três grupos decorativos. A transição autenticada real permanece no roteiro final.
 - Regressão do corte: 55 arquivos e 224 testes, lint, typecheck e build aprovados.
+- PR draft #42, commit `58bd732`: deploy Vercel aprovado; workflow `E2E Preview` `35742146203` executou nove testes públicos em 19,2 segundos, todos aprovados na primeira passagem, sem retry ou flaky. O carregamento administrativo real requer sessão e rede controlada e permanece no roteiro final.
