@@ -4,6 +4,13 @@
 
 Em andamento. A automação, a retenção e o runbook foram implementados e validados localmente. A conclusão depende da configuração protegida, de um backup real e do restore em branch Neon temporária.
 
+## Diagnóstico remoto da configuração
+
+- Execuções agendadas `35581055436` (21/09/2026) e `35705778816` (22/09/2026) falharam antes do dump porque `DATABASE_URL_UNPOOLED`, `BACKUP_ENCRYPTION_PUBLIC_KEY` e `BACKUP_BLOB_READ_WRITE_TOKEN` estavam vazios no ambiente GitHub `Backup`.
+- A consulta de metadados do ambiente não listou secrets ou variables configurados; nenhum valor sensível foi solicitado ou registrado.
+- O workflow agora valida as três entradas antes de checkout, pnpm, dependências e instalação de `age`. Em caso de ausência, informa somente os nomes faltantes e encerra sem acessar banco ou storage.
+- Essa melhoria reduz custo e torna o bloqueio acionável, mas não substitui o primeiro backup nem prova restauração.
+
 ## TEST-FND-015-01 — Integridade e retenção
 
 - `pg_dump` custom-format e `pg_restore --list` fazem parte do workflow;

@@ -11,6 +11,14 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 
 A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/testing/UX-001_STATE_MATRIX.md`; este ledger contém o que deve ser repetido no ambiente indicado ou no gate final.
 
+## FND-015 — Backup criptografado e restauração
+
+- [ ] `Ambiente`: gerar uma identidade `age`, guardar a chave privada offline e cadastrar no ambiente GitHub `Backup` apenas `BACKUP_ENCRYPTION_PUBLIC_KEY`, `DATABASE_URL_UNPOOLED` do ambiente autorizado e `BACKUP_BLOB_READ_WRITE_TOKEN` do store privado.
+- [ ] `CI`: sem cada secret, confirmar falha imediata no preflight mostrando somente o nome ausente; com os três presentes, nenhuma chave ou connection string pode aparecer no log.
+- [ ] `Preview`: executar backup manual, registrar run, ID, tamanho e SHA-256 saneado; baixar novamente, conferir hash e validar `pg_restore --list` após descriptografia offline.
+- [ ] `Preview`: criar branch Neon temporária `restore-test-AAAAMMDD`, restaurar com endpoint diferente da origem, executar sanidade, registrar duração e quantidade de tabelas e remover a branch.
+- [ ] `Final`: confirmar ao menos um backup diário válido, retenção 7/4, posse testada da identidade offline, RPO de 24 horas e RTO inferior a 4 horas antes de Production ou exclusão permanente.
+
 ## PUB-004 — Publicar e atualizar
 
 - [ ] `Preview/final`: publicar um rascunho completo após confirmação.
