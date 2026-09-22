@@ -72,8 +72,8 @@ const lines = [
   "",
   `Mediana de ${reports.length} medições (${reports[0].configSettings.formFactor}).`,
   "",
-  "| Rota | Performance | FCP | LCP | TBT | CLS | Speed Index | Transferência |",
-  "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+  "| Rota | Performance | FCP | LCP | TBT | CLS | Speed Index | Transferência | JavaScript | JS não usado |",
+  "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
 ];
 
 for (const [route, routeReports] of [...grouped].toSorted(([left], [right]) =>
@@ -88,8 +88,22 @@ for (const [route, routeReports] of [...grouped].toSorted(([left], [right]) =>
       unit,
     ),
   );
+  const scriptBytes = median(
+    routeReports.map(
+      (report) =>
+        report.audits["resource-summary"].details.items.find(
+          (item) => item.resourceType === "script",
+        )?.transferSize ?? 0,
+    ),
+  );
+  const unusedScriptBytes = median(
+    routeReports.map(
+      (report) =>
+        report.audits["unused-javascript"].details?.overallSavingsBytes ?? 0,
+    ),
+  );
   lines.push(
-    `| ${route} | ${performance.toFixed(0)} | ${values.join(" | ")} |`,
+    `| ${route} | ${performance.toFixed(0)} | ${values.join(" | ")} | ${format(scriptBytes, "bytes")} | ${format(unusedScriptBytes, "bytes")} |`,
   );
 }
 
