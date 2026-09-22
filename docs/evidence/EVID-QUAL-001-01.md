@@ -4,6 +4,7 @@
 
 ## Provas no Preview
 
+- Workflow `E2E Preview` da PR #38, execução `35730558797`, aprovado no commit `91c863f`: Início, Publicações e Áreas responderam com sucesso em Chromium a 320 × 700; `scrollWidth` não excedeu a viewport e axe-core não encontrou violações WCAG 2.0/2.1 A ou AA.
 - PR #37, commit `b50acad`: axe-core 4.13 executado com WCAG 2 A/AA e 2.1 A/AA em `/`, `/publicacoes` e `/areas`; nenhuma violação foi encontrada no estado disponível sem publicações.
 - `/` e `/areas` não apresentaram largura horizontal excedente em viewport de 320 px.
 - `/publicacoes` apresentou regressão reproduzível: viewport de 320 px e documento de 338 px. A causa foi o tamanho mínimo intrínseco dos controles no grid de filtros; a correção aplica coluna `minmax(0, 1fr)` e controles `min-w-0`/`w-full`.
@@ -18,5 +19,5 @@
 
 ## Próxima comprovação
 
-- Repetir `/publicacoes` em 320 px no Preview da correção e confirmar `scrollWidth === innerWidth`.
-- Repetir axe no mesmo artefato; depois cobrir tablet, desktop, zoom, movimento reduzido, teclado e leitor de tela nas jornadas completas.
+- Cobrir tablet, desktop, zoom de 200%, movimento reduzido, teclado e leitor de tela nas jornadas completas.
+- Repetir axe e overflow com publicação, paginação, comentários e administração autenticada.
