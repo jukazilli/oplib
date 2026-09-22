@@ -35,3 +35,12 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - Regressão do corte: 53 arquivos e 222 testes, lint, typecheck e build aprovados.
 - PR draft #40, commit `56c1ee9`: deploy Vercel aprovado; workflow `E2E Preview` `35739980451` executou nove testes públicos em 14,1 segundos, todos aprovados na primeira passagem, sem retry ou flaky. Essa execução detectaria regressão pública do branch empilhado, mas não comprova o editor autenticado.
 - A prova em componente não substitui a rodada autenticada no Preview com fechar, navegar, atualizar, queda de rede, teclado e leitor de tela.
+
+## Prova incremental: erro administrativo recuperável
+
+- `src/app/admin/error.tsx` protege as rotas filhas da administração contra falhas inesperadas de renderização ou leitura, inclusive Publicações e Taxonomia, que antes não possuíam fallback próprio.
+- O fallback não renderiza `error.message` nem `digest`; apresenta uma orientação direta, mantém a URL atual e chama o `retry()` estável do Next.js 16.3 para refazer o segmento.
+- Ao surgir, o título recebe foco programático e a região usa `role="alert"`, tornando a mudança perceptível sem depender de cor.
+- `tests/unit/admin-error.test.tsx` prova foco, ausência do detalhe técnico e execução do retry. Preview autenticado com falha injetada permanece necessário.
+- Regressão do corte: 54 arquivos e 223 testes, lint, typecheck e build aprovados.
+- PR draft #41, commit `fb48433`: deploy Vercel aprovado; workflow `E2E Preview` `35741052934` executou nove testes públicos em 11,1 segundos, todos aprovados na primeira passagem, sem retry ou flaky. A execução comprova ausência de regressão pública, não a falha administrativa autenticada ainda reservada ao roteiro final.
