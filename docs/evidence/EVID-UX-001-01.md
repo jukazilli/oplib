@@ -1,5 +1,7 @@
 # EVID-UX-001-01 — Estados e recuperação
 
+A matriz consolidada de superfícies, estados, provas e pendências está em `docs/testing/UX-001_STATE_MATRIX.md`.
+
 ## Prova parcial: leitura pública
 
 - `src/app/(public)/publicacoes/[slug]/page.tsx` usa resultados independentes para curtidas e comentários.
