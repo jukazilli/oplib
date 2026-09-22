@@ -162,10 +162,10 @@ export default async function PublicationsPage({
 
       <form
         action="/publicacoes"
-        className="mt-8 grid gap-3 rounded-card border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-8 grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 rounded-card border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4"
         role="search"
       >
-        <label className="sm:col-span-2 lg:col-span-4">
+        <label className="min-w-0 sm:col-span-2 lg:col-span-4">
           <span className="sr-only">Pesquisar no acervo</span>
           <input
             name="busca"
@@ -185,7 +185,7 @@ export default async function PublicationsPage({
           <select
             name="tipo"
             defaultValue={search.tipo}
-            className="min-h-11 rounded-control border bg-background px-3 text-sm"
+            className="min-h-11 w-full min-w-0 rounded-control border bg-background px-3 text-sm"
           >
             <option value="">Todos</option>
             {contentTypeValues.map((value) => (
@@ -215,7 +215,7 @@ export default async function PublicationsPage({
             pattern="[0-9]{4}"
             defaultValue={search.ano}
             placeholder="Todos"
-            className="min-h-11 rounded-control border bg-background px-3 text-sm"
+            className="min-h-11 w-full min-w-0 rounded-control border bg-background px-3 text-sm"
           />
         </label>
         <label className="grid gap-1 font-interface text-xs font-semibold">
@@ -223,7 +223,7 @@ export default async function PublicationsPage({
           <select
             name="ordem"
             defaultValue={search.ordem}
-            className="min-h-11 rounded-control border bg-background px-3 text-sm"
+            className="min-h-11 w-full min-w-0 rounded-control border bg-background px-3 text-sm"
           >
             <option value="recentes">Mais recentes</option>
             <option value="antigas">Mais antigas</option>
@@ -359,7 +359,7 @@ function FilterSelect({
       <select
         name={name}
         defaultValue={value}
-        className="min-h-11 rounded-control border bg-background px-3 text-sm"
+        className="min-h-11 w-full min-w-0 rounded-control border bg-background px-3 text-sm"
       >
         <option value="">Todas</option>
         {items.map((item) => (
