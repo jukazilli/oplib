@@ -13,7 +13,7 @@ test("public home is available", async ({ page }) => {
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: "Conhecimento que atravessa áreas.",
+      name: "Conhecimento para construir, preservar e compartilhar.",
     }),
   ).toBeVisible();
 });
@@ -48,17 +48,32 @@ test("anonymous administrative commands are rejected safely", async ({
   }
 });
 
-test("public home has no critical accessibility violations", async ({
+test("public discovery routes remain accessible and fit a 320px viewport", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.setViewportSize({ width: 320, height: 700 });
 
-  const results = await new AxeBuilder({ page }).analyze();
-  const criticalViolations = results.violations.filter(
-    (violation) => violation.impact === "critical",
-  );
+  for (const pathname of ["/", "/publicacoes", "/areas"]) {
+    const response = await page.goto(pathname);
+    expect(response?.ok(), `${pathname} should respond successfully`).toBe(
+      true,
+    );
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      )
+      .toBe(true);
 
-  expect(criticalViolations).toEqual([]);
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(
+      results.violations,
+      `${pathname} should have no WCAG A/AA violations`,
+    ).toEqual([]);
+  }
 });
 
 test("health endpoint reports a safe status", async ({ request }) => {
