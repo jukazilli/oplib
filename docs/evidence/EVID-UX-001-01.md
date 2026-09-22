@@ -71,3 +71,4 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - A região anuncia `Carregando conteúdo` uma vez como `status`; três grupos de skeleton são decorativos e ficam fora da árvore acessível.
 - `tests/unit/public-loading.test.tsx` prova o anúncio e a ocultação dos placeholders. A transição real em rede lenta permanece no roteiro final.
 - Regressão do corte: 57 arquivos e 226 testes, lint, typecheck e build aprovados.
+- PR draft #44, commit `72f347a`: deploy Vercel aprovado; workflow `E2E Preview` `35764159658` executou nove testes públicos em 13,3 segundos, todos aprovados na primeira passagem, sem retry ou flaky. Rede lenta controlada permanece no roteiro final.
