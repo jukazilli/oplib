@@ -108,3 +108,11 @@ Estado: `in_progress`.
 - A execução [`35774061876`](https://github.com/jukazilli/oplib/actions/runs/35774061876), commit `58e10d3`, aprovou os 11 testes E2E em 12,7 s, sem retry. Assim, proveniência cruzada, mídia incompatível e JSON malformado foram exercitados contra o Preview protegido sem criar cookie nem depender de publicação.
 - A mesma execução repetiu as nove medições Lighthouse e publicou dez arquivos saneados, preservando a regressão conjunta de segurança e desempenho.
 - Pendente: testar publicação real, rate limit e limites distribuídos do WAF antes de encerrar SEC-001.
+
+## Reinspeção do Vercel Firewall
+
+- Em 22/09/2026, o projeto local foi confirmado como vinculado a `oplib` e a consulta foi limitada a operações de leitura. Nenhuma regra foi criada, editada, publicada ou descartada.
+- O Vercel CLI `59.23.2` alcançou a resolução do projeto, mas o runtime Node recusou a cadeia TLS intermediada pela rede local. A validação de certificados não foi desativada.
+- A mesma leitura foi repetida diretamente contra `GET /v1/security/firewall/config` pelo cliente HTTPS do Windows. O token OIDC do Preview respondeu `403`; a credencial persistida pelo CLI respondeu `invalidToken`. Nenhum valor de token, ID interno ou conteúdo de regra foi registrado.
+- Assim, a evidência histórica de FND-013 continua válida para a regra `Observe Preview admin authentication`, mas o estado atual do Firewall e eventuais drafts não foram reatestados nesta sessão.
+- Para retomar: autenticar novamente o CLI na equipe correta; executar `vercel firewall overview --json`, `vercel firewall rules list --expand --json` e `vercel firewall diff --json`; registrar somente nomes, ações, ambientes, condições saneadas e presença/ausência de draft. Qualquer rate limit novo deve começar em `log`, ser observado em Preview e exigir revisão humana antes de publicação ou bloqueio.
