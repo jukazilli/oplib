@@ -179,6 +179,11 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: restaurar a dependência e acionar `Tentar novamente`; o mesmo segmento volta a renderizar sem recarregar para outra rota.
 - [ ] `Final`: repetir por teclado e leitor de tela em desktop e celular, confirmando anúncio único, foco visível e ausência de perda do contexto administrativo.
 
+## UX-001 — Carregamento administrativo
+
+- [ ] `Automatizado/Preview`: atrasar a leitura de Visão geral, Publicações, Taxonomia e Comentários; o shell permanece interativo, `Carregando área administrativa` é anunciado uma vez e os placeholders não entram na árvore acessível.
+- [ ] `Final`: navegar entre as quatro áreas em rede lenta, com teclado e leitor de tela, confirmando que não há salto de foco, anúncio duplicado ou conteúdo falso durante a espera.
+
 ## SEC-001 — Proveniência das mutações públicas
 
 - [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.
