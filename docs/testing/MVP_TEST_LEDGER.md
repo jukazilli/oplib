@@ -21,6 +21,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 
 ## PUB-004 — Publicar e atualizar
 
+- [ ] `Preview/final`: reabrir um rascunho salvo anteriormente, continuar a composição e publicar; nenhuma comparação deve aparecer quando a versão do servidor não mudou, inclusive para rascunhos criados antes da correção de precisão temporal.
 - [ ] `Preview/final`: publicar um rascunho completo após confirmação.
 - [ ] `Preview/final`: repetir o envio idêntico e confirmar sucesso idempotente.
 - [ ] `Preview/final`: alterar a mesma publicação em duas sessões e confirmar conflito somente para conteúdos diferentes.
