@@ -854,7 +854,7 @@ Estado atual: degradação isolada de curtidas e comentários na página de leit
 - **Testes:** `TEST-QUAL-001-01` axe; `-02` teclado; `-03` leitores de tela básico; `-04` breakpoints.
 - **Evidência:** `EVID-QUAL-001-01` relatório e capturas.
 
-Estado atual: Início, Publicações e Áreas sem overflow no Preview em Chromium a 320 px. A primeira auditoria axe revelou semântica inválida no loading do acervo; correção implementada e repetição remota pendente. Conteúdo real, administração autenticada, demais breakpoints, zoom, teclado e leitor de tela permanecem pendentes.
+Estado atual: Início, Publicações e Áreas aprovados no Preview em Chromium a 320 px, sem overflow e sem violações axe WCAG A/AA; o loading do acervo foi corrigido após a primeira execução revelar semântica inválida, e a repetição passou sem retry. Conteúdo real, administração autenticada, demais breakpoints, zoom, teclado e leitor de tela permanecem pendentes.
 
 ### QUAL-002 — Desempenho e degradação segura
 
