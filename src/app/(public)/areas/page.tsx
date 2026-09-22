@@ -10,19 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AreasPage() {
-  let areas: Awaited<ReturnType<typeof listPublicAreas>>;
-  try {
-    areas = await listPublicAreas();
-  } catch {
-    return (
-      <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8">
-        <h1 className="font-editorial text-4xl font-semibold">Áreas</h1>
-        <p className="mt-6 text-muted-foreground">
-          Não foi possível carregar as áreas agora. Tente novamente mais tarde.
-        </p>
-      </div>
-    );
-  }
+  const areas = await listPublicAreas();
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8">

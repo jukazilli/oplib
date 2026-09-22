@@ -47,5 +47,4 @@ describe("AreasPage", () => {
     ).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
-
 });

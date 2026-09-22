@@ -53,3 +53,13 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - `tests/unit/admin-loading.test.tsx` prova o anúncio e a ocultação dos três grupos decorativos. A transição autenticada real permanece no roteiro final.
 - Regressão do corte: 55 arquivos e 224 testes, lint, typecheck e build aprovados.
 - PR draft #42, commit `58bd732`: deploy Vercel aprovado; workflow `E2E Preview` `35742146203` executou nove testes públicos em 19,2 segundos, todos aprovados na primeira passagem, sem retry ou flaky. O carregamento administrativo real requer sessão e rede controlada e permanece no roteiro final.
+
+## Prova incremental: erro público recuperável
+
+- `src/app/(public)/error.tsx` protege Início, Áreas e leitura individual contra falhas inesperadas não tratadas, preservando o shell público e o endereço atual.
+- `/areas` deixou de converter falha de infraestrutura em uma mensagem terminal sem ação; a exceção agora chega ao boundary, que chama o `retry()` estável do Next.js 16.3.
+- O título seguro recebe foco, a região usa `role="alert"` e nenhum conteúdo de `error.message` ou `digest` é renderizado.
+- A Home conserva suas degradações parciais próprias, pois uma seção indisponível não deve derrubar as demais; `/publicacoes` conserva seu boundary específico.
+- `tests/unit/public-error.test.tsx` prova foco, mensagem segura e retry; `tests/unit/areas-page.test.tsx` preserva sucesso e vazio. Falha real e recuperação no Preview permanecem no roteiro final.
+- Regressão do corte: 56 arquivos e 225 testes, lint, typecheck e build aprovados; o build reconheceu o boundary público e todas as rotas protegidas.
+- PR draft #43, commit `5a8cea8`: deploy Vercel aprovado; workflow `E2E Preview` `35763336627` executou nove testes públicos em 14,5 segundos, todos aprovados na primeira passagem, sem retry ou flaky. A execução comprova ausência de regressão nas rotas disponíveis; falha deliberada e recuperação continuam no roteiro final.
