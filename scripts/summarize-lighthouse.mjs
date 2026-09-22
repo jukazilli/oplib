@@ -1,8 +1,12 @@
-import { readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-const [reportDirectory = ".lighthouseci", outputFile] = process.argv.slice(2);
+const [
+  reportDirectory = ".lighthouseci",
+  outputFile,
+  sanitizedDirectory = "lighthouse-artifact",
+] = process.argv.slice(2);
 const metrics = [
   ["first-contentful-paint", "FCP", "ms"],
   ["largest-contentful-paint", "LCP", "ms"],
@@ -26,27 +30,37 @@ function format(value, unit) {
 const files = (await readdir(reportDirectory)).filter((file) =>
   file.endsWith(".json"),
 );
-const reports = [];
+const reportsByRun = new Map();
 
 for (const file of files) {
   const report = JSON.parse(
     await readFile(path.join(reportDirectory, file), "utf8"),
   );
   if (report.lighthouseVersion && report.audits && report.finalUrl) {
-    // Lighthouse persists collection settings in the LHR. Protected Preview
-    // headers must never become part of an uploaded artifact.
-    delete report.configSettings?.extraHeaders;
-    await writeFile(
-      path.join(reportDirectory, file),
-      `${JSON.stringify(report)}\n`,
-      "utf8",
-    );
-    reports.push(report);
+    reportsByRun.set(`${report.finalUrl}|${report.fetchTime}`, report);
   }
 }
 
+const reports = [...reportsByRun.values()];
+
 if (reports.length === 0) {
   throw new Error(`No Lighthouse reports found in ${reportDirectory}.`);
+}
+
+await mkdir(sanitizedDirectory, { recursive: true });
+for (const [index, report] of reports.entries()) {
+  // Lighthouse persists collection settings in the LHR. Protected Preview
+  // headers must never become part of an uploaded artifact.
+  const sanitizedReport = structuredClone(report);
+  delete sanitizedReport.configSettings?.extraHeaders;
+  await writeFile(
+    path.join(
+      sanitizedDirectory,
+      `report-${String(index + 1).padStart(2, "0")}.json`,
+    ),
+    `${JSON.stringify(sanitizedReport)}\n`,
+    "utf8",
+  );
 }
 
 const grouped = Map.groupBy(reports, (report) => {

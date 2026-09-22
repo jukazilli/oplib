@@ -50,7 +50,7 @@ jobs:
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: Summarize Lighthouse measurements
-        run: node scripts/summarize-lighthouse.mjs .lighthouseci lighthouse-summary.md >> "$GITHUB_STEP_SUMMARY"
+        run: node scripts/summarize-lighthouse.mjs .lighthouseci lighthouse-summary.md lighthouse-artifact >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload Lighthouse reports
         if: always()
@@ -58,7 +58,7 @@ jobs:
         with:
           name: lighthouse-report
           path: |
-            .lighthouseci/*.json
+            lighthouse-artifact/
             lighthouse-summary.md
           retention-days: 14
           if-no-files-found: ignore
