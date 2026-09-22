@@ -165,6 +165,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Preview`: interromper rede durante edição/salvamento, voltar e confirmar recuperação do texto; após salvamento confirmado, recarregar sem reapresentar alterações antigas.
 - [ ] `Final`: repetir saída e recuperação por teclado, leitor de tela, celular e zoom 200%; conferir foco no diálogo e retorno ao campo de edição após cancelar.
 
+## UX-001 — Recuperação do comentário público
+
+- [ ] `Automatizado/Preview`: enviar comentário vazio e provocar falha de rede; o foco retorna ao campo `Comentário`, o erro é anunciado e o campo expõe estado inválido.
+- [ ] `Automatizado/Preview`: após falha, nome e comentário permanecem intactos; nova tentativa confirmada publica uma única vez, limpa os campos e anuncia sucesso.
+- [ ] `Final`: repetir com teclado e leitor de tela em celular e desktop; confirmar que detalhes técnicos nunca aparecem e que a mensagem controlada de rate limit continua acionável.
+
 ## SEC-001 — Proveniência das mutações públicas
 
 - [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.

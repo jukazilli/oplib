@@ -12,6 +12,14 @@
 
 UX-001 permanece aberto para matriz completa de estados, edição com alterações pendentes, foco e validação humana no Preview.
 
+## Prova incremental: recuperação do comentário público
+
+- Validação vazia e falha recuperável devolvem o foco ao campo `Comentário`, que passa a expor `aria-invalid="true"` e a referenciar a mensagem correspondente.
+- Erros são anunciados como `alert`; a confirmação usa `status`, sem depender apenas de cor ou substituir o conteúdo digitado antes da confirmação do servidor.
+- Mensagens controladas retornadas pela API continuam visíveis, mas exceções técnicas de rede não são expostas. A falha inesperada usa a mensagem pública aprovada e preserva nome e comentário para retry.
+- `tests/unit/comments-section.test.tsx`: quatro testes aprovados, incluindo sucesso confirmado, vazio, falha, preservação, foco e retry bem-sucedido.
+- Regressão completa: 53 arquivos e 221 testes aprovados; lint e typecheck aprovados. Build e Preview ainda serão registrados neste corte.
+
 ## Prova incremental: conflito entre cópia local e servidor
 
 - `tests/unit/draft-composer.test.tsx` cobre agora as duas escolhas quando uma cópia local tem versão-base anterior à versão carregada do servidor.
