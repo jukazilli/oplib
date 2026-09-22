@@ -90,3 +90,11 @@ Estado: `in_progress`.
 - `pnpm audit --prod --json` passou de 622 dependências e dois alertas moderados para 268 dependências e zero alertas conhecidos. `pnpm why @clerk/ui` e `pnpm why jayson` não retornam cadeia instalada.
 - A solução segue o formato de tema documentado pelo Clerk, mas o objeto passa a ser mantido pelo OPALIB. Atualizações futuras do SDK devem revisar o contrato local antes de alterar aparência ou remover tokens.
 - PR draft [#35](https://github.com/jukazilli/oplib/pull/35), commit `7f710b3`: em 22/09/2026, `Quality` aprovou a auditoria sem vulnerabilidades conhecidas, o scanner de 310 arquivos, os 216 testes, lint, typecheck e build. `CodeQL`, política do repositório e deploy Vercel também passaram. O estado `READY` não substitui smoke autenticado, comparação visual, corpus em banco real nem WAF.
+
+## Primeiro smoke no Preview protegido
+
+- O deployment imutável do commit `1a4ae86` foi identificado pela API Vercel. `/api/health` respondeu `200`, `healthy`, `database: true`, versão correspondente ao commit, `Cache-Control: no-store`, CSP Report-Only e headers defensivos.
+- Em navegador real com acesso temporário ao Preview, a home carregou e exibiu o estado vazio do acervo; `/sign-in` exibiu o formulário Clerk sem expor administração na navegação pública. Não foram enviadas credenciais nem mutações.
+- O navegador mostrou `404` nos prefetched destinos `/areas` e `/sobre`. `/sobre` pertence a WEB-006 e depende de DEC-002; `/areas` consta no contrato do shell WEB-001, mas ainda não há rota nem slice próprio. Esses destinos não podem ser tratados como navegação aprovada no gate final.
+- A tela Clerk exibiu controles em inglês apesar da moldura em português. A correção está no corte AUTH-001 de localização, com prova local e nova validação remota pendente.
+- Não foram executados corpus malicioso contra PostgreSQL, teste autenticado nem WAF; o health check não prova esses itens.

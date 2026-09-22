@@ -32,6 +32,13 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Final`: conferir localização atual e ausência de entrada administrativa na navegação pública.
 - [ ] `Final`: verificar compacto, médio, amplo e zoom de 200%, sem corte ou sobreposição.
 - [ ] `Automatizado`: executar axe sem violações críticas.
+- [ ] `Preview/final`: seguir cada link publicado no cabeçalho e rodapé; `/areas`, `/sobre` e `/privacidade` não podem terminar em `404` no gate final. `/sobre` e `/privacidade` aguardam conteúdo aprovado em DEC-002/WEB-006.
+- [ ] `Preview`: confirmar que o prefetch da navegação não gera `404` ou ruído de console para destinos já oferecidos ao visitante.
+
+## AUTH-001 — Entrada administrativa
+
+- [ ] `Preview/final`: abrir `/sign-in` desautenticado; rótulos, ações, ajuda e erros do Clerk devem estar em português do Brasil, preservando a mensagem genérica para identidade/senha incorretas.
+- [ ] `Preview/final`: comparar desktop e celular após a localização; conferir botão, campo, foco, contraste, recuperação de sessão e ausência de cadastro público.
 
 ## WEB-004 — Página pública de leitura
 
