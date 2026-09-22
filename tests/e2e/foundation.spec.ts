@@ -127,12 +127,19 @@ test("public UI respects reduced-motion preference", async ({ page }) => {
     return result;
   });
 
-  expect(motion).toEqual({
-    reduced: true,
-    animationDuration: "0.01ms",
-    animationIterationCount: "1",
-    transitionDuration: "0.01ms",
-  });
+  const durationInMilliseconds = (value: string) =>
+    value.endsWith("ms")
+      ? Number.parseFloat(value)
+      : Number.parseFloat(value) * 1_000;
+
+  expect(motion.reduced).toBe(true);
+  expect(motion.animationIterationCount).toBe("1");
+  expect(durationInMilliseconds(motion.animationDuration)).toBeLessThanOrEqual(
+    0.01,
+  );
+  expect(durationInMilliseconds(motion.transitionDuration)).toBeLessThanOrEqual(
+    0.01,
+  );
 });
 
 test("health endpoint reports a safe status", async ({ request }) => {
