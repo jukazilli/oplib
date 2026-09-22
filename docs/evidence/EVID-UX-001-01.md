@@ -33,4 +33,5 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - A recarga da página enquanto a composição está alterada continua protegida por `beforeunload`; título e conteúdo são gravados na cópia local antes da interrupção.
 - `tests/unit/draft-composer.test.tsx`: 13 testes aprovados, incluindo diálogo sem `window.confirm`, descarte explícito, retorno de foco, persistência local e bloqueio de recarga.
 - Regressão do corte: 53 arquivos e 222 testes, lint, typecheck e build aprovados.
+- PR draft #40, commit `56c1ee9`: deploy Vercel aprovado; workflow `E2E Preview` `35739980451` executou nove testes públicos em 14,1 segundos, todos aprovados na primeira passagem, sem retry ou flaky. Essa execução detectaria regressão pública do branch empilhado, mas não comprova o editor autenticado.
 - A prova em componente não substitui a rodada autenticada no Preview com fechar, navegar, atualizar, queda de rede, teclado e leitor de tela.
