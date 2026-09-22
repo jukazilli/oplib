@@ -184,6 +184,9 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `CI`: introduzir em branch descartável uma atribuição secreta fictícia e confirmar que `pnpm security:secrets` bloqueia o job sem imprimir o valor; remover a fixture e confirmar o job verde.
 - [ ] `Automatizado`: inspecionar o contrato público de ambiente e os artefatos estáticos do build; somente `NEXT_PUBLIC_*` aprovado pode aparecer, sem URLs de banco, pepper, tokens Blob, chave Clerk secreta ou chave de backup.
 - [ ] `Final`: revisar GitHub Secret Scanning/CodeQL e histórico do repositório; se houver detecção real, revogar primeiro, rotacionar por ambiente e registrar o incidente sem copiar a credencial para evidências.
+- [ ] `Automatizado/CI`: executar `pnpm audit --prod --json` e confirmar zero alertas; `pnpm why @clerk/ui`, `jayson`, `uuid@8.3.2` e `stream-json@1.9.1` não devem reconstruir a antiga cadeia Solana.
+- [ ] `Preview`: comparar entrada administrativa, perfil e sessão expirada antes/depois da remoção de `@clerk/ui`; conferir cores, tipografia, borda, foco, campos, botão, erro e responsividade sem regressão visual.
+- [ ] `Final`: após qualquer atualização de Clerk, revisar `authenticationTheme` contra o contrato suportado, repetir login/logout/MFA e somente então atualizar tokens ou classes.
 
 ## QUAL-001 — Acessibilidade e responsividade
 

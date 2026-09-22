@@ -80,3 +80,12 @@ Estado: `in_progress`.
 - A fronteira pública continua coberta por `tests/unit/env.test.ts`; erros de infraestrutura continuam saneados por `tests/unit/observability.test.ts`. A execução remota do novo gate ainda deve ser observada antes de encerrar SEC-001.
 - Após o build, os 36 arquivos de `.next/static` também passaram pelo scanner sem valor sensível. Dependências Clerk e Vercel Blob incluem os nomes `CLERK_SECRET_KEY` e `BLOB_READ_WRITE_TOKEN` e rotinas genéricas de parsing PEM no código distribuído, mas não seus valores; nome de configuração e implementação de biblioteca não constituem credencial.
 - Validação do corte: 50 arquivos e 215 testes, scanner de 308 arquivos versionados e 36 artefatos estáticos, format check, lint, typecheck e build aprovados.
+
+## Resolução dos alertas transitivos de tema
+
+- A aplicação importava diretamente de `@clerk/ui` somente o objeto `shadcn` e uma diretiva Tailwind `@source`; os pacotes Solana, `jayson`, `uuid` e `stream-json` eram transitivos. A ausência de importação direta não bastava para provar ausência de risco no pacote instalado.
+- Forçar `uuid@11` e `stream-json@3` sob `jayson@4.3.0` ultrapassaria os intervalos declarados `^8.3.2` e `^1.9.1`. Em vez de aceitar o risco ou introduzir overrides incompatíveis, `@clerk/ui` foi removido.
+- `src/modules/identity/theme.ts` preserva o objeto mínimo do tema shadcn usado pelo `ClerkProvider`: nome, camada, tokens e classes são equivalentes à versão 1.33.1. A antiga diretiva CSS apenas apontava o Tailwind ao mesmo arquivo; o módulo local já pertence a `src/` e é descoberto pelo build.
+- `tests/unit/auth-theme.test.ts` fixa o contrato de tokens/classes essenciais e o build gera CSS a partir do módulo local. Isso não equivale a comparação visual: o aceite em Preview deverá comparar login, perfil e sessão expirada em viewport amplo/compacto, foco, contraste e estados de erro.
+- `pnpm audit --prod --json` passou de 622 dependências e dois alertas moderados para 268 dependências e zero alertas conhecidos. `pnpm why @clerk/ui` e `pnpm why jayson` não retornam cadeia instalada.
+- A solução segue o formato de tema documentado pelo Clerk, mas o objeto passa a ser mantido pelo OPALIB. Atualizações futuras do SDK devem revisar o contrato local antes de alterar aparência ou remover tokens.

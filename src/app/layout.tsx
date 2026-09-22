@@ -1,9 +1,9 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Manrope, Newsreader } from "next/font/google";
 
 import { authenticationLocalization } from "@/modules/identity/ui";
+import { authenticationTheme } from "@/modules/identity/theme";
 import { getSiteUrl, publicRobots } from "@/lib/seo/metadata";
 
 import "./styles.css";
@@ -52,7 +52,7 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${newsreader.variable} ${manrope.variable}`}>
       <body>
         <ClerkProvider
-          appearance={{ theme: shadcn }}
+          appearance={{ theme: authenticationTheme }}
           localization={authenticationLocalization}
           signInUrl="/sign-in"
           signUpUrl={undefined}
