@@ -202,6 +202,7 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 
 ## QUAL-001 — Acessibilidade e responsividade
 
+- [ ] `Preview/final`: no cabeçalho compacto, o link iconográfico de pesquisa deve ser anunciado como `Pesquisar`; confirmar que nenhum controle perde nome acessível ao ocultar texto por breakpoint.
 - [ ] `Preview/final`: em 320 px, confirmar `scrollWidth === innerWidth` em Início, Áreas e Publicações; no acervo, repetir com filtros de nomes longos, resultados em Feed/Grade e paginação.
 - [ ] `Preview`: executar axe em home, acervo, leitura e fluxos administrativos autenticados, sem violação crítica.
 - [ ] `Final`: percorrer as jornadas críticas por teclado e leitor de tela; conferir foco, nomes acessíveis e anúncios de estados.

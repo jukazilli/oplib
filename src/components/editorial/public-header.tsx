@@ -49,6 +49,7 @@ export function PublicHeader() {
 
         <Link
           href="/publicacoes?busca="
+          aria-label="Pesquisar"
           aria-current={pathname === "/pesquisa" ? "page" : undefined}
           className="flex min-h-11 items-center gap-2 rounded-control px-3 font-interface text-sm font-semibold hover:bg-muted"
         >

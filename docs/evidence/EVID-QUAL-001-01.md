@@ -7,6 +7,7 @@
 - PR #37, commit `b50acad`: axe-core 4.13 executado com WCAG 2 A/AA e 2.1 A/AA em `/`, `/publicacoes` e `/areas`; nenhuma violação foi encontrada no estado disponível sem publicações.
 - `/` e `/areas` não apresentaram largura horizontal excedente em viewport de 320 px.
 - `/publicacoes` apresentou regressão reproduzível: viewport de 320 px e documento de 338 px. A causa foi o tamanho mínimo intrínseco dos controles no grid de filtros; a correção aplica coluna `minmax(0, 1fr)` e controles `min-w-0`/`w-full`.
+- Na repetição local da correção em 320 px, a largura foi normalizada para 320 px. Axe encontrou o link iconográfico de pesquisa sem nome quando seu texto fica oculto; o cabeçalho passou a manter `aria-label="Pesquisar"` em todos os breakpoints e ganhou teste unitário. Após o ajuste, a nova execução local retornou zero violações WCAG A/AA.
 
 ## Limites da evidência
 
