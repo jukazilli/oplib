@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Suspense, type ReactNode } from "react";
 
 import {
   parsePublicSearch,
@@ -29,6 +30,7 @@ const typeLabels: Record<(typeof contentTypeValues)[number], string> = {
   project: "Projeto",
 };
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" });
+type PublicationsPageProps = Pick<PageProps<"/publicacoes">, "searchParams">;
 
 function searchHref(search: PublicSearch, changes: Partial<PublicSearch>) {
   const next = { ...search, ...changes };
@@ -135,9 +137,9 @@ function GridItem({ item }: { item: PublicPublicationSummary }) {
   );
 }
 
-export default async function PublicationsPage({
+export async function PublicationsContent({
   searchParams,
-}: PageProps<"/publicacoes">) {
+}: PublicationsPageProps) {
   const search = parsePublicSearch(await searchParams);
   const [result, taxonomy] = await Promise.all([
     searchPublications(search),
@@ -153,13 +155,7 @@ export default async function PublicationsPage({
   );
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 lg:px-12">
-      <header className="max-w-3xl">
-        <h1 className="font-editorial text-4xl font-semibold sm:text-5xl">
-          Publicações
-        </h1>
-      </header>
-
+    <>
       <form
         action="/publicacoes"
         className="mt-8 grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 rounded-card border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4"
@@ -338,7 +334,44 @@ export default async function PublicationsPage({
           ) : null}
         </nav>
       ) : null}
+    </>
+  );
+}
+
+function PublicationsFallback() {
+  return (
+    <div className="mt-8" role="status" aria-live="polite">
+      <span className="sr-only">Carregando publicações</span>
+      <div
+        className="h-48 animate-pulse rounded-card bg-muted"
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
+
+export function PublicationsShell({ children }: { children: ReactNode }) {
+  return (
+    <section className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 lg:px-12">
+      <header className="max-w-3xl">
+        <h1 className="font-editorial text-4xl font-semibold sm:text-5xl">
+          Publicações
+        </h1>
+      </header>
+      {children}
     </section>
+  );
+}
+
+export default function PublicationsPage({
+  searchParams,
+}: PublicationsPageProps) {
+  return (
+    <PublicationsShell>
+      <Suspense fallback={<PublicationsFallback />}>
+        <PublicationsContent searchParams={searchParams} />
+      </Suspense>
+    </PublicationsShell>
   );
 }
 

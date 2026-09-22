@@ -6,6 +6,7 @@
 - [x] Resumo saneado por rota e retenção temporária dos relatórios configurados.
 - [x] Observar a primeira execução remota e registrar a linha de base.
 - [x] Restringir o provedor cliente de identidade às rotas que usam componentes Clerk.
+- [x] Separar o shell público das consultas de Áreas e Publicações para transmitir o conteúdo LCP antes dos dados.
 - [ ] Medir conteúdo editorial representativo e consulta crítica.
 - [ ] Validar falha de mídia e concluir evidência antes de marcar `done`.
 
@@ -32,3 +33,4 @@
 - A documentação oficial do Clerk permite montar `ClerkProvider` mais abaixo quando a autenticação existe apenas em rotas específicas. O provedor saiu do layout raiz e agora envolve somente `/sign-in` e `/admin`; o efeito deve ser quantificado no próximo Preview sem comprometer entrada, perfil ou logout.
 - A execução `35769022761`, commit `e70e9dd`, aprovou novamente os nove testes E2E, incluindo o redirecionamento e a tela de entrada. Nas rotas públicas, o JavaScript transferido caiu cerca de 51 KiB e o JavaScript apontado como não usado caiu cerca de 35 KiB; a transferência total caiu de 70 a 109 KiB.
 - A nota subiu para 95/89/90 e o LCP melhorou entre 335 e 368 ms. Como ainda ficou entre 2,72 e 3,45 s no acervo vazio, QUAL-002 continua `in_progress` até conteúdo representativo e investigação do elemento LCP.
+- Os relatórios identificaram texto estático do cabeçalho como LCP em todas as rotas. Áreas e Publicações aguardavam banco antes de devolver esse texto; seus shells agora são síncronos e listas/filtros entram em `Suspense`, com fallback acessível. A próxima medição deve comprovar o efeito no Preview.

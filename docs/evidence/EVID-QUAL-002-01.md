@@ -30,6 +30,13 @@ Estado: `in_progress`.
 - Publicações: performance 86 → 90; LCP 3,79 → 3,45 s; transferência 342,8 → 272,3 KiB; JavaScript 214,2 → 163,3 KiB; JavaScript não usado 62,7 → 27,2 KiB.
 - A melhora consistente confirma a hipótese do provedor global. O LCP ainda supera 2,5 s e deve ser investigado com conteúdo representativo; os números sintéticos não encerram QUAL-002 nem substituem perfil/logout autenticados no aceite final.
 
+## Shell público antes dos dados
+
+- Nos nove relatórios do run `35769022761`, o LCP foi texto estático: o `h1` na Home e em Publicações e o parágrafo introdutório em Áreas. Não houve imagem LCP nem falha de `font-display`; o único CSS bloqueante tinha cerca de 10 KiB e economia estimada nula.
+- Áreas e Publicações aguardavam suas consultas antes de devolver qualquer parte da página, embora título e introdução não dependessem dos dados. O shell dessas duas rotas passou a ser síncrono; lista de áreas e pesquisa/taxonomia são transmitidas depois por `Suspense`.
+- Os fallbacks anunciam uma única espera por rota e mantêm os placeholders fora da árvore acessível. Estados vazio, sucesso e erro continuam sob os mesmos componentes e boundaries.
+- Prova local: dois arquivos direcionados, sete testes; suíte completa com 57 arquivos e 228 testes; lint, typecheck e build aprovados. Pendente: medir o novo Preview e confirmar redução do atraso de renderização sem regressão de streaming.
+
 ## Ainda não comprovado
 
 - Falha real de Blob/imagem, medições com conteúdo representativo, análise conclusiva de bundle e plano de consulta crítico.

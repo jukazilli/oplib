@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const listPublicAreas = vi.hoisted(() => vi.fn());
 vi.mock("@/modules/discovery/publications", () => ({ listPublicAreas }));
 
-import AreasPage, { metadata } from "@/app/(public)/areas/page";
+import { AreasList, AreasShell, metadata } from "@/app/(public)/areas/page";
 
 beforeEach(() => listPublicAreas.mockReset());
 afterEach(cleanup);
@@ -25,10 +25,9 @@ describe("AreasPage", () => {
         publicationCount: 2,
       },
     ]);
-    render(await AreasPage());
+    render(await AreasList());
 
     expect(metadata.alternates).toEqual({ canonical: "/areas" });
-    expect(screen.getByRole("heading", { name: "Áreas" })).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /Educação Física.*1 publicação/ }),
     ).toHaveAttribute("href", "/publicacoes?area=educacao-fisica");
@@ -41,10 +40,17 @@ describe("AreasPage", () => {
 
   it("explains the empty state without inventing areas", async () => {
     listPublicAreas.mockResolvedValue([]);
-    render(await AreasPage());
+    render(await AreasList());
     expect(
       screen.getByText("Nenhuma área publicada ainda."),
     ).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
+
+  it("renders the page heading independently from the area query", () => {
+    render(<AreasShell>Conteúdo posterior</AreasShell>);
+
+    expect(screen.getByRole("heading", { name: "Áreas" })).toBeInTheDocument();
+    expect(screen.getByText("Conteúdo posterior")).toBeInTheDocument();
   });
 });
