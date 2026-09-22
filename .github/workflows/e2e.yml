@@ -7,6 +7,11 @@ on:
         description: URL completa do Preview Vercel
         required: true
         type: string
+      audit_firewall:
+        description: Auditar configuração ativa e draft do Firewall (somente leitura)
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -70,3 +75,64 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  firewall-audit:
+    name: Read-only Firewall audit
+    if: inputs.audit_firewall
+    environment: Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Read active configuration and optional draft
+        shell: bash
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$VERCEL_TOKEN"
+          test -n "$VERCEL_ORG_ID"
+          test -n "$VERCEL_PROJECT_ID"
+          api="https://api.vercel.com/v1/security/firewall/config"
+          query="projectId=$VERCEL_PROJECT_ID&teamId=$VERCEL_ORG_ID"
+          active_file="$RUNNER_TEMP/firewall-active.json"
+          draft_file="$RUNNER_TEMP/firewall-draft.json"
+
+          active_status="$(curl --silent --show-error --retry 2 \
+            --output "$active_file" --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "$api/active?$query")"
+          test "$active_status" = "200"
+
+          draft_status="$(curl --silent --show-error --retry 2 \
+            --output "$draft_file" --write-out '%{http_code}' \
+            --header "Authorization: Bearer $VERCEL_TOKEN" \
+            "$api/draft?$query")"
+          case "$draft_status" in
+            200) echo "FIREWALL_DRAFT_FILE=$draft_file" >> "$GITHUB_ENV" ;;
+            404) rm -f "$draft_file" ;;
+            *) echo "Unexpected draft response: HTTP $draft_status" >&2; exit 1 ;;
+          esac
+          echo "FIREWALL_ACTIVE_FILE=$active_file" >> "$GITHUB_ENV"
+
+      - name: Generate sanitized summary
+        shell: bash
+        run: |
+          args=("$FIREWALL_ACTIVE_FILE" "firewall-summary.md")
+          if [[ -n "${FIREWALL_DRAFT_FILE:-}" ]]; then
+            args+=("$FIREWALL_DRAFT_FILE")
+          fi
+          node scripts/summarize-firewall.mjs "${args[@]}" >> "$GITHUB_STEP_SUMMARY"
+          rm -f "$FIREWALL_ACTIVE_FILE" "${FIREWALL_DRAFT_FILE:-}"
+
+      - name: Upload sanitized Firewall summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: firewall-summary
+          path: firewall-summary.md
+          retention-days: 14
+          if-no-files-found: error
