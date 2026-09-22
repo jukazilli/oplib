@@ -180,6 +180,10 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Preview`: após o `429`, confirmar mensagem clara e preservação do nome/texto; repetir depois de cinco minutos e confirmar novo envio sem trocar o cookie.
 - [ ] `Automatizado`: preencher 10.000 janelas locais distintas, confirmar recusa fechada da chave seguinte sem crescimento do estado e aceitação após o vencimento liberar espaço.
 - [ ] `Preview/WAF`: aplicar tráfego sintético controlado a comentários e curtidas, confirmar limites distintos na borda e documentar que múltiplas instâncias e rotação de cookie não dependem apenas da memória local.
+- [ ] `Automatizado`: forçar negação de identidade nas oito Server Actions administrativas e confirmar que nenhum parser, repositório, cache ou auditoria de sucesso é alcançado; repetir `401`/`404` nas rotas de capa.
+- [ ] `CI`: introduzir em branch descartável uma atribuição secreta fictícia e confirmar que `pnpm security:secrets` bloqueia o job sem imprimir o valor; remover a fixture e confirmar o job verde.
+- [ ] `Automatizado`: inspecionar o contrato público de ambiente e os artefatos estáticos do build; somente `NEXT_PUBLIC_*` aprovado pode aparecer, sem URLs de banco, pepper, tokens Blob, chave Clerk secreta ou chave de backup.
+- [ ] `Final`: revisar GitHub Secret Scanning/CodeQL e histórico do repositório; se houver detecção real, revogar primeiro, rotacionar por ambiente e registrar o incidente sem copiar a credencial para evidências.
 
 ## QUAL-001 — Acessibilidade e responsividade
 

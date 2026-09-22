@@ -12,6 +12,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
+    "security:secrets": "node scripts/check-tracked-secrets.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check package.json components.json .prettierrc.json '*.{ts,mts,mjs}' 'src/**/*.{ts,tsx,css}' 'tests/**/*.{ts,tsx}'",
     "typecheck": "next typegen && tsc --noEmit",

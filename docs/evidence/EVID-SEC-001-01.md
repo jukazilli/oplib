@@ -69,3 +69,14 @@ Estado: `in_progress`.
 - O limite local é uma proteção por instância e pode ser contornado por rotação de cookie ou distribuição entre instâncias. O WAF deve impor limites distintos para comentários e curtidas no Preview antes da promoção.
 - Validação do corte: 3 testes direcionados; suíte completa com 48 arquivos e 212 testes; format check, lint, typecheck e build aprovados.
 - Ainda devem ser verificados no Preview o `429`, a mensagem preservando o formulário, o reset após cinco minutos e o comportamento da borda. Esta seção não aprova SEC-001 nem o WAF.
+
+## Autorização administrativa e exposição de segredos
+
+- `tests/unit/admin-mutation-authorization.test.ts` percorre as oito Server Actions de taxonomia, moderação e publicação. Quando a autorização falha, todas rejeitam antes de validar o corpo, chamar repositório ou invalidar cache.
+- As rotas administrativas de capa permanecem cobertas diretamente por `tests/unit/cover-routes.test.ts`, incluindo sessão ausente, identidade fora da allowlist e ausência de emissão, remoção ou token.
+- `scripts/check-tracked-secrets.mjs` examina arquivos versionados sem dependência adicional e falha para variável sensível preenchida, URL PostgreSQL com credenciais, chave Clerk, token Blob ou chave privada. Arquivos binários e o lockfile são ignorados; `.env.example` vazio é aceito.
+- O scanner registra somente caminho, linha e categoria, nunca o trecho nem o valor. `tests/unit/secret-scan.test.ts` prova tanto o repositório limpo quanto a falha com fixture, inclusive ausência do valor na saída.
+- O job `Quality` executa `pnpm security:secrets` depois da instalação e antes dos checks de código. A varredura complementa — não substitui — GitHub Secret Scanning, CodeQL, separação server/client e rotação imediata após exposição.
+- A fronteira pública continua coberta por `tests/unit/env.test.ts`; erros de infraestrutura continuam saneados por `tests/unit/observability.test.ts`. A execução remota do novo gate ainda deve ser observada antes de encerrar SEC-001.
+- Após o build, os 36 arquivos de `.next/static` também passaram pelo scanner sem valor sensível. Dependências Clerk e Vercel Blob incluem os nomes `CLERK_SECRET_KEY` e `BLOB_READ_WRITE_TOKEN` e rotinas genéricas de parsing PEM no código distribuído, mas não seus valores; nome de configuração e implementação de biblioteca não constituem credencial.
+- Validação do corte: 50 arquivos e 215 testes, scanner de 308 arquivos versionados e 36 artefatos estáticos, format check, lint, typecheck e build aprovados.
