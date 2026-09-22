@@ -34,6 +34,24 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      - name: Validate protected configuration
+        shell: bash
+        env:
+          DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+          BACKUP_ENCRYPTION_PUBLIC_KEY: ${{ secrets.BACKUP_ENCRYPTION_PUBLIC_KEY }}
+          BACKUP_BLOB_READ_WRITE_TOKEN: ${{ secrets.BACKUP_BLOB_READ_WRITE_TOKEN }}
+        run: |
+          set -euo pipefail
+          missing=()
+          [[ -n "$DATABASE_URL_UNPOOLED" ]] || missing+=(DATABASE_URL_UNPOOLED)
+          [[ -n "$BACKUP_ENCRYPTION_PUBLIC_KEY" ]] || missing+=(BACKUP_ENCRYPTION_PUBLIC_KEY)
+          [[ -n "$BACKUP_BLOB_READ_WRITE_TOKEN" ]] || missing+=(BACKUP_BLOB_READ_WRITE_TOKEN)
+          if (( ${#missing[@]} > 0 )); then
+            joined="$(IFS=', '; echo "${missing[*]}")"
+            echo "::error title=Backup configuration incomplete::Missing environment secrets: $joined"
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v5
 
@@ -63,8 +81,6 @@ jobs:
           BACKUP_ENCRYPTION_PUBLIC_KEY: ${{ secrets.BACKUP_ENCRYPTION_PUBLIC_KEY }}
         run: |
           set -euo pipefail
-          test -n "$DATABASE_URL_UNPOOLED"
-          test -n "$BACKUP_ENCRYPTION_PUBLIC_KEY"
           workdir="$(mktemp -d)"
           chmod 700 "$workdir"
           backup_id="$(date -u +%Y-%m-%dT%H%M%SZ)"
