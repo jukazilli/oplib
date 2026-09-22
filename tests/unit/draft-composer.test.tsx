@@ -1,4 +1,10 @@
-import { cleanup, render, screen, within } from "@testing-library/react";
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -315,15 +321,20 @@ describe("draft composer", () => {
     render(<DraftComposer initialDraft={null} onClose={onClose} />);
 
     await user.type(screen.getByRole("textbox", { name: "Título" }), "Ideia");
-    await user.click(screen.getByRole("button", { name: "Cancelar" }));
+    const cancelButton = screen.getByRole("button", { name: "Cancelar" });
+    await user.click(cancelButton);
 
     expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Continuar editando" }),
+    ).toHaveFocus();
     expect(confirmSpy).not.toHaveBeenCalled();
     await user.click(
       screen.getByRole("button", { name: "Continuar editando" }),
     );
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
     expect(onClose).not.toHaveBeenCalled();
+    expect(cancelButton).toHaveFocus();
 
     await user.click(screen.getByRole("button", { name: "Cancelar" }));
     await user.click(
@@ -331,6 +342,26 @@ describe("draft composer", () => {
     );
     expect(onClose).toHaveBeenCalledOnce();
     confirmSpy.mockRestore();
+  });
+
+  it("preserves a dirty composition locally and guards browser reload", async () => {
+    const user = userEvent.setup();
+    render(<DraftComposer initialDraft={null} />);
+
+    await user.type(screen.getByRole("textbox", { name: "Título" }), "Ideia");
+    await user.type(
+      screen.getByRole("textbox", { name: "Conteúdo" }),
+      "Texto ainda não salvo",
+    );
+
+    await waitFor(() =>
+      expect(window.localStorage.getItem("oplib:draft:new")).toContain(
+        "Texto ainda não salvo",
+      ),
+    );
+    const event = new Event("beforeunload", { cancelable: true });
+    expect(window.dispatchEvent(event)).toBe(false);
+    expect(event.defaultPrevented).toBe(true);
   });
 
   it("advances to a safe Markdown preview and returns to composition", async () => {

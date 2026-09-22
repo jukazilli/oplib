@@ -26,3 +26,11 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - `tests/unit/draft-composer.test.tsx` cobre agora as duas escolhas quando uma cópia local tem versão-base anterior à versão carregada do servidor.
 - Antes da escolha, o editor mantém os campos do servidor e apresenta as opções; `Manter versão salva` descarta a cópia local, enquanto `Recuperar minha cópia` só aplica seu conteúdo após ação explícita.
 - Teste isolado do componente: 12 testes aprovados. Suíte completa repetida sem build concorrente: 46 arquivos, 182 testes aprovados; lint, typecheck e build aprovados. A confirmação de saída, queda de rede, foco e recuperação em navegador/Preview continuam pendentes; esta prova não fecha UX-001.
+
+## Prova incremental: saída segura e retorno de foco
+
+- O diálogo de alterações não salvas agora participa do mesmo gerenciamento de foco dos demais diálogos do editor: a ação segura `Continuar editando` recebe foco inicial, `Tab` permanece contido e o cancelamento devolve foco ao acionador original.
+- A recarga da página enquanto a composição está alterada continua protegida por `beforeunload`; título e conteúdo são gravados na cópia local antes da interrupção.
+- `tests/unit/draft-composer.test.tsx`: 13 testes aprovados, incluindo diálogo sem `window.confirm`, descarte explícito, retorno de foco, persistência local e bloqueio de recarga.
+- Regressão do corte: 53 arquivos e 222 testes, lint, typecheck e build aprovados.
+- A prova em componente não substitui a rodada autenticada no Preview com fechar, navegar, atualizar, queda de rede, teclado e leitor de tela.
