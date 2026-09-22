@@ -76,10 +76,13 @@ describe("comments route", () => {
     ] as const) {
       expect((await POST(request(payload), context)).status).toBe(status);
     }
-    expect(
-      (await POST(request({}, { origin: "https://evil.example" }), context))
-        .status,
-    ).toBe(403);
+    const crossOrigin = await POST(
+      request({}, { origin: "https://evil.example" }),
+      context,
+    );
+    expect(crossOrigin.status).toBe(403);
+    expect(crossOrigin.headers.get("cache-control")).toBe("no-store");
+    expect(crossOrigin.headers.get("set-cookie")).toBeNull();
     expect(mocks.create).not.toHaveBeenCalled();
   });
   it("refuses browser cross-site requests even without Origin", async () => {

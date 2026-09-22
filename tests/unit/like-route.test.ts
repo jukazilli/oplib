@@ -96,6 +96,8 @@ describe("like route", () => {
     } as never);
 
     expect(response.status).toBe(403);
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(response.headers.get("set-cookie")).toBeNull();
     expect(mocks.register).not.toHaveBeenCalled();
   });
 
@@ -107,6 +109,7 @@ describe("like route", () => {
     } as never);
 
     expect(response.status).toBe(403);
+    expect(response.headers.get("cache-control")).toBe("no-store");
     expect(mocks.register).not.toHaveBeenCalled();
   });
 });

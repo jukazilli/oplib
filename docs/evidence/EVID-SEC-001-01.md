@@ -99,3 +99,10 @@ Estado: `in_progress`.
 - A tela Clerk exibiu controles em inglês apesar da moldura em português. A correção está no corte AUTH-001 de localização, com prova local e nova validação remota pendente.
 - Não foram executados corpus malicioso contra PostgreSQL, teste autenticado nem WAF; o health check não prova esses itens.
 - A localização de controles autorais da entrada foi corrigida e observada no Preview do PR #36; isso não altera os controles de segurança nem encerra o corpus SEC-001.
+
+## Corpus negativo no Preview
+
+- O smoke remoto passa a chamar curtidas e comentários com `Origin` divergente e `Sec-Fetch-Site: cross-site`, usando slug inexistente para provar que a recusa `403` acontece antes de consulta, cookie ou persistência.
+- O endpoint de comentários também recebe mídia `text/plain` e JSON truncado; deve responder `415`/`400`, `no-store`, sem `Set-Cookie` e sem depender de publicação existente.
+- A rota de curtidas foi alinhada ao contrato defensivo: respostas de proveniência inválida e publicação indisponível agora também declaram `Cache-Control: no-store`.
+- Pendente: observar o corpus no Preview, testar publicação real, rate limit e limites distribuídos do WAF antes de encerrar SEC-001.

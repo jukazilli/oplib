@@ -48,6 +48,59 @@ test("anonymous administrative commands are rejected safely", async ({
   }
 });
 
+test("public mutations reject cross-origin requests before side effects", async ({
+  request,
+}) => {
+  for (const pathname of [
+    "/api/publications/nao-existe/like",
+    "/api/publications/nao-existe/comments",
+  ]) {
+    const response = await request.post(pathname, {
+      headers: {
+        origin: "https://origem-invalida.example",
+        "sec-fetch-site": "cross-site",
+      },
+      data: {},
+    });
+
+    expect(response.status()).toBe(403);
+    expect(response.headers()["cache-control"]).toContain("no-store");
+    expect(response.headers()["set-cookie"]).toBeUndefined();
+    await expect(response.json()).resolves.toEqual({
+      message: "Requisição recusada.",
+    });
+  }
+});
+
+test("comment endpoint rejects unsafe payloads without visitor state", async ({
+  request,
+}) => {
+  const unsupported = await request.post(
+    "/api/publications/nao-existe/comments",
+    {
+      headers: { "content-type": "text/plain" },
+      data: "comentário",
+    },
+  );
+  expect(unsupported.status()).toBe(415);
+  expect(unsupported.headers()["cache-control"]).toContain("no-store");
+  expect(unsupported.headers()["set-cookie"]).toBeUndefined();
+
+  const malformed = await request.post(
+    "/api/publications/nao-existe/comments",
+    {
+      headers: { "content-type": "application/json" },
+      data: '{"body":',
+    },
+  );
+  expect(malformed.status()).toBe(400);
+  expect(malformed.headers()["cache-control"]).toContain("no-store");
+  expect(malformed.headers()["set-cookie"]).toBeUndefined();
+  await expect(malformed.json()).resolves.toEqual({
+    message: "Revise os campos antes de publicar.",
+  });
+});
+
 test("public discovery routes remain accessible and fit a 320px viewport", async ({
   page,
 }) => {

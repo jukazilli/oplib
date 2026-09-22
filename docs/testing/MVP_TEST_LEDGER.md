@@ -225,6 +225,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 ## SEC-001 — Proveniência das mutações públicas
 
 - [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.
+- [ ] `CI/Preview`: executar o corpus negativo com slug inexistente; curtida e comentário cross-site devem retornar `403` + `no-store`, enquanto comentário `text/plain` e JSON truncado retornam `415`/`400`, todos sem `Set-Cookie`.
 - [ ] `Automatizado`: repetir sem `Origin` mas com `Sec-Fetch-Site: cross-site` e `same-site`; ambos devem ser recusados antes de persistir.
 - [ ] `Automatizado`: sem `Origin` e sem Fetch Metadata, confirmar que `Referer` divergente ou inválido é recusado; `Referer` da própria origem é aceito.
 - [ ] `Preview`: em navegador legítimo, curtir e comentar normalmente; inspecionar headers e confirmar que o endurecimento não bloqueou o fluxo real.
