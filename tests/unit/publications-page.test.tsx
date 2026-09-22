@@ -9,7 +9,11 @@ vi.mock("@/modules/taxonomy/repository", () => ({
   listTaxonomy: mocks.taxonomy,
 }));
 
-import PublicationsPage from "@/app/(public)/publicacoes/page";
+import {
+  PublicationsContent,
+  PublicationsFallback,
+  PublicationsShell,
+} from "@/app/(public)/publicacoes/page";
 
 afterEach(cleanup);
 
@@ -54,7 +58,7 @@ describe("publications page", () => {
     });
     mocks.taxonomy.mockResolvedValue(taxonomy);
     render(
-      await PublicationsPage({
+      await PublicationsContent({
         searchParams: Promise.resolve({
           busca: "virtualização",
           area: "engenharia-de-software",
@@ -62,9 +66,6 @@ describe("publications page", () => {
       } as never),
     );
 
-    expect(
-      screen.getByRole("heading", { level: 1, name: "Publicações" }),
-    ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: item.title }),
     ).toBeInTheDocument();
@@ -84,7 +85,7 @@ describe("publications page", () => {
     });
     mocks.taxonomy.mockResolvedValue(taxonomy);
     render(
-      await PublicationsPage({
+      await PublicationsContent({
         searchParams: Promise.resolve({ busca: "inexistente" }),
       } as never),
     );
@@ -106,7 +107,9 @@ describe("publications page", () => {
     });
     mocks.taxonomy.mockResolvedValue(taxonomy);
     render(
-      await PublicationsPage({ searchParams: Promise.resolve({}) } as never),
+      await PublicationsContent({
+        searchParams: Promise.resolve({}),
+      } as never),
     );
 
     expect(
@@ -115,5 +118,23 @@ describe("publications page", () => {
     expect(
       screen.queryByRole("link", { name: "Limpar filtros" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("renders the page heading independently from search and taxonomy", () => {
+    render(<PublicationsShell>Conteúdo posterior</PublicationsShell>);
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Publicações" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Conteúdo posterior")).toBeInTheDocument();
+  });
+
+  it("reserves the result layout while streamed data is pending", () => {
+    const { container } = render(<PublicationsFallback />);
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Carregando publicações",
+    );
+    expect(container.querySelector(".h-64")).toBeInTheDocument();
   });
 });

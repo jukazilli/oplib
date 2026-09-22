@@ -43,6 +43,26 @@ jobs:
           PLAYWRIGHT_BASE_URL: ${{ inputs.preview_url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
+      - name: Measure public performance
+        run: pnpm dlx @lhci/cli@0.15.1 autorun
+        env:
+          LHCI_PREVIEW_URL: ${{ inputs.preview_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+
+      - name: Summarize Lighthouse measurements
+        run: node scripts/summarize-lighthouse.mjs .lighthouseci lighthouse-summary.md lighthouse-artifact >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: |
+            lighthouse-artifact/
+            lighthouse-summary.md
+          retention-days: 14
+          if-no-files-found: ignore
+
       - name: Upload report on failure
         if: failure()
         uses: actions/upload-artifact@v4

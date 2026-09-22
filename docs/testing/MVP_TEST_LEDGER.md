@@ -167,6 +167,22 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Final`: repetir em celular e desktop, conferir anúncio das mensagens, foco e recuperação após restabelecer o serviço.
 - [ ] `Final`: completar a matriz UX-001 de carregamento, vazio, sucesso, erro e retry para cada fluxo, incluindo editor com mudanças não salvas.
 
+## QUAL-002 — Desempenho do Preview
+
+- [ ] `CI/Preview`: executar o workflow `E2E Preview` e confirmar três medições móveis para Início, Publicações e Áreas, com resumo de mediana por rota.
+- [ ] `CI`: baixar o artefato e confirmar que os JSON não contêm `extraHeaders`, segredo de bypass, credenciais, conteúdo privado ou relatório HTML.
+- [ ] `Preview`: registrar FCP, LCP, TBT, CLS, Speed Index, nota de performance e bytes transferidos com conteúdo editorial representativo; investigar todo aviso antes de promover limiares a gate.
+- [ ] `Preview`: comparar capa presente/ausente, Feed/Grade, filtros longos e publicação longa; conferir imagem responsiva, fontes, JavaScript não usado e terceiros.
+- [ ] `Preview`: confirmar que Início, Publicações e Áreas não carregam o runtime cliente do Clerk; comparar JavaScript transferido/não usado antes e depois do provedor ficar restrito a `/sign-in` e `/admin`.
+- [ ] `Preview`: atrasar banco/taxonomia em Áreas e Publicações; título e introdução devem aparecer antes dos resultados, com um único anúncio de carregamento, sem conteúdo falso, salto de foco ou duplicação do shell.
+- [ ] `CI/Preview`: comparar LCP e `elementRenderDelay` antes/depois do shell síncrono; confirmar que o elemento LCP continua sendo texto estático e que nenhuma imagem ou fonte virou nova regressão.
+- [ ] `CI/Preview`: durante o streaming de Publicações, confirmar CLS ≤ 0,1 e ausência de deslocamento do rodapé quando filtros, resultados ou estado vazio substituírem o fallback; repetir em viewport móvel e amplo.
+- [ ] `Final`: repetir o streaming de Publicações com resultados reais, filtros longos e paginação; a reserva deve continuar sem CLS perceptível e sem deixar espaço vazio excessivo após a resolução.
+- [ ] `Preview/final`: após restringir o provedor, repetir entrada, sessão expirada, perfil e logout; localização, tema, redirecionamento e proteção administrativa devem permanecer iguais.
+- [ ] `Preview`: medir a consulta crítica do acervo com combinações representativas e registrar plano quando houver regressão evidente.
+- [ ] `Preview`: com publicações sintéticas distribuídas por tipo, ano e taxonomia, executar `pnpm db:analyze:public-search`; conferir que a transação é somente leitura, a saída não contém valores e os planos de contagem/página não apresentam regressão evidente.
+- [ ] `Final`: repetir em rede/dispositivo representativos e confrontar a medição sintética com dados de campo disponíveis; nenhuma nota isolada aprova o desempenho do MVP.
+
 ## UX-001 — Recuperação e saída do editor
 
 - [ ] `Automatizado`: confirmar que cópia local da mesma versão é recuperada sem perder título e conteúdo; uma cópia de versão anterior exige escolha explícita e mantém a versão mais nova do servidor até a escolha.

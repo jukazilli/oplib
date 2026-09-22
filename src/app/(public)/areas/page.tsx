@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Suspense, type ReactNode } from "react";
 
 import { listPublicAreas } from "@/modules/discovery/publications";
 
@@ -9,15 +10,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/areas" },
 };
 
-export default async function AreasPage() {
+export async function AreasList() {
   const areas = await listPublicAreas();
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8">
-      <h1 className="font-editorial text-4xl font-semibold">Áreas</h1>
-      <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">
-        Explore as publicações por área de conhecimento.
-      </p>
+    <>
       {areas.length ? (
         <ul className="mt-10 grid gap-4 sm:grid-cols-2">
           {areas.map((area) => (
@@ -40,6 +37,40 @@ export default async function AreasPage() {
           Nenhuma área publicada ainda.
         </p>
       )}
+    </>
+  );
+}
+
+function AreasFallback() {
+  return (
+    <div className="mt-10" role="status" aria-live="polite">
+      <span className="sr-only">Carregando áreas</span>
+      <div className="grid gap-4 sm:grid-cols-2" aria-hidden="true">
+        <div className="h-24 animate-pulse rounded-card bg-muted" />
+        <div className="h-24 animate-pulse rounded-card bg-muted" />
+      </div>
     </div>
+  );
+}
+
+export function AreasShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8">
+      <h1 className="font-editorial text-4xl font-semibold">Áreas</h1>
+      <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">
+        Explore as publicações por área de conhecimento.
+      </p>
+      {children}
+    </div>
+  );
+}
+
+export default function AreasPage() {
+  return (
+    <AreasShell>
+      <Suspense fallback={<AreasFallback />}>
+        <AreasList />
+      </Suspense>
+    </AreasShell>
   );
 }
