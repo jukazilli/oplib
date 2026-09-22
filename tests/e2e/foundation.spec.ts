@@ -150,6 +150,48 @@ test("public discovery routes fit tablet and desktop viewports", async ({
   }
 });
 
+test("a representative published item opens as an accessible reading without optional media", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  const collectionResponse = await page.goto("/publicacoes");
+  expect(collectionResponse?.ok()).toBe(true);
+
+  const publicationLink = page.locator('main a[href^="/publicacoes/"]').first();
+  await expect(publicationLink).toBeVisible();
+  const pathname = await publicationLink.getAttribute("href");
+  expect(pathname).toMatch(/^\/publicacoes\/[a-z0-9-]+$/);
+
+  const readingResponse = await page.goto(pathname!);
+  expect(readingResponse?.ok()).toBe(true);
+  const article = page.locator("main article");
+  await expect(article).toBeVisible();
+  await expect(article.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(
+    article.getByRole("heading", { level: 2, name: "Comentários" }),
+  ).toBeVisible();
+  await expect(article.locator("img")).toHaveCount(0);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    new RegExp(`${pathname!.replaceAll("/", "\\/")}$`),
+  );
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    )
+    .toBe(true);
+
+  const results = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(
+    results.violations,
+    "published reading should have no WCAG A/AA violations",
+  ).toEqual([]);
+});
+
 test("public shell exposes a working keyboard skip link", async ({ page }) => {
   await page.goto("/");
   await page.keyboard.press("Tab");

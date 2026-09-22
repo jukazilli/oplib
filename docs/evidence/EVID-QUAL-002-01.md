@@ -46,7 +46,8 @@ Estado: `in_progress`.
 - `scripts/analyze-public-search.mjs` abre transação PostgreSQL `READ ONLY`, deriva filtros somente de uma publicação existente e executa `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` para a contagem e a página ordenada equivalentes ao acervo público.
 - A saída omite título, termo, slugs, IDs, URL e plano textual; registra apenas quantidade saneada, presença de cada filtro, tempos, buffers, linhas e tipos de nós.
 - A primeira execução conectou com sucesso e encontrou cinco posts, todos rascunhos. O resultado `insufficient-data` é a prova correta neste estado: sem publicação não existe consulta pública representativa para aceitar ou orientar índice.
-- Pendente: após conteúdo sintético representativo estar publicado no Preview, executar `pnpm db:analyze:public-search`, revisar `Seq Scan`, ordenação, buffers e tempos, e só então decidir se algum índice adicional é necessário.
+- Após a primeira publicação real, a execução saneada encontrou 6 posts e 1 publicado. Com termo, tipo, ano, área, categoria e tag derivados internamente, a contagem planejou/executou em 0,578/2,141 ms e a página em 0,673/0,160 ms, usando `Bitmap Index Scan`/`Index Scan`; não apareceu `Seq Scan` nem regressão evidente no conjunto atual.
+- A medição é uma baseline pequena, não justificativa para criar índice adicional. Deve ser repetida quando o volume editorial crescer e confrontada com telemetria de campo.
 
 ## Ainda não comprovado
 

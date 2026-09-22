@@ -8,7 +8,8 @@
 - [x] Restringir o provedor cliente de identidade às rotas que usam componentes Clerk.
 - [x] Separar o shell público das consultas de Áreas e Publicações para transmitir o conteúdo LCP antes dos dados.
 - [x] Criar análise saneada e somente leitura para as consultas críticas do acervo.
-- [ ] Medir conteúdo editorial representativo e consulta crítica.
+- [x] Medir a consulta crítica com a primeira publicação real, sem registrar valores editoriais.
+- [ ] Medir Lighthouse com conteúdo editorial representativo e validar a leitura pública automatizada.
 - [ ] Validar falha de mídia e concluir evidência antes de marcar `done`.
 
 ## Decisões
@@ -37,4 +38,5 @@
 - Os relatórios identificaram texto estático do cabeçalho como LCP em todas as rotas. Áreas e Publicações aguardavam banco antes de devolver esse texto; seus shells agora são síncronos e listas/filtros entram em `Suspense`, com fallback acessível. A próxima medição deve comprovar o efeito no Preview.
 - O run `35770571883`, commit `52c573f`, reduziu o LCP de Áreas de 3,45 para 2,58 s e elevou sua nota de 89 para 95. Em Publicações, porém, o fallback curto fez o rodapé deslocar quando filtros e estado vazio chegaram, produzindo CLS 0,152. A entrega não foi aceita nesse estado; o fallback passou a reservar a geometria do formulário, barra de resultados e conteúdo antes de nova medição.
 - O run `35772383744`, commit `745b429`, aprovou os nove testes E2E e confirmou CLS 0 nas nove medições. A baseline aceita ficou em 96/95/94 e LCP 2,43/2,58/2,75 s para Início/Áreas/Publicações. O shell síncrono foi mantido; QUAL-002 segue aberto para conteúdo representativo e consulta crítica.
-- `pnpm db:analyze:public-search` executa contagem e página em transação `READ ONLY`, com filtros derivados de uma publicação existente, e informa somente tempos, buffers, linhas e tipos de nós. A configuração atual contém cinco rascunhos e nenhuma publicação, portanto a primeira execução retornou `insufficient-data` sem fabricar uma medição representativa.
+- `pnpm db:analyze:public-search` executa contagem e página em transação `READ ONLY`, com filtros derivados de uma publicação existente, e informa somente tempos, buffers, linhas e tipos de nós. Na primeira execução, a configuração continha cinco rascunhos e nenhuma publicação; o resultado correto foi `insufficient-data`, sem fabricar uma medição representativa.
+- Após a primeira publicação real, a análise encontrou 6 posts e 1 publicado. Com todos os filtros representativos ativos, a contagem executou em 2,141 ms e a página em 0,160 ms; ambas usaram índices, retornaram uma linha e não apresentaram regressão evidente no volume atual. Nenhum título, slug, ID ou termo foi emitido.
