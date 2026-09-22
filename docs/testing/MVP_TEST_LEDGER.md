@@ -164,6 +164,8 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Preview`: editar título e conteúdo, tentar fechar, navegar por link e atualizar a página; cancelar a saída deve preservar todos os campos, e confirmar descarte deve remover a cópia temporária.
 - [ ] `Preview`: interromper rede durante edição/salvamento, voltar e confirmar recuperação do texto; após salvamento confirmado, recarregar sem reapresentar alterações antigas.
 - [ ] `Final`: repetir saída e recuperação por teclado, leitor de tela, celular e zoom 200%; conferir foco no diálogo e retorno ao campo de edição após cancelar.
+- [ ] `Automatizado/Preview`: ao abrir a confirmação de descarte, `Continuar editando` recebe foco; `Tab` não escapa do diálogo; `Escape` ou a ação segura fecha a confirmação e devolve foco ao controle que a abriu.
+- [ ] `Automatizado/Preview`: com composição alterada, confirmar cópia local atualizada e proteção de recarga; após descarte explícito, confirmar remoção da cópia e ausência de recuperação indevida.
 
 ## UX-001 — Recuperação do comentário público
 

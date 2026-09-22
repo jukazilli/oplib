@@ -840,7 +840,7 @@ Estado atual: transições condicionais auditadas, ação autorizada e desfazer 
 - **Testes:** `TEST-UX-001-01` matriz de estados; `-02` falhas injetadas.
 - **Evidência:** `EVID-UX-001-01` checklist por fluxo.
 
-Estado atual: degradação isolada da leitura, conflito de cópia local e recuperação do comentário público implementados e testados; falha de comentário preserva entrada, foca o campo inválido, anuncia o erro e não expõe exceção técnica. Matriz transversal, saída com mudanças pendentes e aceite de navegador continuam abertos.
+Estado atual: degradação isolada da leitura, conflito de cópia local, recuperação do comentário público e saída segura do editor implementados e testados; o diálogo de descarte contém e devolve foco, enquanto `beforeunload` e a cópia local protegem alterações. Matriz transversal, queda de rede e aceite de navegador continuam abertos.
 
 ### QUAL-001 — Acessibilidade e responsividade do MVP
 

@@ -136,6 +136,8 @@ export function DraftComposer({
   const classificationDialogRef = useRef<HTMLElement>(null);
   const metadataDialogRef = useRef<HTMLElement>(null);
   const publishDialogRef = useRef<HTMLElement>(null);
+  const discardDialogRef = useRef<HTMLElement>(null);
+  const discardReturnFocusRef = useRef<HTMLElement | null>(null);
   const publishInFlightRef = useRef(false);
 
   const key = useMemo(() => storageKey(id), [id]);
@@ -148,16 +150,19 @@ export function DraftComposer({
   useEffect(() => {
     const dialog = publishConfirmation
       ? publishDialogRef.current
-      : classificationOpen
-        ? classificationDialogRef.current
-        : metadataOpen
-          ? metadataDialogRef.current
-          : null;
+      : discardIntent
+        ? discardDialogRef.current
+        : classificationOpen
+          ? classificationDialogRef.current
+          : metadataOpen
+            ? metadataDialogRef.current
+            : null;
     if (!dialog) return;
     const previousFocus = document.activeElement as HTMLElement | null;
-    dialog
-      .querySelector<HTMLElement>("button, select, textarea, input")
-      ?.focus();
+    const initialFocus =
+      dialog.querySelector<HTMLElement>("[data-dialog-initial-focus]") ??
+      dialog.querySelector<HTMLElement>("button, select, textarea, input");
+    initialFocus?.focus();
     const keepFocus = (event: KeyboardEvent) => {
       if (event.key !== "Tab") return;
       const controls = Array.from(
@@ -181,7 +186,7 @@ export function DraftComposer({
       document.removeEventListener("keydown", keepFocus);
       previousFocus?.focus();
     };
-  }, [classificationOpen, metadataOpen, publishConfirmation]);
+  }, [classificationOpen, discardIntent, metadataOpen, publishConfirmation]);
 
   useEffect(() => {
     if (!classificationOpen) return;
@@ -222,10 +227,10 @@ export function DraftComposer({
         return;
       }
       if (discardIntent) {
-        setDiscardIntent(null);
+        cancelDiscard();
         return;
       }
-      if (dirty) setDiscardIntent({ kind: "close" });
+      if (dirty) requestDiscard({ kind: "close" });
       else onClose?.();
     };
     document.addEventListener("keydown", closeOnEscape);
@@ -335,7 +340,7 @@ export function DraftComposer({
       if (!anchor) return;
       event.preventDefault();
       event.stopPropagation();
-      setDiscardIntent({ kind: "navigate", href: anchor.href });
+      requestDiscard({ kind: "navigate", href: anchor.href });
     };
     window.addEventListener("beforeunload", beforeUnload);
     document.addEventListener("click", guardLinks, true);
@@ -623,8 +628,22 @@ export function DraftComposer({
   }
 
   function closeComposer() {
-    if (dirty) setDiscardIntent({ kind: "close" });
+    if (dirty) requestDiscard({ kind: "close" });
     else onClose?.();
+  }
+
+  function requestDiscard(
+    intent: { kind: "close" } | { kind: "navigate"; href: string },
+  ) {
+    discardReturnFocusRef.current =
+      document.activeElement as HTMLElement | null;
+    setDiscardIntent(intent);
+  }
+
+  function cancelDiscard() {
+    const returnFocus = discardReturnFocusRef.current;
+    setDiscardIntent(null);
+    queueMicrotask(() => returnFocus?.focus());
   }
 
   function discardChanges() {
@@ -1417,6 +1436,7 @@ export function DraftComposer({
       {discardIntent ? (
         <div className="fixed inset-0 z-[70] grid place-items-center bg-foreground/55 p-5">
           <section
+            ref={discardDialogRef}
             role="alertdialog"
             aria-modal="true"
             aria-labelledby="discard-title"
@@ -1447,7 +1467,8 @@ export function DraftComposer({
               <Button
                 type="button"
                 autoFocus
-                onClick={() => setDiscardIntent(null)}
+                data-dialog-initial-focus
+                onClick={cancelDiscard}
               >
                 Continuar editando
               </Button>
