@@ -41,6 +41,13 @@ Estado: `in_progress`.
 - A execução aceita [`35772383744`](https://github.com/jukazilli/oplib/actions/runs/35772383744), commit `745b429`, aprovou novamente os nove testes E2E. As nove medições tiveram CLS 0; Publicações atingiu nota 94, LCP 2,75 s e `elementRenderDelay` mediano de 558 ms.
 - Na mesma execução, Início atingiu 96/LCP 2,43 s e Áreas 95/LCP 2,58 s. A reserva estrutural eliminou o deslocamento sem desfazer o ganho do streaming. Os relatórios permaneceram saneados e o artefato temporário contém nove JSON mais o resumo.
 
+## Plano da consulta crítica
+
+- `scripts/analyze-public-search.mjs` abre transação PostgreSQL `READ ONLY`, deriva filtros somente de uma publicação existente e executa `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` para a contagem e a página ordenada equivalentes ao acervo público.
+- A saída omite título, termo, slugs, IDs, URL e plano textual; registra apenas quantidade saneada, presença de cada filtro, tempos, buffers, linhas e tipos de nós.
+- A primeira execução conectou com sucesso e encontrou cinco posts, todos rascunhos. O resultado `insufficient-data` é a prova correta neste estado: sem publicação não existe consulta pública representativa para aceitar ou orientar índice.
+- Pendente: após conteúdo sintético representativo estar publicado no Preview, executar `pnpm db:analyze:public-search`, revisar `Seq Scan`, ordenação, buffers e tempos, e só então decidir se algum índice adicional é necessário.
+
 ## Ainda não comprovado
 
 - Falha real de Blob/imagem, medições com conteúdo representativo, análise conclusiva de bundle e plano de consulta crítico.

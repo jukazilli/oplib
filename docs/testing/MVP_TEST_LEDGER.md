@@ -180,6 +180,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Final`: repetir o streaming de Publicações com resultados reais, filtros longos e paginação; a reserva deve continuar sem CLS perceptível e sem deixar espaço vazio excessivo após a resolução.
 - [ ] `Preview/final`: após restringir o provedor, repetir entrada, sessão expirada, perfil e logout; localização, tema, redirecionamento e proteção administrativa devem permanecer iguais.
 - [ ] `Preview`: medir a consulta crítica do acervo com combinações representativas e registrar plano quando houver regressão evidente.
+- [ ] `Preview`: com publicações sintéticas distribuídas por tipo, ano e taxonomia, executar `pnpm db:analyze:public-search`; conferir que a transação é somente leitura, a saída não contém valores e os planos de contagem/página não apresentam regressão evidente.
 - [ ] `Final`: repetir em rede/dispositivo representativos e confrontar a medição sintética com dados de campo disponíveis; nenhuma nota isolada aprova o desempenho do MVP.
 
 ## UX-001 — Recuperação e saída do editor
