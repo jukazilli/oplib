@@ -844,7 +844,7 @@ Estado atual: degradação isolada de curtidas e comentários na página de leit
 
 ### QUAL-001 — Acessibilidade e responsividade do MVP
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** PUX P-UX-012 e P-UX-013; D04 §§30–31; D05 §24.
 - **Objetivo:** preservar intenção e operação em celular, tablet, desktop, teclado e tecnologia assistiva.
 - **Descrição:** auditoria automatizada e manual das jornadas críticas.
@@ -853,6 +853,8 @@ Estado atual: degradação isolada de curtidas e comentários na página de leit
 - **Riscos:** falso positivo de automação substituir teste manual.
 - **Testes:** `TEST-QUAL-001-01` axe; `-02` teclado; `-03` leitores de tela básico; `-04` breakpoints.
 - **Evidência:** `EVID-QUAL-001-01` relatório e capturas.
+
+Estado atual: Início, Publicações e Áreas aprovados no Preview em Chromium a 320, 768 e 1440 px, sem overflow e sem violações axe WCAG A/AA; loading acessível, skip link e preferência de movimento reduzido também passaram sem retry. Conteúdo real, administração autenticada, zoom de 200%, navegação completa por teclado, leitor de tela e aceite humano permanecem pendentes.
 
 ### QUAL-002 — Desempenho e degradação segura
 

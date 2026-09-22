@@ -22,6 +22,10 @@ describe("public shell", () => {
     expect(
       screen.getByRole("link", { name: "Ir para o conteúdo" }),
     ).toHaveAttribute("href", "#conteudo");
+    expect(screen.getByRole("link", { name: "Pesquisar" })).toHaveAttribute(
+      "href",
+      "/publicacoes?busca=",
+    );
     expect(
       screen.queryByRole("link", { name: /admin|entrar|cadastro/i }),
     ).not.toBeInTheDocument();

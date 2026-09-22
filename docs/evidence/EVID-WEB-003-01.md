@@ -15,6 +15,7 @@
 
 ## Pendências
 
+- O Preview de `b50acad` passou no axe WCAG A/AA, mas revelou overflow horizontal em `/publicacoes`: viewport 320 px, documento 338 px. A correção limita o grid e seus controles à coluna disponível; o workflow `E2E Preview` `35730558797` confirmou no commit `91c863f` que o documento não excede 320 px e não possui violações WCAG A/AA no estado vazio.
 - Executar consulta real na branch Neon `preview`, combinações de filtros e `EXPLAIN` representativo.
 - Confirmar retirada desaparecendo imediatamente da lista e da pesquisa.
 - Validar URL, voltar/avançar, Feed/Grade, paginação, axe e breakpoints no Preview.
