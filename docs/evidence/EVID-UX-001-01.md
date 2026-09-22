@@ -43,3 +43,4 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - Ao surgir, o título recebe foco programático e a região usa `role="alert"`, tornando a mudança perceptível sem depender de cor.
 - `tests/unit/admin-error.test.tsx` prova foco, ausência do detalhe técnico e execução do retry. Preview autenticado com falha injetada permanece necessário.
 - Regressão do corte: 54 arquivos e 223 testes, lint, typecheck e build aprovados.
+- PR draft #41, commit `fb48433`: deploy Vercel aprovado; workflow `E2E Preview` `35741052934` executou nove testes públicos em 11,1 segundos, todos aprovados na primeira passagem, sem retry ou flaky. A execução comprova ausência de regressão pública, não a falha administrativa autenticada ainda reservada ao roteiro final.
