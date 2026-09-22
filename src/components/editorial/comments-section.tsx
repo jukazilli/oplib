@@ -19,9 +19,11 @@ export function CommentsSection({
   const [authorName, setAuthorName] = useState("");
   const [body, setBody] = useState("");
   const [message, setMessage] = useState("");
+  const [hasError, setHasError] = useState(false);
   const [pending, setPending] = useState(false);
   const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const startedAt = useRef(0);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     startedAt.current = Date.now();
   }, []);
@@ -33,15 +35,23 @@ export function CommentsSection({
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!body.trim())
-      return setMessage("Escreva um comentário antes de publicar.");
-    if (body.length > 1500)
-      return setMessage(
-        "Seu comentário ultrapassou o limite de 1.500 caracteres.",
-      );
+    if (!body.trim()) {
+      setHasError(true);
+      setMessage("Escreva um comentário antes de publicar.");
+      bodyRef.current?.focus();
+      return;
+    }
+    if (body.length > 1500) {
+      setHasError(true);
+      setMessage("Seu comentário ultrapassou o limite de 1.500 caracteres.");
+      bodyRef.current?.focus();
+      return;
+    }
     setPending(true);
+    setHasError(false);
     setMessage("");
     const form = new FormData(event.currentTarget);
+    let responseMessage = "";
     try {
       const response = await fetch(
         `/api/publications/${encodeURIComponent(slug)}/comments`,
@@ -60,19 +70,24 @@ export function CommentsSection({
         comment?: PublicComment;
         message?: string;
       };
-      if (!response.ok || !result.comment) throw new Error(result.message);
+      if (!response.ok || !result.comment) {
+        responseMessage = result.message ?? "";
+        throw new Error("comment_request_failed");
+      }
       setComments((current) => [result.comment!, ...current]);
       setHighlightedId(result.comment.id);
       setAuthorName("");
       setBody("");
       startedAt.current = Date.now();
+      setHasError(false);
       setMessage("Comentário publicado.");
-    } catch (error) {
+    } catch {
+      setHasError(true);
       setMessage(
-        error instanceof Error && error.message
-          ? error.message
-          : "Não foi possível publicar agora. Seu texto foi preservado para uma nova tentativa.",
+        responseMessage ||
+          "Não foi possível publicar agora. Seu texto foi preservado para uma nova tentativa.",
       );
+      bodyRef.current?.focus();
     } finally {
       setPending(false);
     }
@@ -97,10 +112,12 @@ export function CommentsSection({
         <label className="grid gap-2 font-interface text-sm font-semibold">
           Comentário
           <textarea
+            ref={bodyRef}
             value={body}
             onChange={(event) => setBody(event.target.value)}
             rows={5}
-            aria-describedby="comment-notice comment-count"
+            aria-invalid={hasError}
+            aria-describedby="comment-notice comment-count comment-message"
             className="rounded-control border bg-surface p-3 font-normal"
           />
         </label>
@@ -127,6 +144,8 @@ export function CommentsSection({
           </button>
         </div>
         <p
+          id="comment-message"
+          role={hasError ? "alert" : "status"}
           aria-live="polite"
           className="min-h-5 font-interface text-sm text-muted-foreground"
         >

@@ -83,7 +83,12 @@ describe("CommentsSection", () => {
     );
     expect(
       screen.getByText("Escreva um comentário antes de publicar."),
-    ).toBeInTheDocument();
+    ).toHaveAttribute("role", "alert");
+    expect(screen.getByRole("textbox", { name: "Comentário" })).toHaveFocus();
+    expect(screen.getByRole("textbox", { name: "Comentário" })).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
     fireEvent.change(screen.getByRole("textbox", { name: /Nome/ }), {
       target: { value: "Ana" },
     });
@@ -102,5 +107,42 @@ describe("CommentsSection", () => {
     expect(screen.getByRole("textbox", { name: "Comentário" })).toHaveValue(
       "Minha mensagem",
     );
+    expect(screen.getByRole("textbox", { name: "Comentário" })).toHaveFocus();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Não foi possível publicar agora. Seu texto foi preservado para uma nova tentativa.",
+    );
+    expect(screen.getByRole("alert")).not.toHaveTextContent("offline");
+  });
+
+  it("clears the invalid state only after a confirmed retry", async () => {
+    vi.mocked(fetch)
+      .mockRejectedValueOnce(new Error("Falha temporária."))
+      .mockResolvedValueOnce(
+        Response.json({
+          comment: {
+            id: "retry",
+            authorName: "Anônimo",
+            body: "Texto preservado",
+            createdAt: "2026-09-21T12:00:00.000Z",
+          },
+        }),
+      );
+    render(<CommentsSection slug="post" initialComments={[]} />);
+    const input = screen.getByRole("textbox", { name: "Comentário" });
+    fireEvent.change(input, { target: { value: "Texto preservado" } });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Publicar comentário" }),
+    );
+    await screen.findByRole("alert");
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Publicar comentário" }),
+    );
+
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Comentário publicado.",
+    );
+    expect(input).toHaveAttribute("aria-invalid", "false");
+    expect(input).toHaveValue("");
   });
 });
