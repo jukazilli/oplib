@@ -16,6 +16,7 @@
 
 ## Pendências
 
+- Preview da PR #37 (`b50acad`): `/areas` respondeu HTTP 200 e mostrou título, estado vazio e navegação em desktop e 390 px sem corte visível. O ambiente não tinha publicações no ar; links e contagens por área ainda exigem dados publicados. O console registrou `404` de prefetch para `/sobre` e `/privacidade`, vinculados a WEB-006/DEC-002, não a `/areas`.
 - O E2E local não iniciou porque o servidor Playwright ficou sem `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
 - Executar axe, teclado, compacto/médio/amplo e zoom de 200% no Preview.
 - Registrar screenshots e aceite humano antes de mover para `done`.
