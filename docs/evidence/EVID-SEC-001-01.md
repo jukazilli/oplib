@@ -105,4 +105,6 @@ Estado: `in_progress`.
 - O smoke remoto passa a chamar curtidas e comentários com `Origin` divergente e `Sec-Fetch-Site: cross-site`, usando slug inexistente para provar que a recusa `403` acontece antes de consulta, cookie ou persistência.
 - O endpoint de comentários também recebe mídia `text/plain` e JSON truncado; deve responder `415`/`400`, `no-store`, sem `Set-Cookie` e sem depender de publicação existente.
 - A rota de curtidas foi alinhada ao contrato defensivo: respostas de proveniência inválida e publicação indisponível agora também declaram `Cache-Control: no-store`.
-- Pendente: observar o corpus no Preview, testar publicação real, rate limit e limites distribuídos do WAF antes de encerrar SEC-001.
+- A execução [`35774061876`](https://github.com/jukazilli/oplib/actions/runs/35774061876), commit `58e10d3`, aprovou os 11 testes E2E em 12,7 s, sem retry. Assim, proveniência cruzada, mídia incompatível e JSON malformado foram exercitados contra o Preview protegido sem criar cookie nem depender de publicação.
+- A mesma execução repetiu as nove medições Lighthouse e publicou dez arquivos saneados, preservando a regressão conjunta de segurança e desempenho.
+- Pendente: testar publicação real, rate limit e limites distribuídos do WAF antes de encerrar SEC-001.
