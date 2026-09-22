@@ -4,6 +4,8 @@
 
 ## Provas locais
 
+- O corte `/areas` oferece página pública real com somente áreas de publicações no ar, contagens e links para `/publicacoes?area=<slug>`; estado vazio coberto por teste. Build lista `/areas` como rota dinâmica.
+- Neste corte: 52 arquivos e 219 testes aprovados; lint, typecheck, build e `git diff --check` aprovados. A simulação unitária de falha da consulta não foi concluída e permanece no roteiro cumulativo.
 - Layout público compartilhado contém skip link, cabeçalho, conteúdo principal e rodapé.
 - Navegação expõe Início, Publicações, Áreas, Pesquisa e Sobre, sem divulgar administração, login ou cadastro.
 - Destino atual usa `aria-current`; foco global permanece visível e controles possuem alvos mínimos.

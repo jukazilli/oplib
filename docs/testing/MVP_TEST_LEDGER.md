@@ -28,6 +28,10 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 
 ## WEB-001 — Shell público responsivo
 
+- [ ] `Preview/final`: abrir `/areas` pelo cabeçalho e rodapé; conferir título, ausência de `404`, somente áreas com publicações no ar e contagens corretas.
+- [ ] `Preview/final`: selecionar cada área e conferir `/publicacoes?area=<slug>` com filtro ativo, URL preservada após recarga e resultados da área correta; testar Voltar/Avançar.
+- [ ] `Preview/final`: com nenhuma publicação no ar, conferir estado vazio sem links fictícios; com falha temporária da consulta, conferir mensagem legível sem erro técnico exposto.
+- [ ] `Final`: repetir `/areas` com teclado, foco visível, leitor de tela, celular e zoom 200%; conferir singular/plural nas contagens e ausência de cortes.
 - [ ] `Final`: percorrer cabeçalho e rodapé somente com teclado, com foco visível.
 - [ ] `Final`: conferir localização atual e ausência de entrada administrativa na navegação pública.
 - [ ] `Final`: verificar compacto, médio, amplo e zoom de 200%, sem corte ou sobreposição.
