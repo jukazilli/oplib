@@ -22,6 +22,14 @@ Estado: `in_progress`.
 - A primeira hipótese de bundle foi tratada sem mudar o contrato de autenticação: `ClerkProvider`, antes global, passou a envolver apenas `/sign-in` e `/admin`, as únicas superfícies com componentes cliente do Clerk. A composição segue a orientação oficial de montar o provedor mais abaixo quando a identidade é necessária só em rotas específicas.
 - Antes/depois deve ser repetido no Preview. Além das três rotas públicas, o smoke precisa confirmar entrada, perfil e logout para impedir que a redução de JavaScript público introduza regressão autenticada.
 
+## Redução do JavaScript público
+
+- A execução [`35769022761`](https://github.com/jukazilli/oplib/actions/runs/35769022761), commit `e70e9dd`, aprovou novamente os nove testes E2E, incluindo redirecionamento administrativo e renderização de `/sign-in`, e produziu nove relatórios saneados sem marcadores dos headers protegidos.
+- Início: performance 91 → 95; LCP 3,09 → 2,72 s; transferência 341,6 → 271,2 KiB; JavaScript 214,1 → 163,4 KiB; JavaScript não usado 62,8 → 27,5 KiB.
+- Áreas: performance 86 → 89; LCP 3,80 → 3,45 s; transferência 380,8 → 271,5 KiB; JavaScript 208,3 → 156,9 KiB; JavaScript não usado 63,1 → 27,6 KiB.
+- Publicações: performance 86 → 90; LCP 3,79 → 3,45 s; transferência 342,8 → 272,3 KiB; JavaScript 214,2 → 163,3 KiB; JavaScript não usado 62,7 → 27,2 KiB.
+- A melhora consistente confirma a hipótese do provedor global. O LCP ainda supera 2,5 s e deve ser investigado com conteúdo representativo; os números sintéticos não encerram QUAL-002 nem substituem perfil/logout autenticados no aceite final.
+
 ## Ainda não comprovado
 
 - Falha real de Blob/imagem, medições com conteúdo representativo, análise conclusiva de bundle e plano de consulta crítico.
