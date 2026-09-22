@@ -19,6 +19,8 @@ Estado: `in_progress`.
 - Linha de base móvel inicial: Início 91, Áreas 86 e Publicações 86; FCP entre 1,86 e 1,93 s; LCP entre 3,09 e 3,80 s; TBT entre 78 e 112 ms; CLS 0; transferência entre 341,6 e 380,8 KiB.
 - O JavaScript transferido ficou entre 208,3 e 214,2 KiB, com mediana de aproximadamente 63 KiB indicada como não usada. LCP acima da referência de 2,5 s e JavaScript não usado entram na investigação; ainda não são conclusão com o acervo vazio.
 - O primeiro run `35766834296` tornou visível uma falha no empacotamento da evidência: relatórios duplicados eram contados e o diretório oculto não era anexado. O commit `0f7b858` deduplicou por URL/instante e passou a publicar uma cópia saneada em diretório próprio antes da prova aceita.
+- A primeira hipótese de bundle foi tratada sem mudar o contrato de autenticação: `ClerkProvider`, antes global, passou a envolver apenas `/sign-in` e `/admin`, as únicas superfícies com componentes cliente do Clerk. A composição segue a orientação oficial de montar o provedor mais abaixo quando a identidade é necessária só em rotas específicas.
+- Antes/depois deve ser repetido no Preview. Além das três rotas públicas, o smoke precisa confirmar entrada, perfil e logout para impedir que a redução de JavaScript público introduza regressão autenticada.
 
 ## Ainda não comprovado
 

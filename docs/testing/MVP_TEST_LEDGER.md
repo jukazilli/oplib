@@ -173,6 +173,8 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `CI`: baixar o artefato e confirmar que os JSON não contêm `extraHeaders`, segredo de bypass, credenciais, conteúdo privado ou relatório HTML.
 - [ ] `Preview`: registrar FCP, LCP, TBT, CLS, Speed Index, nota de performance e bytes transferidos com conteúdo editorial representativo; investigar todo aviso antes de promover limiares a gate.
 - [ ] `Preview`: comparar capa presente/ausente, Feed/Grade, filtros longos e publicação longa; conferir imagem responsiva, fontes, JavaScript não usado e terceiros.
+- [ ] `Preview`: confirmar que Início, Publicações e Áreas não carregam o runtime cliente do Clerk; comparar JavaScript transferido/não usado antes e depois do provedor ficar restrito a `/sign-in` e `/admin`.
+- [ ] `Preview/final`: após restringir o provedor, repetir entrada, sessão expirada, perfil e logout; localização, tema, redirecionamento e proteção administrativa devem permanecer iguais.
 - [ ] `Preview`: medir a consulta crítica do acervo com combinações representativas e registrar plano quando houver regressão evidente.
 - [ ] `Final`: repetir em rede/dispositivo representativos e confrontar a medição sintética com dados de campo disponíveis; nenhuma nota isolada aprova o desempenho do MVP.
 
