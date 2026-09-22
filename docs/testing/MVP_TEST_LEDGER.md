@@ -173,6 +173,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: após falha, nome e comentário permanecem intactos; nova tentativa confirmada publica uma única vez, limpa os campos e anuncia sucesso.
 - [ ] `Final`: repetir com teclado e leitor de tela em celular e desktop; confirmar que detalhes técnicos nunca aparecem e que a mensagem controlada de rate limit continua acionável.
 
+## UX-001 — Erro administrativo recuperável
+
+- [ ] `Automatizado/Preview`: provocar falha de leitura em Publicações e Taxonomia; o shell permanece, a URL e seus parâmetros não mudam, o título seguro recebe foco e nenhum detalhe técnico ou `digest` aparece.
+- [ ] `Automatizado/Preview`: restaurar a dependência e acionar `Tentar novamente`; o mesmo segmento volta a renderizar sem recarregar para outra rota.
+- [ ] `Final`: repetir por teclado e leitor de tela em desktop e celular, confirmando anúncio único, foco visível e ausência de perda do contexto administrativo.
+
 ## SEC-001 — Proveniência das mutações públicas
 
 - [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.
