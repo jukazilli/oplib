@@ -1,4 +1,4 @@
-export type BackupTier = 'daily' | 'weekly';
+export type BackupTier = "daily" | "weekly";
 
 export interface ParsedBackupPath {
   pathname: string;

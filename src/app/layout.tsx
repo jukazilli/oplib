@@ -1,9 +1,10 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import { Manrope, Newsreader } from "next/font/google";
 
 import { authenticationLocalization } from "@/modules/identity/ui";
+import { authenticationTheme } from "@/modules/identity/theme";
+import { getSiteUrl, publicRobots } from "@/lib/seo/metadata";
 
 import "./styles.css";
 
@@ -14,9 +15,32 @@ const newsreader = Newsreader({
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-interface" });
 
 export const metadata: Metadata = {
-  title: "OPALIB",
-  description:
-    "Artigos para explorar ideias entre ciência, tecnologia e movimento.",
+  metadataBase: getSiteUrl(),
+  title: { default: "OPALIB", template: "%s | OPALIB" },
+  description: "Conhecimento para construir, preservar e compartilhar.",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: "OPALIB",
+    title: "OPALIB",
+    description: "Conhecimento para construir, preservar e compartilhar.",
+    url: "/",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "OPALIB — conhecimento para construir, preservar e compartilhar",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OPALIB",
+    description: "Conhecimento para construir, preservar e compartilhar.",
+    images: ["/opengraph-image"],
+  },
+  robots: publicRobots(),
 };
 
 export default function RootLayout({
@@ -28,7 +52,7 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${newsreader.variable} ${manrope.variable}`}>
       <body>
         <ClerkProvider
-          appearance={{ theme: shadcn }}
+          appearance={{ theme: authenticationTheme }}
           localization={authenticationLocalization}
           signInUrl="/sign-in"
           signUpUrl={undefined}

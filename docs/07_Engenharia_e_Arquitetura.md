@@ -699,33 +699,33 @@ Backup somente será considerado confiável quando existir procedimento de resta
 
 ## 24. Segurança — ameaças e controles
 
-| Ameaça | Controle arquitetural |
-|---|---|
-| alteração de publicação por visitante | autorização obrigatória no servidor |
-| roubo de sessão administrativa | cookie protegido, expiração, revogação e MFA quando disponível |
-| força bruta no login | rate limiting e mensagem genérica |
-| XSS por Markdown | pipeline único com allowlist e sanitização |
-| XSS por comentário | texto simples, escape de saída e rejeição de HTML |
-| upload malicioso | autorização, tipo, tamanho, chave gerada e validação |
-| SQL injection | consultas parametrizadas e validação de entrada |
-| duplicação de curtida | identificador opaco, constraint e operação atômica |
-| spam em comentários | limites em camadas e moderação |
-| CSRF administrativo | proteção explícita adequada ao mecanismo de sessão |
-| vazamento de segredo | execução server-side, secret scanning e variáveis protegidas |
-| conteúdo retirado em cache | invalidação associada à transição de estado |
-| enumeração de identidade | erro de autenticação genérico |
-| abuso de endpoint | rate limiting, limites de payload e observabilidade |
+| Ameaça                                | Controle arquitetural                                          |
+| ------------------------------------- | -------------------------------------------------------------- |
+| alteração de publicação por visitante | autorização obrigatória no servidor                            |
+| roubo de sessão administrativa        | cookie protegido, expiração, revogação e MFA quando disponível |
+| força bruta no login                  | rate limiting e mensagem genérica                              |
+| XSS por Markdown                      | pipeline único com allowlist e sanitização                     |
+| XSS por comentário                    | texto simples, escape de saída e rejeição de HTML              |
+| upload malicioso                      | autorização, tipo, tamanho, chave gerada e validação           |
+| SQL injection                         | consultas parametrizadas e validação de entrada                |
+| duplicação de curtida                 | identificador opaco, constraint e operação atômica             |
+| spam em comentários                   | limites em camadas e moderação                                 |
+| CSRF administrativo                   | proteção explícita adequada ao mecanismo de sessão             |
+| vazamento de segredo                  | execução server-side, secret scanning e variáveis protegidas   |
+| conteúdo retirado em cache            | invalidação associada à transição de estado                    |
+| enumeração de identidade              | erro de autenticação genérico                                  |
+| abuso de endpoint                     | rate limiting, limites de payload e observabilidade            |
 
 ## 25. Alternativas arquiteturais avaliadas
 
-| Alternativa | Simplicidade | Operação | Isolamento | Adequação ao MVP | Decisão |
-|---|---:|---:|---:|---:|---|
-| aplicação full-stack modular | alta | alta | suficiente | alta | escolhida |
-| frontend e API em deploys separados | média | média | alta | média | rejeitada no MVP |
-| microserviços | baixa | baixa | alta | baixa | rejeitada |
-| conteúdo somente em arquivos Markdown no Git | alta para leitura | alta | baixa para administração e interações | baixa | rejeitada |
-| CMS externo | média | média | média | baixa diante do editor e moderação próprios | rejeitada |
-| busca externa dedicada | baixa | baixa | alta | baixa no volume inicial | adiada |
+| Alternativa                                  |      Simplicidade | Operação |                            Isolamento |                            Adequação ao MVP | Decisão          |
+| -------------------------------------------- | ----------------: | -------: | ------------------------------------: | ------------------------------------------: | ---------------- |
+| aplicação full-stack modular                 |              alta |     alta |                            suficiente |                                        alta | escolhida        |
+| frontend e API em deploys separados          |             média |    média |                                  alta |                                       média | rejeitada no MVP |
+| microserviços                                |             baixa |    baixa |                                  alta |                                       baixa | rejeitada        |
+| conteúdo somente em arquivos Markdown no Git | alta para leitura |     alta | baixa para administração e interações |                                       baixa | rejeitada        |
+| CMS externo                                  |             média |    média |                                 média | baixa diante do editor e moderação próprios | rejeitada        |
+| busca externa dedicada                       |             baixa |    baixa |                                  alta |                     baixa no volume inicial | adiada           |
 
 ## 26. Decisões arquiteturais
 
@@ -799,18 +799,18 @@ Cache e armazenamento de objetos não serão fonte canônica desses dados.
 
 ## 27. Verificações arquiteturais
 
-| Decisão | Verificação esperada |
-|---|---|
-| domínio independente de interface | regra de importação e testes unitários sem framework visual |
-| cliente sem credenciais privilegiadas | secret scanning e inspeção de variáveis públicas |
-| autorização administrativa no servidor | testes negativos de acesso e mutação |
-| Markdown seguro | suíte de payloads maliciosos |
-| curtida única | constraint, teste concorrente e teste de repetição |
-| comentário como texto simples | testes de HTML, script e protocolos perigosos |
-| preview isolado de produção | configuração e teste de ambiente |
-| publicação retirada sem cache | teste E2E de invalidação |
-| migrations reproduzíveis | execução em banco isolado na CI |
-| módulos com fronteiras | boundary check definido pela stack |
+| Decisão                                | Verificação esperada                                        |
+| -------------------------------------- | ----------------------------------------------------------- |
+| domínio independente de interface      | regra de importação e testes unitários sem framework visual |
+| cliente sem credenciais privilegiadas  | secret scanning e inspeção de variáveis públicas            |
+| autorização administrativa no servidor | testes negativos de acesso e mutação                        |
+| Markdown seguro                        | suíte de payloads maliciosos                                |
+| curtida única                          | constraint, teste concorrente e teste de repetição          |
+| comentário como texto simples          | testes de HTML, script e protocolos perigosos               |
+| preview isolado de produção            | configuração e teste de ambiente                            |
+| publicação retirada sem cache          | teste E2E de invalidação                                    |
+| migrations reproduzíveis               | execução em banco isolado na CI                             |
+| módulos com fronteiras                 | boundary check definido pela stack                          |
 
 ## 28. Necessidades para a Visão do Tech Lead
 

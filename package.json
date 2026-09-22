@@ -12,6 +12,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
+    "security:secrets": "node scripts/check-tracked-secrets.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check package.json components.json .prettierrc.json '*.{ts,mts,mjs}' 'src/**/*.{ts,tsx,css}' 'tests/**/*.{ts,tsx}'",
     "typecheck": "next typegen && tsc --noEmit",
@@ -29,7 +30,6 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.4",
-    "@clerk/ui": "^1.33.1",
     "@radix-ui/react-slot": "1.3.3",
     "@vercel/blob": "^2.8.0",
     "@vercel/functions": "^3.9.8",

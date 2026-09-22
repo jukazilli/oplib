@@ -43,6 +43,27 @@ describe("markdown content", () => {
     expect(screen.getByText("ataque").closest("a")).not.toHaveAttribute("href");
   });
 
+  it.each([
+    "javascript:alert(1)",
+    "JaVaScRiPt:alert(1)",
+    "data:text/html,<script>alert(1)</script>",
+    "vbscript:msgbox(1)",
+    "file:///etc/passwd",
+  ])("removes the dangerous link protocol %s", (url) => {
+    render(<MarkdownContent markdown={`[ataque](${url})`} />);
+
+    expect(screen.getByText("ataque").closest("a")).not.toHaveAttribute("href");
+  });
+
+  it("does not load remote inline images outside the managed cover flow", () => {
+    const { container } = render(
+      <MarkdownContent markdown="![Diagrama](https://tracker.example/pixel.png)" />,
+    );
+
+    expect(container.querySelector("img")).not.toBeInTheDocument();
+    expect(screen.getByText("Imagem: Diagrama")).toBeInTheDocument();
+  });
+
   it("can render preview links as inert text without changing their appearance", () => {
     render(
       <MarkdownContent
@@ -54,5 +75,13 @@ describe("markdown content", () => {
       screen.queryByRole("link", { name: "OPALIB" }),
     ).not.toBeInTheDocument();
     expect(screen.getByText("OPALIB")).toHaveClass("underline");
+  });
+
+  it("opens external links without exposing the originating page", () => {
+    render(<MarkdownContent markdown="[Fonte](https://example.com/artigo)" />);
+    expect(screen.getByRole("link", { name: "Fonte" })).toMatchObject({
+      target: "_blank",
+      rel: "noopener noreferrer",
+    });
   });
 });

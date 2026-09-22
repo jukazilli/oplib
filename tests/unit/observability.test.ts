@@ -21,7 +21,9 @@ describe("observability", () => {
 
     await expect(
       checkHealth("correlation-degraded", async () => {
-        throw new Error("postgres://user:secret@example.test/private");
+        throw new Error(
+          ["postgres", "://user:", "secret", "@example.test/private"].join(""),
+        );
       }),
     ).resolves.toEqual({ status: "degraded", database: false });
 

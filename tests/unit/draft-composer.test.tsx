@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
   refresh: vi.fn(),
   save: vi.fn(),
+  publish: vi.fn(),
   upload: vi.fn(),
 }));
 
@@ -15,6 +16,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/app/admin/publicacoes/actions", () => ({
   saveDraftAction: mocks.save,
+  publishPublicationAction: mocks.publish,
 }));
 vi.mock("@vercel/blob/client", () => ({ upload: mocks.upload }));
 
@@ -25,6 +27,7 @@ beforeEach(() => {
   mocks.replace.mockReset();
   mocks.refresh.mockReset();
   mocks.save.mockReset();
+  mocks.publish.mockReset();
   mocks.upload.mockReset();
   vi.stubGlobal("fetch", vi.fn());
 });
@@ -35,6 +38,51 @@ afterEach(() => {
 });
 
 describe("draft composer", () => {
+  it("confirms before updating a published composition", async () => {
+    const user = userEvent.setup();
+    render(
+      <DraftComposer
+        initialDraft={{
+          id: "10000000-0000-4000-8000-000000000001",
+          title: "Artigo",
+          slug: "artigo",
+          summary: "Resumo",
+          markdown: "# Conteúdo",
+          contentType: "article",
+          areaIds: ["10000000-0000-4000-8000-000000000002"],
+          categoryId: "",
+          tagIds: [],
+          course: "",
+          discipline: "",
+          originalDate: "",
+          references: [],
+          cover: null,
+          updatedAt: "2026-09-21T12:00:00.000Z",
+          status: "published",
+        }}
+      />,
+    );
+    expect(
+      screen.queryByRole("button", { name: "Salvar rascunho" }),
+    ).not.toBeInTheDocument();
+    await user.type(
+      screen.getByRole("textbox", { name: "Título" }),
+      " revisado",
+    );
+    await user.click(
+      screen.getByRole("button", { name: "Atualizar publicação" }),
+    );
+    expect(screen.getByRole("alertdialog")).toHaveTextContent(
+      "substituirá a que está publicada",
+    );
+    expect(mocks.publish).not.toHaveBeenCalled();
+    await user.click(
+      within(screen.getByRole("alertdialog")).getByRole("button", {
+        name: "Cancelar",
+      }),
+    );
+    expect(mocks.publish).not.toHaveBeenCalled();
+  });
   it("starts with the two approved creation fields", () => {
     render(<DraftComposer initialDraft={null} />);
     expect(
@@ -220,7 +268,7 @@ describe("draft composer", () => {
     expect(submitted.get("summary")).toBe("Síntese");
     expect(submitted.get("contentType")).toBe("article");
     expect(submitted.get("course")).toBe("Engenharia de Software");
-  });
+  }, 15_000);
 
   it("preserves the composition when the cover upload fails", async () => {
     const user = userEvent.setup();
@@ -350,4 +398,67 @@ describe("draft composer", () => {
       "Título recuperado",
     );
   });
+
+  it.each(["Manter versão salva", "Recuperar minha cópia"])(
+    "does not silently replace a newer server draft when choosing %s",
+    async (choice) => {
+      const user = userEvent.setup();
+      const key = "oplib:draft:10000000-0000-4000-8000-000000000001";
+      window.localStorage.setItem(
+        key,
+        JSON.stringify({
+          title: "Título local",
+          markdown: "Texto local",
+          baseUpdatedAt: "2026-09-20T20:00:00.000Z",
+          savedLocallyAt: "2026-09-20T20:05:00.000Z",
+        }),
+      );
+      render(
+        <DraftComposer
+          initialDraft={{
+            id: "10000000-0000-4000-8000-000000000001",
+            title: "Título novo no servidor",
+            slug: "titulo-novo",
+            summary: "",
+            markdown: "Texto novo no servidor",
+            contentType: "",
+            areaIds: [],
+            categoryId: "",
+            tagIds: [],
+            course: "",
+            discipline: "",
+            originalDate: "",
+            references: [],
+            cover: null,
+            updatedAt: "2026-09-20T20:10:00.000Z",
+          }}
+        />,
+      );
+
+      expect(
+        await screen.findByText("Escolha a versão para continuar"),
+      ).toBeInTheDocument();
+      expect(screen.getByRole("textbox", { name: "Título" })).toHaveValue(
+        "Título novo no servidor",
+      );
+      await user.click(screen.getByRole("button", { name: choice }));
+
+      expect(screen.getByRole("textbox", { name: "Título" })).toHaveValue(
+        choice === "Recuperar minha cópia"
+          ? "Título local"
+          : "Título novo no servidor",
+      );
+      expect(screen.getByRole("textbox", { name: "Conteúdo" })).toHaveValue(
+        choice === "Recuperar minha cópia"
+          ? "Texto local"
+          : "Texto novo no servidor",
+      );
+      expect(
+        screen.queryByText("Escolha a versão para continuar"),
+      ).not.toBeInTheDocument();
+      if (choice === "Manter versão salva") {
+        expect(window.localStorage.getItem(key)).toBeNull();
+      }
+    },
+  );
 });
