@@ -9,6 +9,8 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - Não remover um teste porque passou numa entrega intermediária.
 - Todo defeito encontrado no aceite final volta ao item de origem, sem ampliar o escopo silenciosamente.
 
+A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/testing/UX-001_STATE_MATRIX.md`; este ledger contém o que deve ser repetido no ambiente indicado ou no gate final.
+
 ## PUB-004 — Publicar e atualizar
 
 - [ ] `Preview/final`: publicar um rascunho completo após confirmação.

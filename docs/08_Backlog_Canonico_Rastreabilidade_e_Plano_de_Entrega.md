@@ -840,7 +840,7 @@ Estado atual: transições condicionais auditadas, ação autorizada e desfazer 
 - **Testes:** `TEST-UX-001-01` matriz de estados; `-02` falhas injetadas.
 - **Evidência:** `EVID-UX-001-01` checklist por fluxo.
 
-Estado atual: degradação isolada da leitura, conflito de cópia local, recuperação do comentário público, saída segura do editor e estados compartilhados de carregamento/erro nas superfícies públicas e administrativas implementados e testados; as rotas mantêm contexto, anunciam progresso e oferecem retry seguro. Matriz transversal, queda de rede e aceite de navegador continuam abertos.
+Estado atual: matriz transversal de carregamento, vazio, sucesso, erro, retry, foco e preservação auditada em `docs/testing/UX-001_STATE_MATRIX.md`; estados públicos e administrativos implementados e testados localmente. Banco/sessão reais, rede controlada, tecnologia assistiva e aceite de navegador continuam abertos no ledger final.
 
 ### QUAL-001 — Acessibilidade e responsividade do MVP
 
