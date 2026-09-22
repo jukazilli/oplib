@@ -60,6 +60,8 @@ const components: Components = {
   ),
   td: ({ children }) => <td className="border px-3 py-2">{children}</td>,
   hr: () => <hr className="my-8 border-border" />,
+  img: ({ alt }) =>
+    alt ? <span className="text-muted-foreground">Imagem: {alt}</span> : null,
 };
 
 export function MarkdownContent({
@@ -81,6 +83,10 @@ export function MarkdownContent({
             linksEnabled ? (
               <a
                 href={href}
+                target={href?.startsWith("http") ? "_blank" : undefined}
+                rel={
+                  href?.startsWith("http") ? "noopener noreferrer" : undefined
+                }
                 className="font-semibold text-primary underline decoration-primary/40 underline-offset-4"
               >
                 {children}

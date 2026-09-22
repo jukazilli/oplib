@@ -42,3 +42,13 @@ Nenhuma credencial ou identidade foi registrada. As chaves Clerk continuam ausen
 - `TEST-AUTH-001-03`: aprovado por aceite humano;
 - `TEST-AUTH-001-04`: aprovado por teste unitário e smoke remoto;
 - AUTH-001: **FECHADA**.
+
+## Regressão de localização descoberta no Preview
+
+Em 22/09/2026, o Preview do PR #35 (commit `1a4ae86`) mostrou a moldura `Acesso administrativo` em português, mas os controles embutidos do Clerk em inglês (`Continue with Google`, `Email address or username`, `Continue`). O aceite anterior de login/logout não cobria a tradução completa da tela.
+
+O módulo `authenticationLocalization` passou a combinar o recurso oficial `ptBR` do Clerk com os três erros genéricos já aprovados. O teste unitário fixa `pt-BR`, rótulos básicos e a preservação da mensagem de erro. A verificação visual no novo Preview e o fluxo autenticado continuam necessários; esta seção não revoga a prova anterior de autorização, mas não declara a regressão visual encerrada antes do teste remoto.
+
+No Preview do PR draft #36, commit `24e5258`, o navegador confirmou em desktop e 390 px: `Continuar com Google`, `E-mail ou nome de usuário`, `Digite seu e-mail ou nome de usuário`, `Senha`, `ou` e `Continuar`. Não houve corte ou sobreposição no layout compacto. O rodapé obrigatório da instância Clerk de desenvolvimento ainda mostra `Secured by` e `Development mode`, e o nome acessível interno do provedor Google começa com `Sign in with Google`; esses trechos controlados pelo fornecedor não foram confundidos com copy autoral traduzida. O teste de erro, login e perfil autenticados continua pendente.
+
+Quality, CodeQL, política do repositório e Vercel passaram no PR #36. Suíte local: 51 arquivos, 217 testes; format, lint, typecheck, build e auditoria de dependências sem alertas aprovados.

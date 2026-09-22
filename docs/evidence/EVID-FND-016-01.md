@@ -6,23 +6,23 @@
 
 ## Promessa versus evidência
 
-| Item | Evidência observada | Status de auditoria |
-| --- | --- | --- |
-| FND-001 | governança, ruleset e validação do repositório | FECHADO |
-| FND-002 | versões fixadas, instalação reproduzível e build | FECHADO |
-| FND-003 | tokens, UI-base e ferramentas de teste | FECHADO |
-| FND-004 | schemas de configuração, gitignore e runbook | FECHADO |
-| FND-005 | Neon `aws-sa-east-1`, branches e conectividade comprovadas | FECHADO |
-| FND-006 | migration, constraints e schema check comprovados em Neon não produtivo | FECHADO |
-| FND-007 | Preview Vercel em `gru1` e ambientes segregados | FECHADO |
-| FND-008 | autenticação e allowlist de desenvolvimento; MFA produtivo pendente | PARCIAL PARA PRODUCTION |
-| FND-009 | Vercel Blob de Preview, upload autorizado e validação de arquivo | FECHADO |
-| FND-010 | CI, CodeQL, ruleset e falha bloqueante comprovados | FECHADO |
-| FND-011 | smoke e axe no Preview | FECHADO |
-| FND-012 | ensaio de release aprovado; rollback produtivo aguarda go-live | PARCIAL PARA PRODUCTION |
-| FND-013 | headers, payload e WAF Preview em log | FECHADO |
-| FND-014 | health Neon, logs saneados e drill sintético | FECHADO |
-| FND-015 | congelada por `OPS-002`; nenhum backup ou restore real | NÃO IMPLEMENTADO — EXCEÇÃO |
+| Item    | Evidência observada                                                     | Status de auditoria        |
+| ------- | ----------------------------------------------------------------------- | -------------------------- |
+| FND-001 | governança, ruleset e validação do repositório                          | FECHADO                    |
+| FND-002 | versões fixadas, instalação reproduzível e build                        | FECHADO                    |
+| FND-003 | tokens, UI-base e ferramentas de teste                                  | FECHADO                    |
+| FND-004 | schemas de configuração, gitignore e runbook                            | FECHADO                    |
+| FND-005 | Neon `aws-sa-east-1`, branches e conectividade comprovadas              | FECHADO                    |
+| FND-006 | migration, constraints e schema check comprovados em Neon não produtivo | FECHADO                    |
+| FND-007 | Preview Vercel em `gru1` e ambientes segregados                         | FECHADO                    |
+| FND-008 | autenticação e allowlist de desenvolvimento; MFA produtivo pendente     | PARCIAL PARA PRODUCTION    |
+| FND-009 | Vercel Blob de Preview, upload autorizado e validação de arquivo        | FECHADO                    |
+| FND-010 | CI, CodeQL, ruleset e falha bloqueante comprovados                      | FECHADO                    |
+| FND-011 | smoke e axe no Preview                                                  | FECHADO                    |
+| FND-012 | ensaio de release aprovado; rollback produtivo aguarda go-live          | PARCIAL PARA PRODUCTION    |
+| FND-013 | headers, payload e WAF Preview em log                                   | FECHADO                    |
+| FND-014 | health Neon, logs saneados e drill sintético                            | FECHADO                    |
+| FND-015 | congelada por `OPS-002`; nenhum backup ou restore real                  | NÃO IMPLEMENTADO — EXCEÇÃO |
 
 ## TEST-FND-016-01 — Aceite integrado
 

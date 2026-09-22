@@ -19,4 +19,15 @@ describe("markdown warnings", () => {
       markdownWarnings("## Título\n\n- item\n\n[site](https://example.com)"),
     ).toEqual([]);
   });
+
+  it("directs inline images to the approved cover flow", () => {
+    for (const markdown of [
+      "![Diagrama](https://example.com/image.png)",
+      "![Diagrama][imagem]\n\n[imagem]: https://example.com/image.png",
+    ]) {
+      expect(markdownWarnings(markdown)).toContain(
+        "Imagens no texto não são exibidas. Use a capa.",
+      );
+    }
+  });
 });

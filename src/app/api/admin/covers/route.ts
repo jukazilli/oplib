@@ -14,6 +14,8 @@ import {
 } from "@/modules/media/cover-policy";
 import { cleanupDetachedCover } from "@/modules/media/covers";
 
+const noStore = { "cache-control": "no-store" };
+
 export async function POST(request: Request) {
   try {
     const body = await readLimitedJson<HandleUploadBody>(request);
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(json);
+    return NextResponse.json(json, { headers: noStore });
   } catch (error) {
     const authorizationResponse = adminAuthorizationResponse(error);
     if (authorizationResponse) return authorizationResponse;
@@ -58,13 +60,13 @@ export async function POST(request: Request) {
     if (error instanceof PayloadTooLargeError) {
       return NextResponse.json(
         { error: "A requisição excede o limite permitido." },
-        { status: 413 },
+        { status: 413, headers: noStore },
       );
     }
 
     return NextResponse.json(
       { error: "Não foi possível enviar a capa." },
-      { status: 400 },
+      { status: 400, headers: noStore },
     );
   }
 }
@@ -78,17 +80,20 @@ export async function DELETE(request: Request) {
       !pathname ||
       !isManagedCoverPathname(env.BLOB_COVERS_PREFIX, pathname)
     ) {
-      return NextResponse.json({ error: "Capa inválida." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Capa inválida." },
+        { status: 400, headers: noStore },
+      );
     }
     await cleanupDetachedCover(pathname);
-    return NextResponse.json({ deleted: true });
+    return NextResponse.json({ deleted: true }, { headers: noStore });
   } catch (error) {
     const authorizationResponse = adminAuthorizationResponse(error);
     if (authorizationResponse) return authorizationResponse;
     if (error instanceof PayloadTooLargeError) {
       return NextResponse.json(
         { error: "A requisição excede o limite permitido." },
-        { status: 413 },
+        { status: 413, headers: noStore },
       );
     }
     if (
@@ -97,12 +102,12 @@ export async function DELETE(request: Request) {
     ) {
       return NextResponse.json(
         { error: "A capa ainda está em uso." },
-        { status: 409 },
+        { status: 409, headers: noStore },
       );
     }
     return NextResponse.json(
       { error: "Não foi possível remover a capa." },
-      { status: 400 },
+      { status: 400, headers: noStore },
     );
   }
 }

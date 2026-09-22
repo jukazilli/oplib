@@ -158,12 +158,8 @@
           "name": "audit_events_admin_identity_id_admin_identities_id_fk",
           "tableFrom": "audit_events",
           "tableTo": "admin_identities",
-          "columnsFrom": [
-            "admin_identity_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["admin_identity_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "cascade"
         }
@@ -382,12 +378,8 @@
           "name": "comments_post_id_posts_id_fk",
           "tableFrom": "comments",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -669,12 +661,8 @@
           "name": "likes_post_id_posts_id_fk",
           "tableFrom": "likes",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -724,12 +712,8 @@
           "name": "post_categories_post_id_posts_id_fk",
           "tableFrom": "post_categories",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -737,12 +721,8 @@
           "name": "post_categories_category_id_categories_id_fk",
           "tableFrom": "post_categories",
           "tableTo": "categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "cascade"
         }
@@ -750,10 +730,7 @@
       "compositePrimaryKeys": {
         "post_categories_post_id_category_id_pk": {
           "name": "post_categories_post_id_category_id_pk",
-          "columns": [
-            "post_id",
-            "category_id"
-          ]
+          "columns": ["post_id", "category_id"]
         }
       },
       "uniqueConstraints": {},
@@ -800,12 +777,8 @@
           "name": "post_knowledge_areas_post_id_posts_id_fk",
           "tableFrom": "post_knowledge_areas",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -813,12 +786,8 @@
           "name": "post_knowledge_areas_knowledge_area_id_knowledge_areas_id_fk",
           "tableFrom": "post_knowledge_areas",
           "tableTo": "knowledge_areas",
-          "columnsFrom": [
-            "knowledge_area_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["knowledge_area_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "cascade"
         }
@@ -826,10 +795,7 @@
       "compositePrimaryKeys": {
         "post_knowledge_areas_post_id_knowledge_area_id_pk": {
           "name": "post_knowledge_areas_post_id_knowledge_area_id_pk",
-          "columns": [
-            "post_id",
-            "knowledge_area_id"
-          ]
+          "columns": ["post_id", "knowledge_area_id"]
         }
       },
       "uniqueConstraints": {},
@@ -876,12 +842,8 @@
           "name": "post_tags_post_id_posts_id_fk",
           "tableFrom": "post_tags",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -889,12 +851,8 @@
           "name": "post_tags_tag_id_tags_id_fk",
           "tableFrom": "post_tags",
           "tableTo": "tags",
-          "columnsFrom": [
-            "tag_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["tag_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "cascade"
         }
@@ -902,10 +860,7 @@
       "compositePrimaryKeys": {
         "post_tags_post_id_tag_id_pk": {
           "name": "post_tags_post_id_tag_id_pk",
-          "columns": [
-            "post_id",
-            "tag_id"
-          ]
+          "columns": ["post_id", "tag_id"]
         }
       },
       "uniqueConstraints": {},
@@ -1127,12 +1082,8 @@
           "name": "posts_cover_asset_id_cover_assets_id_fk",
           "tableFrom": "posts",
           "tableTo": "cover_assets",
-          "columnsFrom": [
-            "cover_asset_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["cover_asset_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "cascade"
         }
@@ -1258,12 +1209,8 @@
           "name": "post_references_post_id_posts_id_fk",
           "tableFrom": "post_references",
           "tableTo": "posts",
-          "columnsFrom": [
-            "post_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["post_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -1371,10 +1318,7 @@
     "public.comment_status": {
       "name": "comment_status",
       "schema": "public",
-      "values": [
-        "visible",
-        "hidden"
-      ]
+      "values": ["visible", "hidden"]
     },
     "public.content_type": {
       "name": "content_type",
@@ -1391,19 +1335,12 @@
     "public.post_status": {
       "name": "post_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "published",
-        "withdrawn"
-      ]
+      "values": ["draft", "published", "withdrawn"]
     },
     "public.reference_kind": {
       "name": "reference_kind",
       "schema": "public",
-      "values": [
-        "bibliography",
-        "related_link"
-      ]
+      "values": ["bibliography", "related_link"]
     }
   },
   "schemas": {},

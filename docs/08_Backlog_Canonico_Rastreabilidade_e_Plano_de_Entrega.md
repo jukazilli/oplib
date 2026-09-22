@@ -552,7 +552,7 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 
 ### PUB-004 — Publicar e atualizar conteúdo público
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D05 §§15–16; D07 §§11 e 18.
 - **Objetivo:** tornar pública somente uma versão validada e confirmada.
 - **Descrição:** validação, confirmação, transação de status/data, atualização explícita e invalidação de cache.
@@ -562,9 +562,11 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 - **Testes:** `TEST-PUB-004-01` publicar; `-02` concorrência; `-03` atualizar/cache; `-04` falha transacional.
 - **Evidência:** `EVID-PUB-004-01` E2E e registros de auditoria saneados.
 
+Estado atual: validação e transação de publicação/atualização, confirmação no composer e testes unitários implementados na branch `feat/pub-004-publish-flow`. Faltam prova transacional real em Neon `preview`, verificação responsiva/autenticada, fechamento da evidência e alinhamento da URL pública com WEB-004; não liberar produção.
+
 ### PUB-005 — Retirar e republicar
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D05 §17; D07 §§11 e 18.
 - **Objetivo:** retirar conteúdo de forma reversível e imediata em origem e cache.
 - **Descrição:** transição para `withdrawn`, remoção de listagens/busca/sitemap e republicação controlada.
@@ -574,9 +576,11 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 - **Testes:** `TEST-PUB-005-01` retirar em todas as superfícies; `-02` cache; `-03` republicar.
 - **Evidência:** `EVID-PUB-005-01` E2E e inspeção de sitemap/cache.
 
+Estado atual: transições otimistas e transacionais de retirada/republicação, auditoria, invalidação pós-commit, confirmação e ações por estado implementadas em branch empilhada sobre PUB-004. Suíte local aprovada; faltam validação no Preview e comprovação nas superfícies públicas de WEB-001/004.
+
 ### PUB-006 — Definir destaque editorial
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §§8.1 e 9; D04 §14; D07 §9.1.
 - **Objetivo:** controlar a publicação principal e outros destaques sem ranking automático.
 - **Descrição:** ação administrativa para destacar/remover destaque em publicação pública.
@@ -585,6 +589,8 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 - **Riscos:** múltiplas publicações principais sem regra determinística.
 - **Testes:** `TEST-PUB-006-01` elegibilidade e ordenação; `-02` cache.
 - **Evidência:** `EVID-PUB-006-01` E2E admin/home.
+
+Estado atual: comando transacional e auditado, elegibilidade pública, ação administrativa e seleção determinística do principal/ demais destaques implementados. Suíte local aprovada; Preview e integração visual com WEB-002 pendentes.
 
 ### PUB-007 — Listar e localizar publicações na administração
 
@@ -630,7 +636,7 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 
 ### WEB-001 — Shell público responsivo
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D04 §13; D05 §3; PUX P-UX-001 a P-UX-005.
 - **Objetivo:** oferecer navegação simples entre Início, Publicações, Áreas, Pesquisa e Sobre.
 - **Descrição:** cabeçalho e rodapé editoriais; administração ausente; conteúdo domina a hierarquia.
@@ -640,9 +646,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-WEB-001-01` teclado; `-02` breakpoints; `-03` 200% zoom.
 - **Evidência:** `EVID-WEB-001-01` screenshots e axe.
 
+Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, localização e navegação responsiva implementados; suíte local aprovada. Axe, screenshots, breakpoints e zoom de 200% permanecem pendentes no Preview.
+
 ### WEB-002 — Página inicial editorial
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §8.1; D04 §14; D05 §4.
 - **Objetivo:** apresentar propósito, publicação principal, destaques, recentes e áreas.
 - **Descrição:** home sem rolagem infinita, com falhas isoladas por seção.
@@ -652,9 +660,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-WEB-002-01` dados/ordem; `-02` estados; `-03` falha parcial.
 - **Evidência:** `EVID-WEB-002-01` E2E e screenshots.
 
+Estado atual: home editorial, copy aprovada, destaque principal, demais destaques, recentes, pesquisa, áreas públicas e falhas isoladas implementados. Suíte local aprovada; Preview, axe, screenshots, breakpoints e zoom de 200% pendentes.
+
 ### WEB-003 — Acervo, pesquisa, filtros e paginação
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §§8.1–8.2; D05 §5; D07 §13; TL §15.
 - **Objetivo:** localizar publicações por texto e taxonomia sem serviço externo.
 - **Descrição:** busca PostgreSQL, filtros por área, tipo, categoria, tag e período, ordenação e paginação estável.
@@ -664,9 +674,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-WEB-003-01` combinações; `-02` URL/back-forward; `-03` sem resultado; `-04` desempenho.
 - **Evidência:** `EVID-WEB-003-01` E2E e plano de consulta quando aplicável.
 
+Estado atual: consulta PostgreSQL por texto e taxonomia, filtros persistentes na URL, Feed/Grade, total, ordem, paginação estável e estados de carregamento/vazio/erro implementados. Taxonomia é agregada sem N+1; validação e plano de consulta reais aguardam Preview.
+
 ### WEB-004 — Página de leitura da publicação
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §8.3; D04 §16; D05 §6.
 - **Objetivo:** oferecer leitura longa confortável em endereço permanente.
 - **Descrição:** área/tipo, título, resumo, autor/datas, capa opcional, Markdown, referências, tags, compartilhamento, interações e relacionados.
@@ -676,9 +688,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-WEB-004-01` renderização; `-02` acesso por status; `-03` responsive/axe.
 - **Evidência:** `EVID-WEB-004-01` E2E de leitura.
 
+Estado atual: consulta pública protegida por status, rota por slug, hierarquia editorial, Markdown seguro, capa opcional, referências e taxonomia implementados. Suíte local aprovada; dados reais, estados e responsividade aguardam Preview.
+
 ### WEB-005 — Compartilhar publicação
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §12; D05 §7.
 - **Objetivo:** compartilhar o endereço permanente sem login.
 - **Descrição:** Web Share API quando suportada e cópia de link como fallback.
@@ -687,6 +701,8 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Riscos:** compartilhar Preview ou URL transitória.
 - **Testes:** `TEST-WEB-005-01` share suportado; `-02` clipboard; `-03` falha.
 - **Evidência:** `EVID-WEB-005-01` E2E compatível.
+
+Estado atual: Web Share API, fallback por clipboard, confirmação, cancelamento neutro, erro recuperável e URL canônica implementados. Suíte local aprovada; dispositivos e navegadores reais permanecem pendentes no Preview/final.
 
 ### WEB-006 — Sobre e Política de Privacidade
 
@@ -714,7 +730,7 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 
 ### SEO-001 — Metadados, canonical e prévia social
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §12; TL §17.
 - **Objetivo:** tornar cada publicação identificável em busca e compartilhamento.
 - **Descrição:** Metadata API, título, descrição, canonical, Open Graph e capa/fallback.
@@ -724,9 +740,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-SEO-001-01` metadados por status/ambiente; `-02` social card.
 - **Evidência:** `EVID-SEO-001-01` HTML/metadados capturados.
 
+Estado atual: metadata global e por publicação, canonical, Open Graph, Twitter Card, capa/fallback social e política `noindex` por ambiente/status implementados. Suíte local aprovada; HTML de Preview, crawler e card renderizado permanecem pendentes.
+
 ### SEO-002 — Sitemap, robots e dados estruturados
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §12; D07 §17; TL §17.
 - **Objetivo:** expor descoberta técnica fiel ao conteúdo público.
 - **Descrição:** `sitemap.ts`, `robots.ts` e schema estruturado somente quando aplicável.
@@ -736,11 +754,13 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-SEO-002-01` sitemap por status; `-02` robots por ambiente; `-03` schema.
 - **Evidência:** `EVID-SEO-002-01` arquivos/validação.
 
+Estado atual: sitemap exclusivo de conteúdo publicado, robots por ambiente, invalidação editorial e Article JSON-LD fiel/seguro implementados. Suíte local aprovada; arquivos em Preview/Production e validadores externos permanecem pendentes.
+
 ## 11. Interações públicas e moderação
 
 ### LIKE-001 — Curtir uma vez por navegador
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
 - **Origem:** D02 §8.5; D05 §8; D07 §14; TL §12.
 - **Objetivo:** registrar curtida anônima, irreversível e consistente.
 - **Descrição:** identificador opaco em cookie seguro, hash com pepper, constraint única e resposta autoritativa.
@@ -750,9 +770,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-LIKE-001-01` primeira curtida; `-02` repetição; `-03` concorrência; `-04` erro; `-05` ausência de remoção.
 - **Evidência:** `EVID-LIKE-001-01` E2E e constraint.
 
+Estado atual: cookie opaco protegido, HMAC com pepper, persistência idempotente, contador autoritativo, recusa de origem cruzada e UI irreversível implementados. Suíte local aprovada; concorrência real, WAF e acessibilidade permanecem pendentes no Preview/final.
+
 ### COM-001 — Publicar e listar comentários
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
 - **Origem:** D02 §8.6; D05 §9; D07 §15; TL §12.
 - **Objetivo:** permitir comentário imediato sem conta e sem e-mail.
 - **Descrição:** nome opcional de 80 caracteres, “Anônimo” por padrão, texto simples de 1.500, aviso de privacidade e lista visível.
@@ -762,9 +784,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-COM-001-01` nome/anônimo; `-02` limites; `-03` payload malicioso; `-04` falha/retry; `-05` rate limit.
 - **Evidência:** `EVID-COM-001-01` E2E e segurança.
 
+Estado atual: leitura e publicação imediata implementadas com validação, proteção básica e testes locais. Banco real, WAF, axe e aceite de navegador permanecem no Preview/final; moderação será entregue em MOD-001–003.
+
 ### MOD-001 — Consultar comentários na administração
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
 - **Origem:** D02 §8.7; D04 §23; D05 §21.
 - **Objetivo:** localizar comentários visíveis e ocultos com a publicação de origem.
 - **Descrição:** lista moderável com estado, data, nome/Anônimo, trecho e vínculo ao post.
@@ -774,9 +798,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-MOD-001-01` listagem/filtros; `-02` XSS na admin.
 - **Evidência:** `EVID-MOD-001-01` E2E.
 
+Estado atual: lista autorizada, filtros, paginação e estados implementados com testes locais; banco real, axe e aceite de navegador pendentes.
+
 ### MOD-002 — Ocultar e restaurar comentário
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `planned`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
 - **Origem:** D02 §8.7; D05 §21; D07 §§11 e 15.
 - **Objetivo:** retirar rapidamente conteúdo da área pública sem destruí-lo.
 - **Descrição:** ocultar sem confirmação pesada, oferecer desfazer temporário e restaurar mantendo autoria/data.
@@ -785,6 +811,8 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Riscos:** cache exibir comentário oculto ou ação concorrente produzir estado incorreto.
 - **Testes:** `TEST-MOD-002-01` ocultar; `-02` desfazer/restaurar; `-03` cache/concorrência.
 - **Evidência:** `EVID-MOD-002-01` E2E público/admin.
+
+Estado atual: transições condicionais auditadas, ação autorizada e desfazer temporário implementados; concorrência e experiência com banco/navegador reais pendem no Preview/final.
 
 ### MOD-003 — Excluir comentário permanentemente
 
@@ -802,7 +830,7 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 
 ### UX-001 — Estados, feedback e recuperação
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** PUX P-UX-008 a P-UX-011 e P-UX-016; D05 §§22–25.
 - **Objetivo:** garantir que ações e interrupções permaneçam compreensíveis.
 - **Descrição:** revisar loading, vazio, sucesso, erro, retry, foco e preservação de entrada em todas as superfícies.
@@ -811,6 +839,8 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Riscos:** tratamento inconsistente ou perda silenciosa de dados.
 - **Testes:** `TEST-UX-001-01` matriz de estados; `-02` falhas injetadas.
 - **Evidência:** `EVID-UX-001-01` checklist por fluxo.
+
+Estado atual: degradação isolada de curtidas e comentários na página de leitura implementada e testada; matriz transversal, edição com mudanças pendentes e aceite de navegador continuam abertos.
 
 ### QUAL-001 — Acessibilidade e responsividade do MVP
 
@@ -826,7 +856,7 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 
 ### QUAL-002 — Desempenho e degradação segura
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D03 §9; D06 §17; D07 §§5, 18 e 20.
 - **Objetivo:** manter leitura rápida e disponível quando interações ou mídia falharem.
 - **Descrição:** validar cache editorial, imagens responsivas, tamanho do cliente e falhas isoladas.
@@ -836,9 +866,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-QUAL-002-01` falhas simuladas; `-02` Lighthouse/medição; `-03` bundle.
 - **Evidência:** `EVID-QUAL-002-01` relatório de desempenho e degradação.
 
+Estado atual: falhas de leitura das interações não derrubam mais o artigo; cache, bundle, Core Web Vitals e demais falhas isoladas ainda exigem medição.
+
 ### SEC-001 — Regressão de segurança do MVP
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `planned`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
 - **Origem:** D02 §11; D06 §§14–15 e 18.4; D07 §24; TL §16; INF §19.
 - **Objetivo:** provar os controles críticos antes de produção.
 - **Descrição:** suíte de autorização negativa, XSS, SQL injection, CSRF, upload, rate limit, payload e exposição de segredo.
@@ -847,6 +879,8 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Riscos:** teste superficial ou regra de proteção quebrar fluxo legítimo.
 - **Testes:** `TEST-SEC-001-01` matriz OWASP aplicável; `-02` auth; `-03` Markdown/comentário; `-04` upload; `-05` scanning.
 - **Evidência:** `EVID-SEC-001-01` relatório saneado e exceções aprovadas.
+
+Estado atual: corpus local cobre proveniência, payload, autorização administrativa negativa, exposição de segredos, upload, conteúdo não confiável, consultas parametrizadas e rate limit; a remoção da árvore transitiva de tema deixou a auditoria de produção sem alertas conhecidos. Execução remota, Preview e WAF continuam pendentes.
 
 ### CNT-001 — Preparar conteúdo inaugural
 

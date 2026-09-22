@@ -75,4 +75,16 @@ describe("administrative authentication UI", () => {
       form_password_incorrect: authenticationErrorMessage,
     });
   });
+
+  it("localizes Clerk controls to Brazilian Portuguese", () => {
+    expect(authenticationLocalization.signIn?.start?.title).toBe("Entrar");
+    expect(authenticationLocalization.formFieldLabel__emailAddress).toBe(
+      "Seu e-mail",
+    );
+    expect(authenticationLocalization.formButtonPrimary).toBe("Continuar");
+    expect(authenticationLocalization.socialButtonsBlockButton).toBe(
+      "Continuar com {{provider|titleize}}",
+    );
+    expect(authenticationLocalization.locale).toBe("pt-BR");
+  });
 });

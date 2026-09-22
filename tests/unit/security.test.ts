@@ -4,6 +4,7 @@ import { securityHeaders } from "@/lib/security/headers";
 import {
   MAX_JSON_BODY_BYTES,
   PayloadTooLargeError,
+  isSameOriginMutation,
   readLimitedJson,
 } from "@/lib/security/request";
 
@@ -57,4 +58,24 @@ describe("security baseline", () => {
       PayloadTooLargeError,
     );
   });
+
+  it.each([
+    [{ origin: "https://oplib.test", "sec-fetch-site": "same-origin" }, true],
+    [{ "sec-fetch-site": "cross-site" }, false],
+    [{ "sec-fetch-site": "same-site" }, false],
+    [{ origin: "https://evil.test", "sec-fetch-site": "same-origin" }, false],
+    [{ referer: "https://evil.test/page" }, false],
+    [{ referer: "invalid-url" }, false],
+    [{ referer: "https://oplib.test/page" }, true],
+    [{}, true],
+  ] as const)(
+    "checks public mutation provenance for %j",
+    (headers, allowed) => {
+      const request = new Request("https://oplib.test/api", {
+        method: "POST",
+        headers,
+      });
+      expect(isSameOriginMutation(request)).toBe(allowed);
+    },
+  );
 });

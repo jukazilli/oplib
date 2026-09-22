@@ -2,6 +2,18 @@ import { z } from "zod";
 
 export const draftIdSchema = z.string().uuid();
 
+export const publicationStatusActionSchema = z.object({
+  id: draftIdSchema,
+  version: z.iso.datetime(),
+  intent: z.enum(["withdraw", "republish"]),
+});
+
+export const publicationFeatureActionSchema = z.object({
+  id: draftIdSchema,
+  version: z.iso.datetime(),
+  featured: z.boolean(),
+});
+
 export const contentTypeValues = [
   "academic_work",
   "article",
@@ -63,6 +75,38 @@ export const draftInputSchema = z.object({
 
 export type DraftInput = z.infer<typeof draftInputSchema>;
 
+export const publishInputSchema = draftInputSchema.superRefine(
+  (value, context) => {
+    const required = [
+      ["title", value.title, "Informe o título."],
+      ["summary", value.summary, "Informe o resumo."],
+      ["markdown", value.markdown, "Escreva o conteúdo."],
+    ] as const;
+    for (const [field, text, message] of required) {
+      if (!text.trim())
+        context.addIssue({ code: "custom", path: [field], message });
+    }
+    if (!value.id || !value.version)
+      context.addIssue({
+        code: "custom",
+        path: ["id"],
+        message: "Salve o rascunho antes de publicar.",
+      });
+    if (!value.contentType)
+      context.addIssue({
+        code: "custom",
+        path: ["contentType"],
+        message: "Escolha o tipo de conteúdo.",
+      });
+    if (!value.areaIds.length)
+      context.addIssue({
+        code: "custom",
+        path: ["areaIds"],
+        message: "Escolha pelo menos uma área.",
+      });
+  },
+);
+
 export function parseDraftInput(formData: FormData) {
   let cover: unknown = null;
   let references: unknown = [];
@@ -94,4 +138,9 @@ export function parseDraftInput(formData: FormData) {
     references,
     cover,
   });
+}
+
+export function parsePublishInput(formData: FormData) {
+  const draft = parseDraftInput(formData);
+  return draft.success ? publishInputSchema.safeParse(draft.data) : draft;
 }
