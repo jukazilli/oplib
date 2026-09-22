@@ -18,7 +18,8 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - Erros são anunciados como `alert`; a confirmação usa `status`, sem depender apenas de cor ou substituir o conteúdo digitado antes da confirmação do servidor.
 - Mensagens controladas retornadas pela API continuam visíveis, mas exceções técnicas de rede não são expostas. A falha inesperada usa a mensagem pública aprovada e preserva nome e comentário para retry.
 - `tests/unit/comments-section.test.tsx`: quatro testes aprovados, incluindo sucesso confirmado, vazio, falha, preservação, foco e retry bem-sucedido.
-- Regressão completa: 53 arquivos e 221 testes aprovados; lint e typecheck aprovados. Build e Preview ainda serão registrados neste corte.
+- Regressão completa: 53 arquivos e 221 testes, lint, typecheck e build aprovados.
+- PR draft #39, commit `e5f4cc5`: Vercel aprovado; workflow `E2E Preview` `35738760614` executou nove testes públicos em Chromium, todos aprovados na primeira passagem em 15,5 segundos, sem retry ou flaky. O Preview não tinha publicação representativa, portanto essa execução prova ausência de regressão pública geral, mas não exercita o formulário de comentário real.
 
 ## Prova incremental: conflito entre cópia local e servidor
 
