@@ -4,6 +4,7 @@
 - [x] Corrigir overflow do acervo em 320 px e preservar nome acessível da pesquisa compacta.
 - [x] Corrigir semântica e anúncio do loading do acervo.
 - [x] Automatizar o gate público no workflow E2E com bypass protegido do Vercel.
+- [ ] Confirmar no Preview tablet, desktop, skip link por teclado e preferência por movimento reduzido com o E2E ampliado.
 - [ ] Repetir com publicações, paginação, comentários e conteúdo editorial representativo.
 - [ ] Auditar administração autenticada, incluindo editor, taxonomia e moderação.
 - [ ] Executar tablet, desktop, zoom de 200%, movimento reduzido, teclado e leitor de tela.

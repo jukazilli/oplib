@@ -76,6 +76,65 @@ test("public discovery routes remain accessible and fit a 320px viewport", async
   }
 });
 
+test("public discovery routes fit tablet and desktop viewports", async ({
+  page,
+}) => {
+  for (const viewport of [
+    { width: 768, height: 1024 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    for (const pathname of ["/", "/publicacoes", "/areas"]) {
+      await page.goto(pathname);
+      await expect
+        .poll(() =>
+          page.evaluate(
+            () => document.documentElement.scrollWidth <= window.innerWidth,
+          ),
+        )
+        .toBe(true);
+    }
+  }
+});
+
+test("public shell exposes a working keyboard skip link", async ({ page }) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+
+  const skipLink = page.getByRole("link", { name: "Ir para o conteúdo" });
+  await expect(skipLink).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main#conteudo")).toBeFocused();
+});
+
+test("public UI respects reduced-motion preference", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+
+  const motion = await page.evaluate(() => {
+    const probe = document.createElement("div");
+    probe.style.animation = "pulse 2s infinite";
+    probe.style.transition = "opacity 2s";
+    document.body.append(probe);
+    const style = getComputedStyle(probe);
+    const result = {
+      reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
+      animationDuration: style.animationDuration,
+      animationIterationCount: style.animationIterationCount,
+      transitionDuration: style.transitionDuration,
+    };
+    probe.remove();
+    return result;
+  });
+
+  expect(motion).toEqual({
+    reduced: true,
+    animationDuration: "0.01ms",
+    animationIterationCount: "1",
+    transitionDuration: "0.01ms",
+  });
+});
+
 test("health endpoint reports a safe status", async ({ request }) => {
   const response = await request.get("/api/health");
 
