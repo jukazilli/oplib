@@ -62,3 +62,4 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - A Home conserva suas degradações parciais próprias, pois uma seção indisponível não deve derrubar as demais; `/publicacoes` conserva seu boundary específico.
 - `tests/unit/public-error.test.tsx` prova foco, mensagem segura e retry; `tests/unit/areas-page.test.tsx` preserva sucesso e vazio. Falha real e recuperação no Preview permanecem no roteiro final.
 - Regressão do corte: 56 arquivos e 225 testes, lint, typecheck e build aprovados; o build reconheceu o boundary público e todas as rotas protegidas.
+- PR draft #43, commit `5a8cea8`: deploy Vercel aprovado; workflow `E2E Preview` `35763336627` executou nove testes públicos em 14,5 segundos, todos aprovados na primeira passagem, sem retry ou flaky. A execução comprova ausência de regressão nas rotas disponíveis; falha deliberada e recuperação continuam no roteiro final.
