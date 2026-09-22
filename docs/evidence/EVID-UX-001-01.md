@@ -63,3 +63,11 @@ UX-001 permanece aberto para matriz completa de estados, edição com alteraçõ
 - `tests/unit/public-error.test.tsx` prova foco, mensagem segura e retry; `tests/unit/areas-page.test.tsx` preserva sucesso e vazio. Falha real e recuperação no Preview permanecem no roteiro final.
 - Regressão do corte: 56 arquivos e 225 testes, lint, typecheck e build aprovados; o build reconheceu o boundary público e todas as rotas protegidas.
 - PR draft #43, commit `5a8cea8`: deploy Vercel aprovado; workflow `E2E Preview` `35763336627` executou nove testes públicos em 14,5 segundos, todos aprovados na primeira passagem, sem retry ou flaky. A execução comprova ausência de regressão nas rotas disponíveis; falha deliberada e recuperação continuam no roteiro final.
+
+## Prova incremental: carregamento público
+
+- `src/app/(public)/loading.tsx` oferece fallback instantâneo para rotas públicas sem carregamento próprio, especialmente Áreas e leitura individual, mantendo o cabeçalho e o rodapé compartilhados.
+- A Home conserva Suspense granular para não esconder seções independentes; `/publicacoes` conserva seu loading específico do acervo.
+- A região anuncia `Carregando conteúdo` uma vez como `status`; três grupos de skeleton são decorativos e ficam fora da árvore acessível.
+- `tests/unit/public-loading.test.tsx` prova o anúncio e a ocultação dos placeholders. A transição real em rede lenta permanece no roteiro final.
+- Regressão do corte: 57 arquivos e 226 testes, lint, typecheck e build aprovados.

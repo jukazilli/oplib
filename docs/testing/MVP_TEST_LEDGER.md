@@ -190,6 +190,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: provocar isoladamente falhas de destaque, recentes e áreas na Home; somente a seção afetada degrada, as demais continuam disponíveis e a falha não vira sucesso ou conteúdo vazio falso.
 - [ ] `Final`: repetir recuperação pública por teclado e leitor de tela em celular e desktop, confirmando anúncio único, foco visível e retorno do conteúdo após restabelecer a dependência.
 
+## UX-001 — Carregamento público
+
+- [ ] `Automatizado/Preview`: atrasar Áreas e uma leitura individual; cabeçalho e rodapé permanecem disponíveis, `Carregando conteúdo` é anunciado uma vez e os placeholders não entram na árvore acessível.
+- [ ] `Automatizado/Preview`: confirmar que Home continua carregando seções de forma independente e que o acervo mantém seu skeleton específico, sem dois anúncios simultâneos.
+- [ ] `Final`: navegar em rede lenta com teclado e leitor de tela no celular e desktop, confirmando ausência de salto de foco, anúncio repetido ou conteúdo enganoso.
+
 ## SEC-001 — Proveniência das mutações públicas
 
 - [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.
