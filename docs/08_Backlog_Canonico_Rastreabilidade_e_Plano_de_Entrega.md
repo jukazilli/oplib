@@ -562,7 +562,7 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 - **Testes:** `TEST-PUB-004-01` publicar; `-02` concorrência; `-03` atualizar/cache; `-04` falha transacional.
 - **Evidência:** `EVID-PUB-004-01` E2E e registros de auditoria saneados.
 
-Estado atual: validação e transação de publicação/atualização, confirmação no composer e testes unitários implementados na branch `feat/pub-004-publish-flow`. Faltam prova transacional real em Neon `preview`, verificação responsiva/autenticada, fechamento da evidência e alinhamento da URL pública com WEB-004; não liberar produção.
+Estado atual: validação, transação, confirmação e rota pública implementadas. O falso conflito causado por microssegundos do PostgreSQL foi corrigido para os rascunhos existentes e comprovado por consulta `READ ONLY`; suíte local e smoke remoto estão verdes. Faltam publicar/atualizar em sessão autenticada, provar concorrência/rollback e fechar a evidência; não liberar produção.
 
 ### PUB-005 — Retirar e republicar
 
@@ -868,7 +868,7 @@ Estado atual: Início, Publicações e Áreas aprovados no Preview em Chromium a
 - **Testes:** `TEST-QUAL-002-01` falhas simuladas; `-02` Lighthouse/medição; `-03` bundle.
 - **Evidência:** `EVID-QUAL-002-01` relatório de desempenho e degradação.
 
-Estado atual: falhas de leitura das interações não derrubam mais o artigo; cache, bundle, Core Web Vitals e demais falhas isoladas ainda exigem medição.
+Estado atual: falhas isoladas das interações preservam o artigo; o runtime Clerk foi retirado das rotas públicas e o streaming passou a entregar o shell antes dos dados. A baseline aceita no Preview ficou em 96/95/94 para Início/Áreas/Publicações, LCP 2,43/2,58/2,75 s e CLS 0 nas nove medições. Conteúdo representativo, falha real de mídia e plano da consulta crítica continuam pendentes.
 
 ### SEC-001 — Regressão de segurança do MVP
 
@@ -882,7 +882,7 @@ Estado atual: falhas de leitura das interações não derrubam mais o artigo; ca
 - **Testes:** `TEST-SEC-001-01` matriz OWASP aplicável; `-02` auth; `-03` Markdown/comentário; `-04` upload; `-05` scanning.
 - **Evidência:** `EVID-SEC-001-01` relatório saneado e exceções aprovadas.
 
-Estado atual: corpus local cobre proveniência, payload, autorização administrativa negativa, exposição de segredos, upload, conteúdo não confiável, consultas parametrizadas e rate limit; a remoção da árvore transitiva de tema deixou a auditoria de produção sem alertas conhecidos. Execução remota, Preview e WAF continuam pendentes.
+Estado atual: corpus local cobre proveniência, payload, autorização administrativa negativa, exposição de segredos, upload, conteúdo não confiável, consultas parametrizadas e rate limit; a auditoria de produção ficou sem alertas conhecidos. O Preview aprovou o corpus negativo de origem/mídia/JSON e o scanner remoto. A leitura saneada do Firewall está automatizada, mas configuração ativa, draft e limites distribuídos ainda dependem do gate protegido em `main`.
 
 ### CNT-001 — Preparar conteúdo inaugural
 
