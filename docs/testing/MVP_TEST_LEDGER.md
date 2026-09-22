@@ -184,6 +184,12 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 - [ ] `Automatizado/Preview`: atrasar a leitura de Visão geral, Publicações, Taxonomia e Comentários; o shell permanece interativo, `Carregando área administrativa` é anunciado uma vez e os placeholders não entram na árvore acessível.
 - [ ] `Final`: navegar entre as quatro áreas em rede lenta, com teclado e leitor de tela, confirmando que não há salto de foco, anúncio duplicado ou conteúdo falso durante a espera.
 
+## UX-001 — Erro público recuperável
+
+- [ ] `Automatizado/Preview`: provocar falha total em Áreas e na leitura individual; o shell e a URL permanecem, o título seguro recebe foco, nenhum detalhe técnico aparece e `Tentar novamente` refaz o segmento atual.
+- [ ] `Automatizado/Preview`: provocar isoladamente falhas de destaque, recentes e áreas na Home; somente a seção afetada degrada, as demais continuam disponíveis e a falha não vira sucesso ou conteúdo vazio falso.
+- [ ] `Final`: repetir recuperação pública por teclado e leitor de tela em celular e desktop, confirmando anúncio único, foco visível e retorno do conteúdo após restabelecer a dependência.
+
 ## SEC-001 — Proveniência das mutações públicas
 
 - [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.
