@@ -14,6 +14,7 @@
 - `revalidatePath` roda somente após sucesso e cobre administração, lista pública e slug novo/anterior.
 - Validação atual: 59 arquivos e 234 testes aprovados, inclusive retomada do rascunho salvo, falha de cache após commit e a regressão da janela de versão.
 - `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm format:check` e `git diff --check`: aprovados após o corte local.
+- O Preview do commit `42285d4` ficou verde. A execução remota [`35778154721`](https://github.com/jukazilli/oplib/actions/runs/35778154721) aprovou os 11 testes E2E em 15,4 s e as 9 medições Lighthouse; ela comprova ausência de regressão pública, mas não executa publicação autenticada nem substitui o aceite abaixo.
 
 ## Pendências de aceite
 
