@@ -39,6 +39,7 @@ Este documento preserva tudo o que deverá ser validado na rodada final do MVP. 
 
 - [ ] `Preview/final`: abrir `/sign-in` desautenticado; rótulos, ações, ajuda e erros do Clerk devem estar em português do Brasil, preservando a mensagem genérica para identidade/senha incorretas.
 - [ ] `Preview/final`: comparar desktop e celular após a localização; conferir botão, campo, foco, contraste, recuperação de sessão e ausência de cadastro público.
+- [ ] `Final`: confirmar com leitor de tela o nome acessível do provedor Google; a renderização de Preview ainda acrescenta `Sign in with Google` antes do texto traduzido. Verificar se o SDK/configuração permite correção suportada sem substituir o componente de autenticação.
 
 ## WEB-004 — Página pública de leitura
 

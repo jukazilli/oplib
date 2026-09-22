@@ -98,3 +98,4 @@ Estado: `in_progress`.
 - O navegador mostrou `404` nos prefetched destinos `/areas` e `/sobre`. `/sobre` pertence a WEB-006 e depende de DEC-002; `/areas` consta no contrato do shell WEB-001, mas ainda não há rota nem slice próprio. Esses destinos não podem ser tratados como navegação aprovada no gate final.
 - A tela Clerk exibiu controles em inglês apesar da moldura em português. A correção está no corte AUTH-001 de localização, com prova local e nova validação remota pendente.
 - Não foram executados corpus malicioso contra PostgreSQL, teste autenticado nem WAF; o health check não prova esses itens.
+- A localização de controles autorais da entrada foi corrigida e observada no Preview do PR #36; isso não altera os controles de segurança nem encerra o corpus SEC-001.
