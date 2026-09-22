@@ -38,6 +38,8 @@ Estado: `in_progress`.
 - Prova local: dois arquivos direcionados, sete testes; suíte completa com 57 arquivos e 228 testes; lint, typecheck e build aprovados. Pendente: medir o novo Preview e confirmar redução do atraso de renderização sem regressão de streaming.
 - O run [`35770571883`](https://github.com/jukazilli/oplib/actions/runs/35770571883) confirmou LCP de 2,58 s e nota 95 em Áreas, contra 3,45 s e 89 antes. Publicações caiu de 3,45 para 2,65 s, mas os três relatórios registraram CLS 0,152 causado pelo rodapé deslocado quando o fallback de 192 px foi substituído pelo formulário e estado vazio.
 - Como desempenho não pode ser comprado com instabilidade visual, esse estado foi rejeitado. O fallback de Publicações agora replica a grade dos filtros, barra de resultados e reserva de conteúdo; a próxima execução deve demonstrar CLS ≤ 0,1 mantendo a redução do LCP.
+- A execução aceita [`35772383744`](https://github.com/jukazilli/oplib/actions/runs/35772383744), commit `745b429`, aprovou novamente os nove testes E2E. As nove medições tiveram CLS 0; Publicações atingiu nota 94, LCP 2,75 s e `elementRenderDelay` mediano de 558 ms.
+- Na mesma execução, Início atingiu 96/LCP 2,43 s e Áreas 95/LCP 2,58 s. A reserva estrutural eliminou o deslocamento sem desfazer o ganho do streaming. Os relatórios permaneceram saneados e o artefato temporário contém nove JSON mais o resumo.
 
 ## Ainda não comprovado
 

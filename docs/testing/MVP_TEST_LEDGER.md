@@ -177,6 +177,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Preview`: atrasar banco/taxonomia em Áreas e Publicações; título e introdução devem aparecer antes dos resultados, com um único anúncio de carregamento, sem conteúdo falso, salto de foco ou duplicação do shell.
 - [ ] `CI/Preview`: comparar LCP e `elementRenderDelay` antes/depois do shell síncrono; confirmar que o elemento LCP continua sendo texto estático e que nenhuma imagem ou fonte virou nova regressão.
 - [ ] `CI/Preview`: durante o streaming de Publicações, confirmar CLS ≤ 0,1 e ausência de deslocamento do rodapé quando filtros, resultados ou estado vazio substituírem o fallback; repetir em viewport móvel e amplo.
+- [ ] `Final`: repetir o streaming de Publicações com resultados reais, filtros longos e paginação; a reserva deve continuar sem CLS perceptível e sem deixar espaço vazio excessivo após a resolução.
 - [ ] `Preview/final`: após restringir o provedor, repetir entrada, sessão expirada, perfil e logout; localização, tema, redirecionamento e proteção administrativa devem permanecer iguais.
 - [ ] `Preview`: medir a consulta crítica do acervo com combinações representativas e registrar plano quando houver regressão evidente.
 - [ ] `Final`: repetir em rede/dispositivo representativos e confrontar a medição sintética com dados de campo disponíveis; nenhuma nota isolada aprova o desempenho do MVP.
