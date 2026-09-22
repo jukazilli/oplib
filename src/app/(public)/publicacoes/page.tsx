@@ -338,14 +338,29 @@ export async function PublicationsContent({
   );
 }
 
-function PublicationsFallback() {
+export function PublicationsFallback() {
   return (
     <div className="mt-8" role="status" aria-live="polite">
       <span className="sr-only">Carregando publicações</span>
-      <div
-        className="h-48 animate-pulse rounded-card bg-muted"
-        aria-hidden="true"
-      />
+      <div className="animate-pulse" aria-hidden="true">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 rounded-card border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="h-12 rounded-control bg-muted sm:col-span-2 lg:col-span-4" />
+          {Array.from({ length: 6 }, (_, index) => (
+            <div className="grid gap-1" key={index}>
+              <div className="h-4 w-20 rounded bg-muted" />
+              <div className="h-11 rounded-control bg-muted" />
+            </div>
+          ))}
+          <div className="flex min-h-11 items-end sm:col-span-2">
+            <div className="h-11 w-28 rounded-control bg-muted" />
+          </div>
+        </div>
+        <div className="mt-8 flex min-h-14 items-center justify-between gap-4 border-b pb-4">
+          <div className="h-4 w-24 rounded bg-muted" />
+          <div className="h-10 w-32 rounded-control bg-muted" />
+        </div>
+        <div className="h-64" />
+      </div>
     </div>
   );
 }

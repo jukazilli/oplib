@@ -11,6 +11,7 @@ vi.mock("@/modules/taxonomy/repository", () => ({
 
 import {
   PublicationsContent,
+  PublicationsFallback,
   PublicationsShell,
 } from "@/app/(public)/publicacoes/page";
 
@@ -126,5 +127,14 @@ describe("publications page", () => {
       screen.getByRole("heading", { level: 1, name: "Publicações" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Conteúdo posterior")).toBeInTheDocument();
+  });
+
+  it("reserves the result layout while streamed data is pending", () => {
+    const { container } = render(<PublicationsFallback />);
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Carregando publicações",
+    );
+    expect(container.querySelector(".h-64")).toBeInTheDocument();
   });
 });

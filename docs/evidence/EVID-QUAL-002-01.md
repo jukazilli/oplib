@@ -36,6 +36,8 @@ Estado: `in_progress`.
 - Áreas e Publicações aguardavam suas consultas antes de devolver qualquer parte da página, embora título e introdução não dependessem dos dados. O shell dessas duas rotas passou a ser síncrono; lista de áreas e pesquisa/taxonomia são transmitidas depois por `Suspense`.
 - Os fallbacks anunciam uma única espera por rota e mantêm os placeholders fora da árvore acessível. Estados vazio, sucesso e erro continuam sob os mesmos componentes e boundaries.
 - Prova local: dois arquivos direcionados, sete testes; suíte completa com 57 arquivos e 228 testes; lint, typecheck e build aprovados. Pendente: medir o novo Preview e confirmar redução do atraso de renderização sem regressão de streaming.
+- O run [`35770571883`](https://github.com/jukazilli/oplib/actions/runs/35770571883) confirmou LCP de 2,58 s e nota 95 em Áreas, contra 3,45 s e 89 antes. Publicações caiu de 3,45 para 2,65 s, mas os três relatórios registraram CLS 0,152 causado pelo rodapé deslocado quando o fallback de 192 px foi substituído pelo formulário e estado vazio.
+- Como desempenho não pode ser comprado com instabilidade visual, esse estado foi rejeitado. O fallback de Publicações agora replica a grade dos filtros, barra de resultados e reserva de conteúdo; a próxima execução deve demonstrar CLS ≤ 0,1 mantendo a redução do LCP.
 
 ## Ainda não comprovado
 
