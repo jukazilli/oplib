@@ -26,7 +26,8 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Preview/final`: repetir o envio idêntico e confirmar sucesso idempotente.
 - [ ] `Preview/final`: alterar a mesma publicação em duas sessões e confirmar conflito somente para conteúdos diferentes.
 - [ ] `Preview/final`: atualizar conteúdo público e confirmar que a versão anterior permanece até o commit.
-- [ ] `Preview`: comprovar auditoria, rollback transacional e invalidação de cache.
+- [x] `Preview`: comprovar auditoria e rollback transacional no Neon com dados sintéticos e limpeza sem resíduos. `pnpm db:verify:publishing-preview`.
+- [ ] `Preview`: correlacionar o fluxo autenticado com invalidação da administração, acervo, página pública e slug anterior.
 - [ ] `Final`: repetir o fluxo em desktop e celular, incluindo duplo clique e falha recuperável.
 
 ## PUB-005 — Retirar e republicar

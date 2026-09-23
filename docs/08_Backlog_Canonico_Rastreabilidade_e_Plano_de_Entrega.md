@@ -562,7 +562,7 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 - **Testes:** `TEST-PUB-004-01` publicar; `-02` concorrência; `-03` atualizar/cache; `-04` falha transacional.
 - **Evidência:** `EVID-PUB-004-01` E2E e registros de auditoria saneados.
 
-Estado atual: validação, transação, confirmação e rota pública implementadas. O falso conflito causado por microssegundos do PostgreSQL foi corrigido para os rascunhos existentes e comprovado por consulta `READ ONLY`; suíte local e smoke remoto estão verdes. Faltam publicar/atualizar em sessão autenticada, provar concorrência/rollback e fechar a evidência; não liberar produção.
+Estado atual: validação, transação, confirmação e rota pública implementadas. O falso conflito causado por microssegundos foi corrigido; publicação real e leitura pública foram observadas. Um drill sintético no Neon Preview comprovou publicação + auditoria atômicas, rejeição de escrita obsoleta, rollback após falha e zero resíduos. Falta exercitar atualização, duplo envio, erro recuperável e responsividade em sessão autenticada antes de fechar a evidência; não liberar produção.
 
 ### PUB-005 — Retirar e republicar
 
