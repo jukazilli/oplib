@@ -170,9 +170,9 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 
 ## QUAL-002 — Desempenho do Preview
 
-- [ ] `CI/Preview`: executar o workflow `E2E Preview` e confirmar três medições móveis para Início, Publicações e Áreas, com resumo de mediana por rota.
-- [ ] `CI`: baixar o artefato e confirmar que os JSON não contêm `extraHeaders`, segredo de bypass, credenciais, conteúdo privado ou relatório HTML.
-- [ ] `Preview`: registrar FCP, LCP, TBT, CLS, Speed Index, nota de performance e bytes transferidos com conteúdo editorial representativo; investigar todo aviso antes de promover limiares a gate.
+- [x] `CI/Preview`: executar o workflow `E2E Preview` e confirmar três medições móveis para Início, Publicações e Áreas, com resumo de mediana por rota. Run `35858970051`: 96/96/95, LCP 2,572/2,321/2,718 s e CLS 0.
+- [x] `CI`: baixar o artefato e confirmar que os JSON não contêm `extraHeaders`, segredo de bypass, credenciais, conteúdo privado ou relatório HTML. Artefato `10749310268`: nove JSON e um resumo, zero HTML e zero marcadores dos headers protegidos.
+- [x] `Preview`: registrar FCP, LCP, TBT, CLS, Speed Index, nota de performance e bytes transferidos com conteúdo editorial representativo; investigar todo aviso antes de promover limiares a gate. Baseline detalhada em `EVID-QUAL-002-01`.
 - [ ] `Preview`: comparar capa presente/ausente, Feed/Grade, filtros longos e publicação longa; conferir imagem responsiva, fontes, JavaScript não usado e terceiros.
 - [ ] `Preview`: confirmar que Início, Publicações e Áreas não carregam o runtime cliente do Clerk; comparar JavaScript transferido/não usado antes e depois do provedor ficar restrito a `/sign-in` e `/admin`.
 - [ ] `Preview`: atrasar banco/taxonomia em Áreas e Publicações; título e introdução devem aparecer antes dos resultados, com um único anúncio de carregamento, sem conteúdo falso, salto de foco ou duplicação do shell.

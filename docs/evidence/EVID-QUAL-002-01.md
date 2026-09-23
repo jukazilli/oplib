@@ -49,7 +49,16 @@ Estado: `in_progress`.
 - Após a primeira publicação real, a execução saneada encontrou 6 posts e 1 publicado. Com termo, tipo, ano, área, categoria e tag derivados internamente, a contagem planejou/executou em 0,578/2,141 ms e a página em 0,673/0,160 ms, usando `Bitmap Index Scan`/`Index Scan`; não apareceu `Seq Scan` nem regressão evidente no conjunto atual.
 - A medição é uma baseline pequena, não justificativa para criar índice adicional. Deve ser repetida quando o volume editorial crescer e confrontada com telemetria de campo.
 
+## Conteúdo representativo no Preview
+
+- A primeira execução com publicação real, run `35780570104`, revelou overflow horizontal reproduzível na leitura em 320 px. O estado foi rejeitado; o teste permaneceu como regressão.
+- O commit `c4b71d5` permite que título, Markdown e referências quebrem tokens longos, garante que os contêineres editoriais possam encolher e remove a largura intrínseca dos campos de comentário.
+- O run [`35858970051`](https://github.com/jukazilli/oplib/actions/runs/35858970051) aprovou os 12 testes E2E em 17,9 s, sem retry: a publicação real abriu em 320 px, sem overflow, com artigo, comentários e canonical presentes, nenhuma imagem opcional e nenhuma violação axe WCAG 2.0/2.1 A ou AA.
+- A mesma execução completou nove medições Lighthouse móveis. Início/Áreas/Publicações obtiveram performance 96/96/95, LCP 2,572/2,321/2,718 s, TBT 48/64/62 ms e CLS 0. A transferência permaneceu entre 273,2 e 273,7 KiB; JavaScript entre 156,9 e 163,9 KiB, com 27,3 a 27,6 KiB apontados como não usados.
+- O artefato `10749310268` contém somente nove JSON saneados e o resumo: zero HTML e zero ocorrências de `extraHeaders`, `x-vercel-protection-bypass` ou `x-vercel-set-bypass-cookie`.
+- A medição confirma o acervo com conteúdo representativo e mantém estabilidade visual. Ela ainda não mede a página individual no Lighthouse nem substitui dados de campo.
+
 ## Ainda não comprovado
 
-- Falha real de Blob/imagem, medições com conteúdo representativo, análise conclusiva de bundle e plano de consulta crítico.
-- Medições e comportamento em Preview/navegador, sob condições de rede e dispositivo representativas.
+- Falha real de Blob/imagem e análise conclusiva de bundle.
+- Dados de campo e medição Lighthouse da página individual publicada.

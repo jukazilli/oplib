@@ -9,7 +9,7 @@
 - [x] Separar o shell público das consultas de Áreas e Publicações para transmitir o conteúdo LCP antes dos dados.
 - [x] Criar análise saneada e somente leitura para as consultas críticas do acervo.
 - [x] Medir a consulta crítica com a primeira publicação real, sem registrar valores editoriais.
-- [ ] Medir Lighthouse com conteúdo editorial representativo e validar a leitura pública automatizada.
+- [x] Medir Lighthouse com conteúdo editorial representativo e validar a leitura pública automatizada.
 - [ ] Validar falha de mídia e concluir evidência antes de marcar `done`.
 
 ## Decisões
@@ -40,3 +40,4 @@
 - O run `35772383744`, commit `745b429`, aprovou os nove testes E2E e confirmou CLS 0 nas nove medições. A baseline aceita ficou em 96/95/94 e LCP 2,43/2,58/2,75 s para Início/Áreas/Publicações. O shell síncrono foi mantido; QUAL-002 segue aberto para conteúdo representativo e consulta crítica.
 - `pnpm db:analyze:public-search` executa contagem e página em transação `READ ONLY`, com filtros derivados de uma publicação existente, e informa somente tempos, buffers, linhas e tipos de nós. Na primeira execução, a configuração continha cinco rascunhos e nenhuma publicação; o resultado correto foi `insufficient-data`, sem fabricar uma medição representativa.
 - Após a primeira publicação real, a análise encontrou 6 posts e 1 publicado. Com todos os filtros representativos ativos, a contagem executou em 2,141 ms e a página em 0,160 ms; ambas usaram índices, retornaram uma linha e não apresentaram regressão evidente no volume atual. Nenhum título, slug, ID ou termo foi emitido.
+- O run `35858970051`, commit `c4b71d5`, aprovou os 12 testes E2E em 17,9 s, sem retry. A leitura real em 320 px permaneceu contida, acessível, canônica e disponível sem mídia opcional. Nas nove medições móveis, a baseline ficou em 96/96/95 e LCP 2,57/2,32/2,72 s para Início/Áreas/Publicações, com CLS 0 nas três rotas.
