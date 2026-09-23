@@ -11,7 +11,7 @@
 - A comparação otimista passou a usar a janela fechada/aberta do milissegundo transportado (`>= versão` e `< versão + 1 ms`) em salvar, publicar/atualizar, retirar/republicar e destacar. Uma consulta `READ ONLY` confirmou que os 6 rascunhos existentes são reconhecidos pela nova janela, sem ler nem alterar conteúdo.
 - Novos rascunhos gravam `updatedAt` explicitamente a partir de `Date`, evitando criar nova fração não representável pelo cliente. O teste do composer comprova que um rascunho salvo é retomado e envia seu ID/versão persistidos ao publicar.
 - O composer diferencia salvar rascunho, publicar e atualizar; confirmação nomeia o título e a consequência.
-- `revalidatePath` roda somente após sucesso e cobre administração, lista pública e slug novo/anterior.
+- `revalidatePath` roda somente após sucesso. A regressão unitária agora exige explicitamente o conjunto completo de superfícies: administração, lista administrativa, home, acervo, sitemap e slug novo/anterior.
 - Validação atual: 59 arquivos e 234 testes aprovados, inclusive retomada do rascunho salvo, falha de cache após commit e a regressão da janela de versão.
 - `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm format:check` e `git diff --check`: aprovados após o corte local.
 - O Preview do commit `42285d4` ficou verde. A execução remota [`35778154721`](https://github.com/jukazilli/oplib/actions/runs/35778154721) aprovou os 11 testes E2E em 15,4 s e as 9 medições Lighthouse; ela comprova ausência de regressão pública, mas não executa publicação autenticada nem substitui o aceite abaixo.
@@ -23,6 +23,7 @@
 - O comando `pnpm db:verify:publishing-preview`, executado com `.env.local`, comprovou no banco real: publicação e evento `publication.publish` confirmados na mesma transação; relação com área preservada; segunda escrita com a versão inicial recusada; falha deliberada pela constraint de auditoria revertendo integralmente a segunda publicação; limpeza final com zero posts, eventos ou identidades sintéticas.
 - Saída saneada: `result=passed`, `committedPublication=true`, `auditInTransaction=true`, `staleWriteRejected=true`, `failedTransactionRolledBack=true`, `residue=0`.
 - O drill valida as invariantes PostgreSQL e a migration AUD-001. Os testes unitários continuam responsáveis pela chamada do repositório e da Server Action; a verificação visual autenticada permanece separada.
+- A regressão da Server Action confirma a ordem e a presença de todos os sete alvos de invalidação após o commit. Isso fecha a prova local da intenção de cache, mas não substitui a correlação observável no Preview autenticado.
 
 ## Pendências de aceite
 
