@@ -552,7 +552,7 @@ Estado atual: upload autenticado, validação em duas camadas, prévia, texto al
 
 ### PUB-004 — Publicar e atualizar conteúdo público
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D05 §§15–16; D07 §§11 e 18.
 - **Objetivo:** tornar pública somente uma versão validada e confirmada.
 - **Descrição:** validação, confirmação, transação de status/data, atualização explícita e invalidação de cache.
@@ -566,7 +566,7 @@ Estado atual: validação, transação, confirmação e rota pública implementa
 
 ### PUB-005 — Retirar e republicar
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D05 §17; D07 §§11 e 18.
 - **Objetivo:** retirar conteúdo de forma reversível e imediata em origem e cache.
 - **Descrição:** transição para `withdrawn`, remoção de listagens/busca/sitemap e republicação controlada.
@@ -580,7 +580,7 @@ Estado atual: transições otimistas e transacionais de retirada/republicação,
 
 ### PUB-006 — Definir destaque editorial
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §§8.1 e 9; D04 §14; D07 §9.1.
 - **Objetivo:** controlar a publicação principal e outros destaques sem ranking automático.
 - **Descrição:** ação administrativa para destacar/remover destaque em publicação pública.
@@ -636,7 +636,7 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 
 ### WEB-001 — Shell público responsivo
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D04 §13; D05 §3; PUX P-UX-001 a P-UX-005.
 - **Objetivo:** oferecer navegação simples entre Início, Publicações, Áreas, Pesquisa e Sobre.
 - **Descrição:** cabeçalho e rodapé editoriais; administração ausente; conteúdo domina a hierarquia.
@@ -646,11 +646,11 @@ Estado atual: matriz fechada de eventos, writer transacional, minimização de m
 - **Testes:** `TEST-WEB-001-01` teclado; `-02` breakpoints; `-03` 200% zoom.
 - **Evidência:** `EVID-WEB-001-01` screenshots e axe.
 
-Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, localização e navegação responsiva implementados; suíte local aprovada. Axe, screenshots, breakpoints e zoom de 200% permanecem pendentes no Preview.
+Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, localização e navegação responsiva implementados. O Preview aprovou Início, Publicações e Áreas em 320, 768 e 1440 px, axe A/AA, skip link e movimento reduzido; `/areas` com dados reais, zoom de 200%, navegação completa por teclado e aceite humano continuam pendentes.
 
 ### WEB-002 — Página inicial editorial
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D02 §8.1; D04 §14; D05 §4.
 - **Objetivo:** apresentar propósito, publicação principal, destaques, recentes e áreas.
 - **Descrição:** home sem rolagem infinita, com falhas isoladas por seção.
@@ -660,11 +660,11 @@ Estado atual: layout público compartilhado, cabeçalho, rodapé, skip link, loc
 - **Testes:** `TEST-WEB-002-01` dados/ordem; `-02` estados; `-03` falha parcial.
 - **Evidência:** `EVID-WEB-002-01` E2E e screenshots.
 
-Estado atual: home editorial, copy aprovada, destaque principal, demais destaques, recentes, pesquisa, áreas públicas e falhas isoladas implementados. Suíte local aprovada; Preview, axe, screenshots, breakpoints e zoom de 200% pendentes.
+Estado atual: home editorial, copy aprovada, destaque principal, demais destaques, recentes, pesquisa, áreas públicas e falhas isoladas implementados. O shell da Home passou no Preview em 320, 768 e 1440 px, axe A/AA, skip link, movimento reduzido e Lighthouse; ainda faltam validar destaques e recentes com variedade representativa, falhas isoladas remotas, zoom de 200% e aceite humano.
 
 ### WEB-003 — Acervo, pesquisa, filtros e paginação
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D02 §§8.1–8.2; D05 §5; D07 §13; TL §15.
 - **Objetivo:** localizar publicações por texto e taxonomia sem serviço externo.
 - **Descrição:** busca PostgreSQL, filtros por área, tipo, categoria, tag e período, ordenação e paginação estável.
@@ -674,11 +674,11 @@ Estado atual: home editorial, copy aprovada, destaque principal, demais destaque
 - **Testes:** `TEST-WEB-003-01` combinações; `-02` URL/back-forward; `-03` sem resultado; `-04` desempenho.
 - **Evidência:** `EVID-WEB-003-01` E2E e plano de consulta quando aplicável.
 
-Estado atual: consulta PostgreSQL por texto e taxonomia, filtros persistentes na URL, Feed/Grade, total, ordem, paginação estável e estados de carregamento/vazio/erro implementados. Taxonomia é agregada sem N+1; validação e plano de consulta reais aguardam Preview.
+Estado atual: consulta PostgreSQL por texto e taxonomia, filtros persistentes na URL, Feed/Grade, total, ordem, paginação estável e estados de carregamento/vazio/erro implementados. O acervo passou no Preview em três breakpoints, axe e Lighthouse; a consulta crítica com filtros derivados de uma publicação real usou índices e não mostrou regressão no volume atual. Combinações visuais de filtros, paginação com massa suficiente e retirada refletida na busca continuam pendentes.
 
 ### WEB-004 — Página de leitura da publicação
 
-- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D02 §8.3; D04 §16; D05 §6.
 - **Objetivo:** oferecer leitura longa confortável em endereço permanente.
 - **Descrição:** área/tipo, título, resumo, autor/datas, capa opcional, Markdown, referências, tags, compartilhamento, interações e relacionados.
@@ -688,11 +688,11 @@ Estado atual: consulta PostgreSQL por texto e taxonomia, filtros persistentes na
 - **Testes:** `TEST-WEB-004-01` renderização; `-02` acesso por status; `-03` responsive/axe.
 - **Evidência:** `EVID-WEB-004-01` E2E de leitura.
 
-Estado atual: consulta pública protegida por status, rota por slug, hierarquia editorial, Markdown seguro, capa opcional, referências e taxonomia implementados. Suíte local aprovada; dados reais, estados e responsividade aguardam Preview.
+Estado atual: consulta pública protegida por status, rota por slug, hierarquia editorial, Markdown seguro, capa opcional, referências e taxonomia implementados. Uma publicação real foi aberta no Preview em 320 px com canonical, comentários, ausência segura de capa, axe A/AA e sem overflow. Ainda faltam capa presente, tablet/desktop/zoom de 200%, tabela e código largos, links externos e equivalência remota entre rascunho, retirada e slug inexistente.
 
 ### WEB-005 — Compartilhar publicação
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §12; D05 §7.
 - **Objetivo:** compartilhar o endereço permanente sem login.
 - **Descrição:** Web Share API quando suportada e cópia de link como fallback.
@@ -730,7 +730,7 @@ Estado atual: Web Share API, fallback por clipboard, confirmação, cancelamento
 
 ### SEO-001 — Metadados, canonical e prévia social
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §12; TL §17.
 - **Objetivo:** tornar cada publicação identificável em busca e compartilhamento.
 - **Descrição:** Metadata API, título, descrição, canonical, Open Graph e capa/fallback.
@@ -744,7 +744,7 @@ Estado atual: metadata global e por publicação, canonical, Open Graph, Twitter
 
 ### SEO-002 — Sitemap, robots e dados estruturados
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §12; D07 §17; TL §17.
 - **Objetivo:** expor descoberta técnica fiel ao conteúdo público.
 - **Descrição:** `sitemap.ts`, `robots.ts` e schema estruturado somente quando aplicável.
@@ -760,7 +760,7 @@ Estado atual: sitemap exclusivo de conteúdo publicado, robots por ambiente, inv
 
 ### LIKE-001 — Curtir uma vez por navegador
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in_progress`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §8.5; D05 §8; D07 §14; TL §12.
 - **Objetivo:** registrar curtida anônima, irreversível e consistente.
 - **Descrição:** identificador opaco em cookie seguro, hash com pepper, constraint única e resposta autoritativa.
@@ -774,7 +774,7 @@ Estado atual: cookie opaco protegido, HMAC com pepper, persistência idempotente
 
 ### COM-001 — Publicar e listar comentários
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §8.6; D05 §9; D07 §15; TL §12.
 - **Objetivo:** permitir comentário imediato sem conta e sem e-mail.
 - **Descrição:** nome opcional de 80 caracteres, “Anônimo” por padrão, texto simples de 1.500, aviso de privacidade e lista visível.
@@ -788,7 +788,7 @@ Estado atual: leitura e publicação imediata implementadas com validação, pro
 
 ### MOD-001 — Consultar comentários na administração
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §8.7; D04 §23; D05 §21.
 - **Objetivo:** localizar comentários visíveis e ocultos com a publicação de origem.
 - **Descrição:** lista moderável com estado, data, nome/Anônimo, trecho e vínculo ao post.
@@ -802,7 +802,7 @@ Estado atual: lista autorizada, filtros, paginação e estados implementados com
 
 ### MOD-002 — Ocultar e restaurar comentário
 
-- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `implemented-local`.
+- **Tipo:** `feature`; **Prioridade:** `P1`; **Status:** `in-progress`.
 - **Origem:** D02 §8.7; D05 §21; D07 §§11 e 15.
 - **Objetivo:** retirar rapidamente conteúdo da área pública sem destruí-lo.
 - **Descrição:** ocultar sem confirmação pesada, oferecer desfazer temporário e restaurar mantendo autoria/data.
@@ -830,7 +830,7 @@ Estado atual: transições condicionais auditadas, ação autorizada e desfazer 
 
 ### UX-001 — Estados, feedback e recuperação
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** PUX P-UX-008 a P-UX-011 e P-UX-016; D05 §§22–25.
 - **Objetivo:** garantir que ações e interrupções permaneçam compreensíveis.
 - **Descrição:** revisar loading, vazio, sucesso, erro, retry, foco e preservação de entrada em todas as superfícies.
@@ -844,7 +844,7 @@ Estado atual: matriz transversal de carregamento, vazio, sucesso, erro, retry, f
 
 ### QUAL-001 — Acessibilidade e responsividade do MVP
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** PUX P-UX-012 e P-UX-013; D04 §§30–31; D05 §24.
 - **Objetivo:** preservar intenção e operação em celular, tablet, desktop, teclado e tecnologia assistiva.
 - **Descrição:** auditoria automatizada e manual das jornadas críticas.
@@ -854,11 +854,11 @@ Estado atual: matriz transversal de carregamento, vazio, sucesso, erro, retry, f
 - **Testes:** `TEST-QUAL-001-01` axe; `-02` teclado; `-03` leitores de tela básico; `-04` breakpoints.
 - **Evidência:** `EVID-QUAL-001-01` relatório e capturas.
 
-Estado atual: Início, Publicações e Áreas aprovados no Preview em Chromium a 320, 768 e 1440 px, sem overflow e sem violações axe WCAG A/AA; loading acessível, skip link e preferência de movimento reduzido também passaram sem retry. Conteúdo real, administração autenticada, zoom de 200%, navegação completa por teclado, leitor de tela e aceite humano permanecem pendentes.
+Estado atual: Início, Publicações e Áreas aprovados no Preview em Chromium a 320, 768 e 1440 px, sem overflow e sem violações axe WCAG A/AA; loading acessível, skip link e preferência de movimento reduzido também passaram sem retry. A leitura de uma publicação real com comentários passou em 320 px após a correção do overflow editorial. Paginação representativa, administração autenticada, zoom de 200%, navegação completa por teclado, leitor de tela e aceite humano permanecem pendentes.
 
 ### QUAL-002 — Desempenho e degradação segura
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D03 §9; D06 §17; D07 §§5, 18 e 20.
 - **Objetivo:** manter leitura rápida e disponível quando interações ou mídia falharem.
 - **Descrição:** validar cache editorial, imagens responsivas, tamanho do cliente e falhas isoladas.
@@ -868,11 +868,11 @@ Estado atual: Início, Publicações e Áreas aprovados no Preview em Chromium a
 - **Testes:** `TEST-QUAL-002-01` falhas simuladas; `-02` Lighthouse/medição; `-03` bundle.
 - **Evidência:** `EVID-QUAL-002-01` relatório de desempenho e degradação.
 
-Estado atual: falhas isoladas das interações preservam o artigo; o runtime Clerk foi retirado das rotas públicas e o streaming passou a entregar o shell antes dos dados. A baseline aceita no Preview ficou em 96/95/94 para Início/Áreas/Publicações, LCP 2,43/2,58/2,75 s e CLS 0 nas nove medições. Conteúdo representativo, falha real de mídia e plano da consulta crítica continuam pendentes.
+Estado atual: falhas isoladas das interações preservam o artigo; o runtime Clerk foi retirado das rotas públicas e o streaming passou a entregar o shell antes dos dados. Com conteúdo representativo, o Preview ficou em 96/96/95 para Início/Áreas/Publicações, LCP 2,57/2,32/2,72 s e CLS 0; a consulta crítica real foi medida em transação somente leitura e usou índices. Permanecem falha real de Blob/imagem, análise conclusiva de bundle, dados de campo e Lighthouse da página individual.
 
 ### SEC-001 — Regressão de segurança do MVP
 
-- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in_progress`.
+- **Tipo:** `quality`; **Prioridade:** `P0`; **Status:** `in-progress`.
 - **Origem:** D02 §11; D06 §§14–15 e 18.4; D07 §24; TL §16; INF §19.
 - **Objetivo:** provar os controles críticos antes de produção.
 - **Descrição:** suíte de autorização negativa, XSS, SQL injection, CSRF, upload, rate limit, payload e exposição de segredo.

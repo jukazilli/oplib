@@ -1,6 +1,6 @@
 # EVID-WEB-001-01 — Shell público responsivo
 
-- **Estado:** evidência parcial; inspeção no Preview pendente.
+- **Estado:** evidência parcial; shell público automatizado no Preview, aceite humano pendente.
 
 ## Provas locais
 
@@ -17,6 +17,6 @@
 ## Pendências
 
 - Preview da PR #37 (`b50acad`): `/areas` respondeu HTTP 200 e mostrou título, estado vazio e navegação em desktop e 390 px sem corte visível. O ambiente não tinha publicações no ar; links e contagens por área ainda exigem dados publicados. O console registrou `404` de prefetch para `/sobre` e `/privacidade`, vinculados a WEB-006/DEC-002, não a `/areas`.
-- O E2E local não iniciou porque o servidor Playwright ficou sem `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
-- Executar axe, teclado, compacto/médio/amplo e zoom de 200% no Preview.
+- Os runs `35731044752` e `35732127987` aprovaram axe, 320/768/1440 px, skip link e movimento reduzido sem retry. O run `35858970051` repetiu o gate e incluiu uma leitura real em 320 px.
+- Validar links e contagens de `/areas` com variedade suficiente de dados, além de zoom de 200%.
 - Registrar screenshots e aceite humano antes de mover para `done`.

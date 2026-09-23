@@ -63,7 +63,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Final`: ler uma publicação longa em celular, tablet e desktop, sem barra lateral ou elementos competindo com o texto.
 - [ ] `Final`: conferir capa presente e ausente, sem espaço vazio indevido.
 - [ ] `Final`: testar links externos, tabela larga e bloco de código em tela pequena.
-- [ ] `Automatizado`: executar axe e confirmar hierarquia de títulos e regiões.
+- [x] `Automatizado/Preview`: executar axe na leitura real e confirmar ausência de violações WCAG A/AA. Run `35858970051`; hierarquia editorial detalhada permanece na revisão final.
 
 ## WEB-003 — Acervo, pesquisa, filtros e paginação
 
@@ -264,11 +264,16 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 
 ## QUAL-001 — Acessibilidade e responsividade
 
-- [ ] `Preview/final`: em Início, Publicações e Áreas, confirmar ausência de overflow em 768 × 1024 e 1440 × 900; no teclado, `Tab` inicial revela `Ir para o conteúdo` e `Enter` leva foco ao conteúdo principal.
-- [ ] `Preview/final`: com `prefers-reduced-motion: reduce`, animações e transições tornam-se praticamente instantâneas, sem repetição; conferir também visualmente que nenhum estado importante depende do movimento.
-- [ ] `Preview/final`: no cabeçalho compacto, o link iconográfico de pesquisa deve ser anunciado como `Pesquisar`; confirmar que nenhum controle perde nome acessível ao ocultar texto por breakpoint.
-- [ ] `Preview/final`: em 320 px, confirmar `scrollWidth === innerWidth` em Início, Áreas e Publicações; no acervo, repetir com filtros de nomes longos, resultados em Feed/Grade e paginação.
-- [ ] `Preview`: executar axe em home, acervo, leitura e fluxos administrativos autenticados, sem violação crítica.
+- [x] `Preview`: em Início, Publicações e Áreas, confirmar ausência de overflow em 768 × 1024 e 1440 × 900; no teclado, `Tab` inicial revela `Ir para o conteúdo` e `Enter` leva foco ao conteúdo principal. Run `35732127987`.
+- [ ] `Final`: repetir breakpoints e skip link nas jornadas consolidadas.
+- [x] `Automatizado/Preview`: com `prefers-reduced-motion: reduce`, animações e transições tornam-se praticamente instantâneas e sem repetição. Run `35732127987`.
+- [ ] `Final`: conferir visualmente que nenhum estado importante depende do movimento.
+- [x] `Preview`: no cabeçalho compacto, o link iconográfico de pesquisa é anunciado como `Pesquisar`. Runs `35731044752` e `35858970051`.
+- [ ] `Final`: confirmar que nenhum controle perde nome acessível ao ocultar texto por breakpoint.
+- [x] `Preview`: em 320 px, confirmar `scrollWidth === innerWidth` em Início, Áreas, Publicações e uma leitura real. Run `35858970051`.
+- [ ] `Preview/final`: repetir o acervo com filtros de nomes longos, resultados em Feed/Grade e paginação.
+- [x] `Preview`: executar axe em home, acervo e leitura real, sem violações WCAG A/AA. Run `35858970051`.
+- [ ] `Preview`: executar axe nos fluxos administrativos autenticados.
 - [ ] `Final`: percorrer as jornadas críticas por teclado e leitor de tela; conferir foco, nomes acessíveis e anúncios de estados.
 - [ ] `Final`: verificar celular, tablet, desktop, zoom 200% e preferência por movimento reduzido.
-- [ ] `Ambiente`: disponibilizar chave pública Clerk no ambiente local ou acesso autorizado ao Preview para a auditoria de navegador; tentativa local retornou 500 por chave ausente e o Preview protegido redirecionou ao login Vercel.
+- [x] `Ambiente`: acesso automatizado ao Preview protegido configurado por segredo de bypass no GitHub Actions, sem publicar o valor.

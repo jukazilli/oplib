@@ -1,6 +1,6 @@
 # EVID-SEC-001-01 — Regressão de segurança
 
-Estado: `in_progress`.
+Estado: `in-progress`.
 
 ## Proveniência de mutações públicas
 

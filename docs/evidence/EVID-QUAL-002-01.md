@@ -1,6 +1,6 @@
 # EVID-QUAL-002-01 — Desempenho e degradação segura
 
-Estado: `in_progress`.
+Estado: `in-progress`.
 
 ## Degradação comprovada localmente
 

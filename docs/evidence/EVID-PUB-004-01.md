@@ -15,11 +15,12 @@
 - Validação atual: 59 arquivos e 234 testes aprovados, inclusive retomada do rascunho salvo, falha de cache após commit e a regressão da janela de versão.
 - `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm format:check` e `git diff --check`: aprovados após o corte local.
 - O Preview do commit `42285d4` ficou verde. A execução remota [`35778154721`](https://github.com/jukazilli/oplib/actions/runs/35778154721) aprovou os 11 testes E2E em 15,4 s e as 9 medições Lighthouse; ela comprova ausência de regressão pública, mas não executa publicação autenticada nem substitui o aceite abaixo.
+- Depois da ação humana de publicação, a consulta saneada do Preview encontrou 6 posts: 1 público, 3 rascunhos e 2 retirados. O run [`35858970051`](https://github.com/jukazilli/oplib/actions/runs/35858970051) abriu a publicação real pela listagem pública e aprovou leitura, canonical, comentários, axe e largura de 320 px. Essa é prova do estado público resultante, não da atomicidade interna do comando.
 
 ## Pendências de aceite
 
 - Verificação em banco `preview` de publicação, atualização, concorrência e rollback, com auditoria saneada.
 - Verificação responsiva/autenticada do fluxo; a automação desta sessão não encontrou Chrome nem navegador interno disponível. O bloqueio local contra duplo envio foi coberto no componente e os testes do fluxo passaram.
-- Repetir no Preview autenticado com um dos rascunhos existentes: abrir, continuar a edição e publicar sem receber comparação; em uma segunda sessão, alterar de fato a mesma publicação e confirmar que o conflito continua aparecendo.
-- A rota pública `/publicacoes/[slug]` já existe em WEB-004; falta confirmar a navegação com uma publicação real no Preview.
+- Repetir no Preview autenticado com um dos rascunhos existentes: abrir, continuar a edição e publicar/atualizar sem receber comparação; repetir o envio idêntico e, em uma segunda sessão, alterar de fato a mesma publicação para confirmar que o conflito continua aparecendo.
+- A navegação pública de uma publicação real já foi comprovada; falta correlacionar o comando administrativo com auditoria, versão e invalidação sem registrar conteúdo editorial.
 - Migration AUD-001 ainda não aplicada em produção.

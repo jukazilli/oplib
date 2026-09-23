@@ -1,6 +1,6 @@
 # EVID-WEB-004-01 — Página pública de leitura
 
-- **Estado:** evidência parcial; Preview pendente.
+- **Estado:** evidência parcial; leitura real em 320 px aprovada no Preview.
 
 ## Provas locais
 
@@ -15,8 +15,13 @@
 
 ## Pendências
 
-- O deploy explícito de Preview falhou antes do upload com `fetch failed` ao consultar Vercel/npm; a branch remota pode acionar a integração Git, mas esse estado não foi contado como evidência.
-- Consultar uma publicação real na branch Neon `preview`.
 - Confirmar que rascunho, retirada e slug inexistente têm resposta indistinguível.
-- Executar axe e inspeção em celular, tablet, desktop e zoom de 200%.
-- Registrar capa presente/ausente, tabela larga, código e links externos.
+- Inspecionar tablet, desktop e zoom de 200%.
+- Registrar capa presente, tabela larga, código e links externos.
+- Obter aceite visual humano antes de mover para `done`.
+
+## Prova integrada no Preview
+
+- O run inicial `35780570104` encontrou overflow horizontal reproduzível na publicação real em 320 px e foi rejeitado.
+- O commit `c4b71d5` corrigiu encolhimento e quebra de conteúdo no artigo, Markdown, referências e formulário de comentários.
+- O run [`35858970051`](https://github.com/jukazilli/oplib/actions/runs/35858970051) aprovou os 12 testes E2E em 17,9 s, sem retry. A leitura real respondeu com sucesso, exibiu artigo, título, comentários e canonical, não dependeu de capa, não excedeu 320 px e não apresentou violações axe WCAG A/AA.
