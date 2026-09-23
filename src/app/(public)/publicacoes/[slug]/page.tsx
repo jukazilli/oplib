@@ -134,7 +134,7 @@ export default async function PublicationPage({
   }
 
   return (
-    <article className="mx-auto w-full max-w-5xl px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
+    <article className="mx-auto w-full max-w-5xl min-w-0 px-5 py-12 sm:px-8 sm:py-16 lg:px-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -150,7 +150,7 @@ export default async function PublicationPage({
             contentTypeLabels[publication.contentType],
           ].join(" · ")}
         </p>
-        <h1 className="mt-4 font-editorial text-4xl leading-tight font-semibold tracking-[-0.025em] text-balance sm:text-5xl lg:text-6xl">
+        <h1 className="mt-4 font-editorial text-4xl leading-tight font-semibold tracking-[-0.025em] text-balance [overflow-wrap:anywhere] break-words sm:text-5xl lg:text-6xl">
           {publication.title}
         </h1>
         <p className="mt-5 font-editorial text-xl leading-8 text-muted-foreground sm:text-2xl">
@@ -190,7 +190,7 @@ export default async function PublicationPage({
         </figure>
       ) : null}
 
-      <div className="mx-auto mt-12 max-w-[72ch]">
+      <div className="mx-auto mt-12 max-w-[72ch] min-w-0">
         <MarkdownContent markdown={publication.markdown} />
 
         {publication.references.length ? (
@@ -204,7 +204,7 @@ export default async function PublicationPage({
             >
               Referências
             </h2>
-            <ol className="mt-5 grid gap-4 pl-5 font-interface text-sm leading-6 text-muted-foreground">
+            <ol className="mt-5 grid min-w-0 gap-4 pl-5 font-interface text-sm leading-6 [overflow-wrap:anywhere] break-words text-muted-foreground">
               {publication.references.map((reference) => (
                 <li key={reference.id} className="list-decimal pl-1">
                   <span className="font-semibold text-foreground">
