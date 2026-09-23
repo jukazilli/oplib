@@ -1,7 +1,7 @@
 import "server-only";
 
 import { randomUUID } from "node:crypto";
-import { and, desc, eq, ne, sql } from "drizzle-orm";
+import { and, desc, eq, gte, lt, ne, sql } from "drizzle-orm";
 import { connection } from "next/server";
 
 import { getDatabase, type Database } from "@/lib/db";
@@ -18,6 +18,7 @@ import {
   tags,
 } from "@/lib/db/schema";
 import { normalizeRequestedSlug, slugifyPostTitle } from "./metadata";
+import { optimisticVersionWindow } from "./optimistic-version";
 import { cleanupDetachedCover } from "@/modules/media/covers";
 import { recordAdminAuditEvent } from "@/modules/identity/audit/repository";
 
@@ -383,6 +384,7 @@ export async function createDraft(
 ): Promise<DraftRecord> {
   const db = database ?? getDatabase();
   const id = randomUUID();
+  const updatedAt = new Date();
   await db.transaction(async (tx) => {
     const slug = await availableSlug(tx, values.title, values.slug);
     const coverRows = values.cover
@@ -410,6 +412,7 @@ export async function createDraft(
         ? new Date(`${values.originalDate}T12:00:00.000Z`)
         : null,
       coverAssetId,
+      updatedAt,
     });
     await replaceRelations(tx, id, values);
   });
@@ -425,6 +428,7 @@ export async function updateDraft(
   database?: Database,
 ): Promise<DraftRecord | null> {
   const db = database ?? getDatabase();
+  const versionWindow = optimisticVersionWindow(version);
   const previousCoverRows = await db
     .select({ pathname: coverAssets.pathname })
     .from(posts)
@@ -465,7 +469,8 @@ export async function updateDraft(
         and(
           eq(posts.id, id),
           eq(posts.status, "draft"),
-          eq(posts.updatedAt, version),
+          gte(posts.updatedAt, versionWindow.start),
+          lt(posts.updatedAt, versionWindow.end),
         ),
       )
       .returning({ id: posts.id });
@@ -505,6 +510,7 @@ export async function publishPublication(
   database?: Database,
 ): Promise<AdminPublication | null> {
   const db = database ?? getDatabase();
+  const versionWindow = optimisticVersionWindow(version);
   const previousCoverRows = await db
     .select({ pathname: coverAssets.pathname })
     .from(posts)
@@ -546,7 +552,8 @@ export async function publishPublication(
         and(
           eq(posts.id, id),
           eq(posts.status, expectedStatus),
-          eq(posts.updatedAt, version),
+          gte(posts.updatedAt, versionWindow.start),
+          lt(posts.updatedAt, versionWindow.end),
         ),
       )
       .returning({ id: posts.id });
@@ -596,6 +603,7 @@ export async function transitionPublicationStatus(
   database?: Database,
 ): Promise<AdminPublication | null> {
   const db = database ?? getDatabase();
+  const versionWindow = optimisticVersionWindow(version);
   const expectedStatus = intent === "withdraw" ? "published" : "withdrawn";
   const nextStatus = intent === "withdraw" ? "withdrawn" : "published";
   const changed = await db.transaction(async (tx) => {
@@ -610,7 +618,8 @@ export async function transitionPublicationStatus(
         and(
           eq(posts.id, id),
           eq(posts.status, expectedStatus),
-          eq(posts.updatedAt, version),
+          gte(posts.updatedAt, versionWindow.start),
+          lt(posts.updatedAt, versionWindow.end),
         ),
       )
       .returning({ id: posts.id });
@@ -641,6 +650,7 @@ export async function setPublicationFeatured(
   database?: Database,
 ): Promise<AdminPublication | null> {
   const db = database ?? getDatabase();
+  const versionWindow = optimisticVersionWindow(version);
   const changed = await db.transaction(async (tx) => {
     const rows = await tx
       .update(posts)
@@ -649,7 +659,8 @@ export async function setPublicationFeatured(
         and(
           eq(posts.id, id),
           eq(posts.status, "published"),
-          eq(posts.updatedAt, version),
+          gte(posts.updatedAt, versionWindow.start),
+          lt(posts.updatedAt, versionWindow.end),
         ),
       )
       .returning({ id: posts.id });

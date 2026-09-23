@@ -44,6 +44,53 @@ afterEach(() => {
 });
 
 describe("draft composer", () => {
+  it("resumes a saved draft and publishes with its persisted version", async () => {
+    const user = userEvent.setup();
+    const savedDraft = {
+      id: "10000000-0000-4000-8000-000000000001",
+      title: "Artigo retomado",
+      slug: "artigo-retomado",
+      summary: "Resumo",
+      markdown: "# Conteúdo",
+      contentType: "article" as const,
+      areaIds: ["10000000-0000-4000-8000-000000000002"],
+      categoryId: "",
+      tagIds: [],
+      course: "",
+      discipline: "",
+      originalDate: "",
+      references: [],
+      cover: null,
+      updatedAt: "2026-09-22T18:42:10.123Z",
+      status: "draft" as const,
+    };
+    mocks.publish.mockResolvedValue({
+      status: "success",
+      publication: { ...savedDraft, status: "published" },
+      publicUrl: "/publicacoes/artigo-retomado",
+    });
+    render(<DraftComposer initialDraft={savedDraft} />);
+
+    await user.click(screen.getByRole("button", { name: "Publicar" }));
+    await user.click(
+      within(screen.getByRole("alertdialog")).getByRole("button", {
+        name: "Publicar agora",
+      }),
+    );
+
+    await waitFor(() => expect(mocks.publish).toHaveBeenCalledOnce());
+    const [submitted, expectedStatus] = mocks.publish.mock.calls[0] as [
+      FormData,
+      string,
+    ];
+    expect(submitted.get("id")).toBe(savedDraft.id);
+    expect(submitted.get("version")).toBe(savedDraft.updatedAt);
+    expect(expectedStatus).toBe("draft");
+    expect(
+      await screen.findByText(/Publicação confirmada/),
+    ).toBeInTheDocument();
+  });
+
   it("confirms before updating a published composition", async () => {
     const user = userEvent.setup();
     render(

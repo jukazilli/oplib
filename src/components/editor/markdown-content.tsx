@@ -72,7 +72,7 @@ export function MarkdownContent({
   linksEnabled?: boolean;
 }) {
   return (
-    <div className="font-editorial text-lg text-foreground">
+    <div className="min-w-0 font-editorial text-lg [overflow-wrap:anywhere] break-words text-foreground">
       <ReactMarkdown
         skipHtml
         remarkPlugins={[remarkGfm]}

@@ -98,18 +98,18 @@ export function CommentsSection({
       <h2 id="comments-title" className="font-editorial text-3xl font-semibold">
         Comentários
       </h2>
-      <form onSubmit={submit} className="mt-6 grid gap-4">
-        <label className="grid gap-2 font-interface text-sm font-semibold">
+      <form onSubmit={submit} className="mt-6 grid min-w-0 gap-4">
+        <label className="grid min-w-0 gap-2 font-interface text-sm font-semibold">
           Nome{" "}
           <span className="font-normal text-muted-foreground">(opcional)</span>
           <input
             value={authorName}
             onChange={(event) => setAuthorName(event.target.value)}
             maxLength={80}
-            className="min-h-11 rounded-control border bg-surface px-3 font-normal"
+            className="min-h-11 w-full min-w-0 rounded-control border bg-surface px-3 font-normal"
           />
         </label>
-        <label className="grid gap-2 font-interface text-sm font-semibold">
+        <label className="grid min-w-0 gap-2 font-interface text-sm font-semibold">
           Comentário
           <textarea
             ref={bodyRef}
@@ -118,7 +118,7 @@ export function CommentsSection({
             rows={5}
             aria-invalid={hasError}
             aria-describedby="comment-notice comment-count comment-message"
-            className="rounded-control border bg-surface p-3 font-normal"
+            className="w-full min-w-0 rounded-control border bg-surface p-3 font-normal"
           />
         </label>
         <input

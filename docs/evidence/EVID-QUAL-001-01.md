@@ -1,6 +1,6 @@
 # EVID-QUAL-001-01 — Acessibilidade e responsividade do MVP
 
-- **Estado:** evidência parcial; superfícies públicas sem publicação auditadas no Preview.
+- **Estado:** evidência parcial; superfícies públicas e uma leitura real auditadas no Preview.
 
 ## Provas no Preview
 
@@ -12,15 +12,17 @@
 - `/` e `/areas` não apresentaram largura horizontal excedente em viewport de 320 px.
 - `/publicacoes` apresentou regressão reproduzível: viewport de 320 px e documento de 338 px. A causa foi o tamanho mínimo intrínseco dos controles no grid de filtros; a correção aplica coluna `minmax(0, 1fr)` e controles `min-w-0`/`w-full`.
 - Na repetição local da correção em 320 px, a largura foi normalizada para 320 px. Axe encontrou o link iconográfico de pesquisa sem nome quando seu texto fica oculto; o cabeçalho passou a manter `aria-label="Pesquisar"` em todos os breakpoints e ganhou teste unitário. Após o ajuste, a nova execução local retornou zero violações WCAG A/AA.
+- O primeiro run com conteúdo real (`35780570104`) revelou overflow horizontal na leitura em 320 px e foi rejeitado. O commit `c4b71d5` corrigiu larguras intrínsecas e quebra de tokens no título, Markdown, referências e formulário de comentários.
+- O run [`35858970051`](https://github.com/jukazilli/oplib/actions/runs/35858970051) aprovou 12 testes em 17,9 s, sem retry: a publicação real abriu em 320 px sem overflow, com artigo, comentários e canonical, ausência segura de capa e zero violações axe WCAG 2.0/2.1 A ou AA.
 
 ## Limites da evidência
 
 - Axe automatizado não substitui teclado, leitor de tela, contraste visual, zoom de 200% nem avaliação humana.
-- O ambiente não tinha publicação no ar; página de leitura, cards, paginação e conteúdo editorial ainda precisam ser auditados com dados representativos.
-- Administração autenticada, comentários e moderação permanecem pendentes.
+- O ambiente possui uma publicação real; ainda não há massa suficiente para provar paginação, variedade de cards e todas as combinações de filtros.
+- Administração autenticada e moderação permanecem pendentes.
 - `/sobre` e `/privacidade` ainda geram `404` de prefetch e pertencem a WEB-006/DEC-002.
 
 ## Próxima comprovação
 
 - Cobrir zoom de 200%, navegação completa por teclado, leitor de tela e inspeção visual de movimento reduzido nas jornadas completas.
-- Repetir axe e overflow com publicação, paginação, comentários e administração autenticada.
+- Repetir axe e overflow com paginação representativa e administração autenticada.

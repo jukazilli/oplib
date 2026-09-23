@@ -170,10 +170,15 @@ describe("draft actions", () => {
       status: "success",
       publicUrl: "/publicacoes/publicacao",
     });
-    expect(mocks.revalidate).toHaveBeenCalledWith("/publicacoes/publicacao");
-    expect(mocks.revalidate).toHaveBeenCalledWith(
+    expect(mocks.revalidate.mock.calls.map(([path]) => path)).toEqual([
+      "/admin",
+      "/admin/publicacoes",
+      "/",
+      "/publicacoes",
+      "/sitemap.xml",
       "/publicacoes/endereco-antigo",
-    );
+      "/publicacoes/publicacao",
+    ]);
   });
 
   it("does not revalidate when another session changed the publication", async () => {

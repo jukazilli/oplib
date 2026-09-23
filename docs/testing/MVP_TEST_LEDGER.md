@@ -21,11 +21,13 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 
 ## PUB-004 — Publicar e atualizar
 
+- [ ] `Preview/final`: reabrir um rascunho salvo anteriormente, continuar a composição e publicar; nenhuma comparação deve aparecer quando a versão do servidor não mudou, inclusive para rascunhos criados antes da correção de precisão temporal.
 - [ ] `Preview/final`: publicar um rascunho completo após confirmação.
 - [ ] `Preview/final`: repetir o envio idêntico e confirmar sucesso idempotente.
 - [ ] `Preview/final`: alterar a mesma publicação em duas sessões e confirmar conflito somente para conteúdos diferentes.
 - [ ] `Preview/final`: atualizar conteúdo público e confirmar que a versão anterior permanece até o commit.
-- [ ] `Preview`: comprovar auditoria, rollback transacional e invalidação de cache.
+- [x] `Preview`: comprovar auditoria e rollback transacional no Neon com dados sintéticos e limpeza sem resíduos. `pnpm db:verify:publishing-preview`.
+- [ ] `Preview`: correlacionar o fluxo autenticado com invalidação da administração, acervo, página pública e slug anterior.
 - [ ] `Final`: repetir o fluxo em desktop e celular, incluindo duplo clique e falha recuperável.
 
 ## PUB-005 — Retirar e republicar
@@ -62,7 +64,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Final`: ler uma publicação longa em celular, tablet e desktop, sem barra lateral ou elementos competindo com o texto.
 - [ ] `Final`: conferir capa presente e ausente, sem espaço vazio indevido.
 - [ ] `Final`: testar links externos, tabela larga e bloco de código em tela pequena.
-- [ ] `Automatizado`: executar axe e confirmar hierarquia de títulos e regiões.
+- [x] `Automatizado/Preview`: executar axe na leitura real e confirmar ausência de violações WCAG A/AA. Run `35858970051`; hierarquia editorial detalhada permanece na revisão final.
 
 ## WEB-003 — Acervo, pesquisa, filtros e paginação
 
@@ -169,9 +171,9 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 
 ## QUAL-002 — Desempenho do Preview
 
-- [ ] `CI/Preview`: executar o workflow `E2E Preview` e confirmar três medições móveis para Início, Publicações e Áreas, com resumo de mediana por rota.
-- [ ] `CI`: baixar o artefato e confirmar que os JSON não contêm `extraHeaders`, segredo de bypass, credenciais, conteúdo privado ou relatório HTML.
-- [ ] `Preview`: registrar FCP, LCP, TBT, CLS, Speed Index, nota de performance e bytes transferidos com conteúdo editorial representativo; investigar todo aviso antes de promover limiares a gate.
+- [x] `CI/Preview`: executar o workflow `E2E Preview` e confirmar três medições móveis para Início, Publicações e Áreas, com resumo de mediana por rota. Run `35858970051`: 96/96/95, LCP 2,572/2,321/2,718 s e CLS 0.
+- [x] `CI`: baixar o artefato e confirmar que os JSON não contêm `extraHeaders`, segredo de bypass, credenciais, conteúdo privado ou relatório HTML. Artefato `10749310268`: nove JSON e um resumo, zero HTML e zero marcadores dos headers protegidos.
+- [x] `Preview`: registrar FCP, LCP, TBT, CLS, Speed Index, nota de performance e bytes transferidos com conteúdo editorial representativo; investigar todo aviso antes de promover limiares a gate. Baseline detalhada em `EVID-QUAL-002-01`.
 - [ ] `Preview`: comparar capa presente/ausente, Feed/Grade, filtros longos e publicação longa; conferir imagem responsiva, fontes, JavaScript não usado e terceiros.
 - [ ] `Preview`: confirmar que Início, Publicações e Áreas não carregam o runtime cliente do Clerk; comparar JavaScript transferido/não usado antes e depois do provedor ficar restrito a `/sign-in` e `/admin`.
 - [ ] `Preview`: atrasar banco/taxonomia em Áreas e Publicações; título e introdução devem aparecer antes dos resultados, com um único anúncio de carregamento, sem conteúdo falso, salto de foco ou duplicação do shell.
@@ -180,6 +182,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Final`: repetir o streaming de Publicações com resultados reais, filtros longos e paginação; a reserva deve continuar sem CLS perceptível e sem deixar espaço vazio excessivo após a resolução.
 - [ ] `Preview/final`: após restringir o provedor, repetir entrada, sessão expirada, perfil e logout; localização, tema, redirecionamento e proteção administrativa devem permanecer iguais.
 - [ ] `Preview`: medir a consulta crítica do acervo com combinações representativas e registrar plano quando houver regressão evidente.
+- [ ] `Final`: repetir `db:analyze:public-search` com volume editorial maior; comparar com a baseline inicial de 1 publicação (contagem 2,141 ms, página 0,160 ms) sem transformar o pequeno conjunto atual em garantia de escala.
 - [ ] `Preview`: com publicações sintéticas distribuídas por tipo, ano e taxonomia, executar `pnpm db:analyze:public-search`; conferir que a transação é somente leitura, a saída não contém valores e os planos de contagem/página não apresentam regressão evidente.
 - [ ] `Final`: repetir em rede/dispositivo representativos e confrontar a medição sintética com dados de campo disponíveis; nenhuma nota isolada aprova o desempenho do MVP.
 
@@ -225,6 +228,7 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 ## SEC-001 — Proveniência das mutações públicas
 
 - [ ] `Automatizado`: enviar POST de curtida e comentário com `Origin` divergente e confirmar `403` sem persistência ou cookie novo.
+- [ ] `CI/Preview`: executar o corpus negativo com slug inexistente; curtida e comentário cross-site devem retornar `403` + `no-store`, enquanto comentário `text/plain` e JSON truncado retornam `415`/`400`, todos sem `Set-Cookie`.
 - [ ] `Automatizado`: repetir sem `Origin` mas com `Sec-Fetch-Site: cross-site` e `same-site`; ambos devem ser recusados antes de persistir.
 - [ ] `Automatizado`: sem `Origin` e sem Fetch Metadata, confirmar que `Referer` divergente ou inválido é recusado; `Referer` da própria origem é aceito.
 - [ ] `Preview`: em navegador legítimo, curtir e comentar normalmente; inspecionar headers e confirmar que o endurecimento não bloqueou o fluxo real.
@@ -249,6 +253,8 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 - [ ] `Preview`: após o `429`, confirmar mensagem clara e preservação do nome/texto; repetir depois de cinco minutos e confirmar novo envio sem trocar o cookie.
 - [ ] `Automatizado`: preencher 10.000 janelas locais distintas, confirmar recusa fechada da chave seguinte sem crescimento do estado e aceitação após o vencimento liberar espaço.
 - [ ] `Preview/WAF`: aplicar tráfego sintético controlado a comentários e curtidas, confirmar limites distintos na borda e documentar que múltiplas instâncias e rotação de cookie não dependem apenas da memória local.
+- [ ] `Preview/WAF`: em `main`, cadastrar/renovar `VERCEL_TOKEN`, `VERCEL_ORG_ID` e `VERCEL_PROJECT_ID` no ambiente protegido, aprovar o job `Read-only Firewall audit` e conferir o artefato saneado; confirmar a regra histórica de observação de login, ausência de draft esquecido e nenhuma regra de bloqueio publicada sem revisão humana.
+- [ ] `Preview/WAF`: configurar limites de comentários e curtidas primeiro em `log`, com limiares distintos e folga sobre tráfego legítimo; observar falsos positivos e contadores por região antes de solicitar publicação ou mudança para bloqueio.
 - [ ] `Automatizado`: forçar negação de identidade nas oito Server Actions administrativas e confirmar que nenhum parser, repositório, cache ou auditoria de sucesso é alcançado; repetir `401`/`404` nas rotas de capa.
 - [ ] `CI`: introduzir em branch descartável uma atribuição secreta fictícia e confirmar que `pnpm security:secrets` bloqueia o job sem imprimir o valor; remover a fixture e confirmar o job verde.
 - [ ] `Automatizado`: inspecionar o contrato público de ambiente e os artefatos estáticos do build; somente `NEXT_PUBLIC_*` aprovado pode aparecer, sem URLs de banco, pepper, tokens Blob, chave Clerk secreta ou chave de backup.
@@ -259,11 +265,16 @@ A cobertura transversal e a prova local de cada estado estão mapeadas em `docs/
 
 ## QUAL-001 — Acessibilidade e responsividade
 
-- [ ] `Preview/final`: em Início, Publicações e Áreas, confirmar ausência de overflow em 768 × 1024 e 1440 × 900; no teclado, `Tab` inicial revela `Ir para o conteúdo` e `Enter` leva foco ao conteúdo principal.
-- [ ] `Preview/final`: com `prefers-reduced-motion: reduce`, animações e transições tornam-se praticamente instantâneas, sem repetição; conferir também visualmente que nenhum estado importante depende do movimento.
-- [ ] `Preview/final`: no cabeçalho compacto, o link iconográfico de pesquisa deve ser anunciado como `Pesquisar`; confirmar que nenhum controle perde nome acessível ao ocultar texto por breakpoint.
-- [ ] `Preview/final`: em 320 px, confirmar `scrollWidth === innerWidth` em Início, Áreas e Publicações; no acervo, repetir com filtros de nomes longos, resultados em Feed/Grade e paginação.
-- [ ] `Preview`: executar axe em home, acervo, leitura e fluxos administrativos autenticados, sem violação crítica.
+- [x] `Preview`: em Início, Publicações e Áreas, confirmar ausência de overflow em 768 × 1024 e 1440 × 900; no teclado, `Tab` inicial revela `Ir para o conteúdo` e `Enter` leva foco ao conteúdo principal. Run `35732127987`.
+- [ ] `Final`: repetir breakpoints e skip link nas jornadas consolidadas.
+- [x] `Automatizado/Preview`: com `prefers-reduced-motion: reduce`, animações e transições tornam-se praticamente instantâneas e sem repetição. Run `35732127987`.
+- [ ] `Final`: conferir visualmente que nenhum estado importante depende do movimento.
+- [x] `Preview`: no cabeçalho compacto, o link iconográfico de pesquisa é anunciado como `Pesquisar`. Runs `35731044752` e `35858970051`.
+- [ ] `Final`: confirmar que nenhum controle perde nome acessível ao ocultar texto por breakpoint.
+- [x] `Preview`: em 320 px, confirmar `scrollWidth === innerWidth` em Início, Áreas, Publicações e uma leitura real. Run `35858970051`.
+- [ ] `Preview/final`: repetir o acervo com filtros de nomes longos, resultados em Feed/Grade e paginação.
+- [x] `Preview`: executar axe em home, acervo e leitura real, sem violações WCAG A/AA. Run `35858970051`.
+- [ ] `Preview`: executar axe nos fluxos administrativos autenticados.
 - [ ] `Final`: percorrer as jornadas críticas por teclado e leitor de tela; conferir foco, nomes acessíveis e anúncios de estados.
 - [ ] `Final`: verificar celular, tablet, desktop, zoom 200% e preferência por movimento reduzido.
-- [ ] `Ambiente`: disponibilizar chave pública Clerk no ambiente local ou acesso autorizado ao Preview para a auditoria de navegador; tentativa local retornou 500 por chave ausente e o Preview protegido redirecionou ao login Vercel.
+- [x] `Ambiente`: acesso automatizado ao Preview protegido configurado por segredo de bypass no GitHub Actions, sem publicar o valor.

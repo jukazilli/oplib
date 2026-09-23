@@ -26,6 +26,7 @@
     "db:verify:areas": "node scripts/verify-knowledge-areas.mjs",
     "db:verify:taxonomy": "node scripts/verify-taxonomy.mjs",
     "db:verify:drafts": "node scripts/verify-publishing-drafts.mjs",
+    "db:verify:publishing-preview": "node scripts/verify-publishing-preview.mjs",
     "db:verify": "node scripts/verify-database.mjs",
     "db:analyze:public-search": "node scripts/analyze-public-search.mjs"
   },

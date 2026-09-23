@@ -11,6 +11,8 @@ import {
 } from "@/modules/interactions/likes/identity";
 import { registerLike } from "@/modules/interactions/likes/repository";
 
+const noStore = { "cache-control": "no-store" };
+
 export async function POST(
   request: Request,
   { params }: RouteContext<"/api/publications/[slug]/like">,
@@ -21,7 +23,7 @@ export async function POST(
     if (!isSameOriginMutation(request))
       return Response.json(
         { message: "Requisição recusada." },
-        { status: 403 },
+        { status: 403, headers: noStore },
       );
     const { slug } = await params;
     const cookieValue = request.headers
@@ -34,12 +36,12 @@ export async function POST(
     if (!result)
       return Response.json(
         { message: "Esta publicação não está disponível." },
-        { status: 404 },
+        { status: 404, headers: noStore },
       );
 
     const response = NextResponse.json(result, {
       headers: {
-        "cache-control": "no-store",
+        ...noStore,
         "x-correlation-id": correlationId,
       },
     });
@@ -75,7 +77,7 @@ export async function POST(
         message:
           "Não foi possível registrar sua curtida agora. Tente novamente.",
       },
-      { status: 503, headers: { "cache-control": "no-store" } },
+      { status: 503, headers: noStore },
     );
   }
 }

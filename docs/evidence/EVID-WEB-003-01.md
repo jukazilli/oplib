@@ -1,6 +1,6 @@
 # EVID-WEB-003-01 — Acervo, pesquisa, filtros e paginação
 
-- **Estado:** evidência parcial; Preview pendente.
+- **Estado:** evidência parcial; shell e consulta crítica aprovados no Preview.
 
 ## Provas locais
 
@@ -16,7 +16,8 @@
 ## Pendências
 
 - O Preview de `b50acad` passou no axe WCAG A/AA, mas revelou overflow horizontal em `/publicacoes`: viewport 320 px, documento 338 px. A correção limita o grid e seus controles à coluna disponível; o workflow `E2E Preview` `35730558797` confirmou no commit `91c863f` que o documento não excede 320 px e não possui violações WCAG A/AA no estado vazio.
-- Executar consulta real na branch Neon `preview`, combinações de filtros e `EXPLAIN` representativo.
+- A análise real `pnpm db:analyze:public-search`, em transação `READ ONLY`, derivou termo e taxonomia de uma publicação pública. Contagem e página executaram em 2,141 ms e 0,160 ms, usando índices e sem emitir título, slug, ID ou termo.
+- Repetir combinações visuais de filtros e paginação quando houver massa de dados suficiente.
 - Confirmar retirada desaparecendo imediatamente da lista e da pesquisa.
 - Validar URL, voltar/avançar, Feed/Grade, paginação, axe e breakpoints no Preview.
 - Registrar screenshots e aceite humano.
